@@ -33,14 +33,19 @@ abstract class LargerAct<T> : AppCompatActivity() {
                     } else {
                         item(itemView, position, data[position])
                     }
-
                 }
             })
+
+        //不需要平滑过渡了
+        viewpager.setCurrentItem(getCurrentItemIndex(), false)
     }
+
 
     abstract fun getItemLayout(): Int
 
     abstract fun getData(): List<T>?
+
+    abstract fun getCurrentItemIndex(): Int
 
     abstract fun item(itemView: View, position: Int, data: T?)
 }

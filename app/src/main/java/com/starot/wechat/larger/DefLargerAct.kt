@@ -1,6 +1,7 @@
 package com.starot.wechat.larger
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -30,6 +31,10 @@ class DefLargerAct : LargerAct<String>() {
 
     override fun getItemLayout(): Int {
         return R.layout.item_def
+    }
+
+    override fun getCurrentItemIndex(): Int {
+        return intent.getIntExtra(INDEX, 0)
     }
 
 
