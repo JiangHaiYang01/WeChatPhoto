@@ -108,7 +108,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     //设置显示时间
-    fun setDuration(): Long {
+    open fun setDuration(): Long {
         return defDuration
     }
 

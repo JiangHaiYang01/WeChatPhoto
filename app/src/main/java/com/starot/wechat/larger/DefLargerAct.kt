@@ -31,4 +31,10 @@ class DefLargerAct : LargerAct<String>() {
     }
 
 
+    //设置 持续时间
+    override fun setDuration(): Long {
+        return 1000
+    }
+
+
 }
