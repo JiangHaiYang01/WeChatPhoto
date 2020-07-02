@@ -1,0 +1,3 @@
+include ':Larger'
+include ':app'
+rootProject.name = "WeChat"
