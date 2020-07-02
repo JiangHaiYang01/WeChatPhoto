@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.starot.larger.activity.LargerAct
+import com.starot.larger.tools.ImageTool
 import com.starot.wechat.larger.DefLargerAct
 import kotlinx.android.synthetic.main.activity_def.*
 
@@ -52,8 +54,17 @@ class DefAct : AppCompatActivity() {
 
     private fun startAct(index: Int, images: ArrayList<String>) {
         val intent = Intent(this, DefLargerAct::class.java)
-        intent.putStringArrayListExtra(DefLargerAct.IMAGE, images)
-        intent.putExtra(DefLargerAct.INDEX, index)
+        intent.putStringArrayListExtra(LargerAct.IMAGE, images)
+        intent.putExtra(LargerAct.INDEX, index)
+        intent.putParcelableArrayListExtra(
+            LargerAct.ORIGINAL,
+            arrayListOf(
+                ImageTool.getImageInfo(image_1),
+                ImageTool.getImageInfo(image_2),
+                ImageTool.getImageInfo(image_3),
+                ImageTool.getImageInfo(image_4)
+            )
+        )
         startActivity(intent)
     }
 }

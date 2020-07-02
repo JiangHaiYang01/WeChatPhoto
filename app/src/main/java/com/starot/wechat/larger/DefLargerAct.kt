@@ -10,31 +10,24 @@ import com.starot.wechat.R
 
 class DefLargerAct : LargerAct<String>() {
 
-    companion object {
-        const val IMAGE = "images"
-        const val INDEX = "index"
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun getData(): List<String>? {
-        return intent.getStringArrayListExtra(IMAGE)
-    }
 
     override fun item(itemView: View, position: Int, data: String?) {
         val image = itemView.findViewById<ImageView>(com.starot.larger.R.id.image)
         Glide.with(this).load(data).into(image)
+
+        itemView.setOnClickListener {
+            //取消的动画
+            exitAnim()
+        }
     }
 
     override fun getItemLayout(): Int {
         return R.layout.item_def
     }
 
-    override fun getCurrentItemIndex(): Int {
-        return intent.getIntExtra(INDEX, 0)
+
+    override fun getData(): List<String>? {
+        return intent.getStringArrayListExtra(IMAGE)
     }
 
 
