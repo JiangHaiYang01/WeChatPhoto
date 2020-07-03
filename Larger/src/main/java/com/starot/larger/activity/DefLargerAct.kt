@@ -10,9 +10,6 @@ import kotlin.math.abs
 
 class DefLargerAct : LargerAct<String>() {
 
-    companion object {
-        const val TAG = "ALLENS"
-    }
 
 
     override fun getData(): List<String>? {
@@ -22,7 +19,7 @@ class DefLargerAct : LargerAct<String>() {
 
     //设置 持续时间
     override fun setDuration(): Long {
-        return 200
+        return 2000
     }
 
     override fun item(itemView: View, photoView: PhotoView, position: Int, data: String?) {

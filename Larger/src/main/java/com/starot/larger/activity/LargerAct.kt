@@ -37,11 +37,15 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         const val IMAGE = "images"
         const val INDEX = "index"
         const val ORIGINAL = "ORIGINAL"
-        const val TAG = "TAG"
+        const val TAG = "TAG_LARGER"
     }
 
+    private var currentOriginalScale = 0f
 
     private lateinit var image: PhotoView
+
+
+    private var isAnimIng = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
@@ -104,6 +108,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 override fun onAnimationEnd(p0: Animator?) {
                     Log.i(TAG, "进入的动画 end")
                     setViewPagerEnable(true)
+                    isAnimIng = false
                 }
 
                 override fun onAnimationCancel(p0: Animator?) {
@@ -112,6 +117,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 override fun onAnimationStart(p0: Animator?) {
                     Log.i(TAG, "进入的动画 start")
                     setViewPagerEnable(false)
+                    isAnimIng = true
                 }
             }
         )
@@ -152,6 +158,12 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             }
 
             override fun onScroll(x: Float, y: Float) {
+                if (abs(y) > 30) {
+                    Log.i(TAG, "拖动 是都在播放动画 $isAnimIng")
+                    if (isAnimIng) {
+                        return
+                    }
+                }
                 if (image.scale in 1.0f..1.01f && abs(y) > 30) {
                     isDrag = true
                     startDrag(x, y)
@@ -244,7 +256,6 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         }
     }
 
-    private var currentOriginalScale = 0f
 
     //拖动
     private fun startDrag(x: Float, y: Float) {
@@ -272,6 +283,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     override fun onAnimationEnd(p0: Animator?) {
         Log.i(TAG, "退出的动画 end")
+        isAnimIng = false
         setViewPagerEnable(true)
         finish()
         overridePendingTransition(0, 0)
@@ -284,6 +296,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     override fun onAnimationStart(p0: Animator?) {
         setViewPagerEnable(false)
         Log.i(TAG, "退出的动画 start")
+        isAnimIng = true
     }
 
 
