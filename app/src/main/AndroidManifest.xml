@@ -21,7 +21,7 @@
         </activity>
         <activity android:name=".DefAct" />
         <activity
-            android:name=".larger.DefLargerAct"
+            android:name="com.starot.larger.activity.DefLargerAct"
             android:theme="@style/custom_larger" />
     </application>
 

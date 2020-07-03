@@ -1,18 +1,21 @@
 package com.starot.larger.activity
 
 import android.animation.Animator
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.anim.LargerAnim
 import com.starot.larger.bean.ImageInfo
+import com.starot.larger.tools.ColorTool
 import com.starot.larger.tools.ImageTool
 import kotlinx.android.synthetic.main.activity_larger_base.*
 import java.util.*
+import kotlin.math.abs
 
 
 abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
@@ -93,14 +96,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         return R.layout.item_def
     }
 
-    open fun item(itemView: View, position: Int, data: T?) {
-        if (data != null) {
-            itemView.setOnClickListener {
-                //取消的动画
-                exitAnim()
-            }
-        }
-    }
+    abstract fun item(itemView: View, position: Int, data: T?)
 
     abstract fun getData(): List<T>?
 
@@ -129,7 +125,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     //退出动画
-    private fun exitAnim() {
+    open fun exitAnim() {
         val info = getImageInfo()[getCurrentItemIndex()]
         val originalScale =
             ImageTool.getCurrentPicOriginalScale(this, info)
@@ -142,6 +138,27 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             setDuration(),
             this
         )
+    }
+
+
+    //拖动
+    open fun startDrag(x: Float, y: Float) {
+
+
+        larger_viewpager.translationX = x
+        larger_viewpager.translationY = y
+        if (y > 0) {
+            larger_viewpager.pivotX = (ImageTool.getWindowWidth(this) / 2).toFloat()
+            larger_viewpager.pivotY = (ImageTool.getWindowHeight(this) / 2).toFloat()
+            val scale: Float = abs(y) / ImageTool.getWindowHeight(this)
+            if (scale < 1 && scale > 0) {
+                larger_viewpager.scaleX = 1 - scale
+                larger_viewpager.scaleY = 1 - scale
+                larger_parent.setBackgroundColor(
+                    ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
+                )
+            }
+        }
     }
 
     override fun onAnimationRepeat(p0: Animator?) {
