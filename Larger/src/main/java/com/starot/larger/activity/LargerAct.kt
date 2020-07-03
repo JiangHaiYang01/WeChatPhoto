@@ -3,6 +3,7 @@ package com.starot.larger.activity
 import android.animation.Animator
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.R
@@ -87,9 +88,19 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
 
-    abstract fun getItemLayout(): Int
+    //默认的布局
+    open fun getItemLayout(): Int {
+        return R.layout.item_def
+    }
 
-    abstract fun item(itemView: View, position: Int, data: T?)
+    open fun item(itemView: View, position: Int, data: T?) {
+        if (data != null) {
+            itemView.setOnClickListener {
+                //取消的动画
+                exitAnim()
+            }
+        }
+    }
 
     abstract fun getData(): List<T>?
 
@@ -118,7 +129,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     //退出动画
-    fun exitAnim() {
+    private fun exitAnim() {
         val info = getImageInfo()[getCurrentItemIndex()]
         val originalScale =
             ImageTool.getCurrentPicOriginalScale(this, info)

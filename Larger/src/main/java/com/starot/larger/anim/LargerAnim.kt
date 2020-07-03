@@ -23,7 +23,8 @@ object LargerAnim {
         duration: Long,
         animatorListener: Animator.AnimatorListener
     ) {
-        parent.setBackgroundColor(ColorTool.getColorWithAlpha(Color.BLACK, 0f))
+        startExitParentAnim(parent, originalScale, duration)
+//        parent.setBackgroundColor(ColorTool.getColorWithAlpha(Color.BLACK, 0f))
         startExitViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
     }
 
@@ -40,6 +41,24 @@ object LargerAnim {
         startEnterParentAnim(parent, originalScale, duration)
         startEnterViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
     }
+
+    //修改进入的时候背景 渐变 黑色
+    private fun startExitParentAnim(
+        parent: View,
+        originalScale: Float,
+        duration: Long
+    ) {
+        val valueAnimator = ValueAnimator()
+        valueAnimator.duration = duration
+        valueAnimator.setFloatValues(1f, originalScale)
+        valueAnimator.addUpdateListener { animation ->
+            parent.setBackgroundColor(
+                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
+            )
+        }
+        valueAnimator.start()
+    }
+
 
     //修改进入的时候背景 渐变 黑色
     private fun startEnterParentAnim(

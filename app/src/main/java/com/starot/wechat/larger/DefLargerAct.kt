@@ -11,18 +11,12 @@ import com.starot.wechat.R
 class DefLargerAct : LargerAct<String>() {
 
 
+    //重写item 方法 加载图片 默认的只有一个image
     override fun item(itemView: View, position: Int, data: String?) {
+        //父类的方法 必须要有
+        super.item(itemView, position, data)
         val image = itemView.findViewById<ImageView>(com.starot.larger.R.id.image)
         Glide.with(this).load(data).into(image)
-
-        itemView.setOnClickListener {
-            //取消的动画
-            exitAnim()
-        }
-    }
-
-    override fun getItemLayout(): Int {
-        return R.layout.item_def
     }
 
 
