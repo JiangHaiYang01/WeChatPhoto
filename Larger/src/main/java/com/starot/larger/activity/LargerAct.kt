@@ -159,14 +159,20 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
             override fun onScroll(x: Float, y: Float) {
                 if (abs(y) > 30) {
-                    Log.i(TAG, "拖动 是都在播放动画 $isAnimIng")
+//                    Log.i(TAG, "拖动 是都在播放动画 $isAnimIng")
                     if (isAnimIng) {
                         return
                     }
                 }
                 if (image.scale in 1.0f..1.01f && abs(y) > 30) {
-                    isDrag = true
-                    startDrag(x, y)
+                    //只有向下可以 向上不拖动
+                    if (y > 0) {
+                        isDrag = true
+                        startDrag(x, y)
+                    }else{
+//                        Log.i(TAG, "拖动 向上")
+                    }
+
                 }
             }
 
@@ -232,6 +238,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     private fun onDragFinish() {
         setViewPagerEnable(true)
+        Log.i(TAG, "drag finish ${larger_viewpager.scaleX}")
         if (larger_viewpager.scaleX > 0.7f) {
             LargerAnim.dragFinish(
                 larger_parent,
@@ -274,6 +281,8 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                     ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
                 )
             }
+        } else {
+            currentOriginalScale = 1.0f
         }
     }
 
