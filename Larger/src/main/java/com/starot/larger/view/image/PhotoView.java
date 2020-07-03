@@ -150,6 +150,10 @@ public class PhotoView extends AppCompatImageView {
         attacher.setZoomable(zoomable);
     }
 
+    public void setCustomZoomable(boolean zoomable) {
+        attacher.setCustomZoomable(zoomable);
+    }
+
     public RectF getDisplayRect() {
         return attacher.getDisplayRect();
     }

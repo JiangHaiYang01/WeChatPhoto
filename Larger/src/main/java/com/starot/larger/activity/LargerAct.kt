@@ -159,7 +159,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
             override fun onScroll(x: Float, y: Float) {
                 if (abs(y) > 30) {
-//                    Log.i(TAG, "拖动 是都在播放动画 $isAnimIng")
+                    Log.i(TAG, "拖动 是都在播放动画 $isAnimIng")
                     if (isAnimIng) {
                         return
                     }
@@ -169,8 +169,8 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                     if (y > 0) {
                         isDrag = true
                         startDrag(x, y)
-                    }else{
-//                        Log.i(TAG, "拖动 向上")
+                    } else {
+                        Log.i(TAG, "拖动 向上")
                     }
 
                 }
@@ -185,6 +185,12 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 isDrag = false
             }
         })
+    }
+
+
+    //是否可以方法缩小 移动过程中不可以方法缩小
+    private fun setZoomable(isZoomable: Boolean) {
+        image.setCustomZoomable(isZoomable)
     }
 
     abstract fun getData(): List<T>?
@@ -238,6 +244,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     private fun onDragFinish() {
         setViewPagerEnable(true)
+        setZoomable(true)
         Log.i(TAG, "drag finish ${larger_viewpager.scaleX}")
         if (larger_viewpager.scaleX > 0.7f) {
             LargerAnim.dragFinish(
@@ -267,6 +274,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     //拖动
     private fun startDrag(x: Float, y: Float) {
         setViewPagerEnable(false)
+        setZoomable(false)
         larger_viewpager.translationX = x
         larger_viewpager.translationY = y
         if (y > 0) {

@@ -93,6 +93,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     private int mVerticalScrollEdge = VERTICAL_EDGE_BOTH;
     private float mBaseRotation;
 
+
+    private boolean customZoomEnable = true;
+
     private boolean mZoomEnabled = true;
     private ScaleType mScaleType = ScaleType.FIT_CENTER;
 
@@ -145,6 +148,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         @Override
         public void onScale(float scaleFactor, float focusX, float focusY) {
+            if (!customZoomEnable) {
+                return;
+            }
             if (getScale() < mMaxScale || scaleFactor < 1f) {
                 if (mScaleChangeListener != null) {
                     mScaleChangeListener.onScaleChange(scaleFactor, focusX, focusY);
@@ -502,6 +508,11 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
     public void setZoomable(boolean zoomable) {
         mZoomEnabled = zoomable;
+        update();
+    }
+
+    public void setCustomZoomable(boolean zoomable) {
+        customZoomEnable = zoomable;
         update();
     }
 
