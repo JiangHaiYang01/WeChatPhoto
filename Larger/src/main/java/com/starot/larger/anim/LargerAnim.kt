@@ -57,6 +57,19 @@ object LargerAnim {
         translationYAnim.start()
     }
 
+    fun startExitDrag(
+        context: Context,
+        parent: View,
+        target: View,
+        originalScale: Float,
+        currentScale: Float,
+        info: ImageInfo,
+        duration: Long,
+        animatorListener: Animator.AnimatorListener
+    ) {
+        startExitParentAnimWithStart(currentScale, parent, originalScale, duration)
+        startExitViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
+    }
 
     fun startExit(
         context: Context,
@@ -94,6 +107,23 @@ object LargerAnim {
         val valueAnimator = ValueAnimator()
         valueAnimator.duration = duration
         valueAnimator.setFloatValues(1f, originalScale)
+        valueAnimator.addUpdateListener { animation ->
+            parent.setBackgroundColor(
+                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
+            )
+        }
+        valueAnimator.start()
+    }
+
+    private fun startExitParentAnimWithStart(
+        start: Float,
+        parent: View,
+        end: Float,
+        duration: Long
+    ) {
+        val valueAnimator = ValueAnimator()
+        valueAnimator.duration = duration
+        valueAnimator.setFloatValues(start, end)
         valueAnimator.addUpdateListener { animation ->
             parent.setBackgroundColor(
                 ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))

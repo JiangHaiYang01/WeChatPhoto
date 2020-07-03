@@ -195,8 +195,19 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 setDuration()
             )
         } else {
-            //todo  这里有一个bug 不应该直接从 1.0f -----> 0.0f
-            exitAnim()
+            val info = getImageInfo()[getCurrentItemIndex()]
+            val originalScale =
+                ImageTool.getCurrentPicOriginalScale(this, info)
+            LargerAnim.startExitDrag(
+                this,
+                larger_parent,
+                larger_viewpager,
+                originalScale,
+                currentOriginalScale,
+                info,
+                setDuration(),
+                this
+            )
         }
     }
 
