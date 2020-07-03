@@ -186,6 +186,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     private fun onDragFinish() {
+        larger_viewpager.isUserInputEnabled = true //true:滑动，false：禁止滑动
         if (larger_viewpager.scaleX > 0.7f) {
             LargerAnim.dragFinish(
                 larger_parent,
@@ -203,6 +204,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     //拖动
     private fun startDrag(x: Float, y: Float) {
+        larger_viewpager.isUserInputEnabled = false //true:滑动，false：禁止滑动
         larger_viewpager.translationX = x
         larger_viewpager.translationY = y
         if (y > 0) {
