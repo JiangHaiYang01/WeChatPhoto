@@ -15,7 +15,6 @@ import com.starot.larger.tools.ImageTool
 import com.starot.larger.view.image.OnViewDragListener
 import com.starot.larger.view.image.PhotoView
 import kotlinx.android.synthetic.main.activity_larger_base.*
-import kotlinx.android.synthetic.main.item_def.*
 import java.util.*
 import kotlin.math.abs
 
@@ -38,6 +37,9 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         const val INDEX = "index"
         const val ORIGINAL = "ORIGINAL"
     }
+
+
+    private lateinit var image: PhotoView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
@@ -105,7 +107,6 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     abstract fun item(itemView: View, photoView: PhotoView, position: Int, data: T?)
 
     fun item(itemView: View, position: Int, data: T?) {
-        val image: PhotoView
         try {
             image = itemView.findViewById(R.id.image)
         } catch (t: Throwable) {
@@ -171,6 +172,13 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     //退出动画
     open fun exitAnim() {
+
+        //如果现在是放大的  仿造微信 就先变成真长 1：1 比例 在缩小
+        if (image.scale > 1.0f) {
+            image.scale = 1f
+        }
+
+
         val info = getImageInfo()[getCurrentItemIndex()]
         val originalScale =
             ImageTool.getCurrentPicOriginalScale(this, info)
