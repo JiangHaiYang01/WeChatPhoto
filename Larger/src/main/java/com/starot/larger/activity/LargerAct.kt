@@ -3,6 +3,7 @@ package com.starot.larger.activity
 import android.animation.Animator
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -36,6 +37,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         const val IMAGE = "images"
         const val INDEX = "index"
         const val ORIGINAL = "ORIGINAL"
+        const val TAG = "TAG"
     }
 
 
@@ -94,8 +96,31 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             originalScale,
             info,
             setDuration(),
-            null
+            object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    Log.i(TAG, "进入的动画 end")
+                    setViewPagerEnable(true)
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                    Log.i(TAG, "进入的动画 start")
+                    setViewPagerEnable(false)
+                }
+            }
         )
+    }
+
+
+    //设置viewpager 是否可以滑动
+    private fun setViewPagerEnable(isUserInputEnabled: Boolean) {
+        larger_viewpager.isUserInputEnabled = isUserInputEnabled //true:滑动，false：禁止滑动
     }
 
 
@@ -194,7 +219,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     private fun onDragFinish() {
-        larger_viewpager.isUserInputEnabled = true //true:滑动，false：禁止滑动
+        setViewPagerEnable(true)
         if (larger_viewpager.scaleX > 0.7f) {
             LargerAnim.dragFinish(
                 larger_parent,
@@ -223,7 +248,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     //拖动
     private fun startDrag(x: Float, y: Float) {
-        larger_viewpager.isUserInputEnabled = false //true:滑动，false：禁止滑动
+        setViewPagerEnable(false)
         larger_viewpager.translationX = x
         larger_viewpager.translationY = y
         if (y > 0) {
@@ -246,14 +271,19 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     override fun onAnimationEnd(p0: Animator?) {
+        Log.i(TAG, "退出的动画 end")
+        setViewPagerEnable(true)
         finish()
         overridePendingTransition(0, 0)
+
     }
 
     override fun onAnimationCancel(p0: Animator?) {
     }
 
     override fun onAnimationStart(p0: Animator?) {
+        setViewPagerEnable(false)
+        Log.i(TAG, "退出的动画 start")
     }
 
 

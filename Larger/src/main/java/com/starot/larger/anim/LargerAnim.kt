@@ -205,8 +205,8 @@ object LargerAnim {
         val set = AnimatorSet()
         set.playTogether(animatorX, animatorY, animatorTransX, animatorTransY)
         set.duration = duration
-        set.start()
         set.addListener(animatorListener)
+        set.start()
     }
 
     //小图片 到 大图的动画
@@ -253,8 +253,9 @@ object LargerAnim {
         val set = AnimatorSet()
         set.playTogether(animatorX, animatorY)
         set.duration = duration
-        set.start()
         if (animatorListener != null)
             set.addListener(animatorListener)
+        set.start()
+
     }
 }
