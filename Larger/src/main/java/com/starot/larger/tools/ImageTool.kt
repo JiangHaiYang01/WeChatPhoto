@@ -45,7 +45,7 @@ object ImageTool {
     ): Float {
         val width: Float = info.width
         val height: Float = info.height
-        val imgScale: Float = getImgScale(width.toFloat(), height.toFloat())
+        val imgScale: Float = getImgScale(width, height)
         val mWindowScale: Float = getWindowScale(context)
         return if (imgScale >= mWindowScale) {
             width * 1.0f / getWindowWidth(context)

@@ -3,7 +3,6 @@ package com.starot.larger.activity
 import android.animation.Animator
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -13,7 +12,10 @@ import com.starot.larger.anim.LargerAnim
 import com.starot.larger.bean.ImageInfo
 import com.starot.larger.tools.ColorTool
 import com.starot.larger.tools.ImageTool
+import com.starot.larger.view.image.OnViewDragListener
+import com.starot.larger.view.image.PhotoView
 import kotlinx.android.synthetic.main.activity_larger_base.*
+import kotlinx.android.synthetic.main.item_def.*
 import java.util.*
 import kotlin.math.abs
 
@@ -26,6 +28,10 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     //当前的index
     private var mCurrentIndex = 0
+
+
+    //是否发生过移动
+    private var isDrag = false
 
     companion object {
         const val IMAGE = "images"
@@ -96,7 +102,46 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         return R.layout.item_def
     }
 
-    abstract fun item(itemView: View, position: Int, data: T?)
+    abstract fun item(itemView: View, photoView: PhotoView, position: Int, data: T?)
+
+    fun item(itemView: View, position: Int, data: T?) {
+        val image: PhotoView
+        try {
+            image = itemView.findViewById(R.id.image)
+        } catch (t: Throwable) {
+            throw Throwable("Must add id to be 'image' of PhotoView in your layout")
+        }
+        item(itemView, image, position, data)
+
+        //单点击退出
+        image.setOnPhotoTapListener { _, _, _ ->
+            exitAnim()
+        }
+
+
+        //移动
+        image.setOnViewDragListener(object : OnViewDragListener {
+            override fun onDrag(dx: Float, dy: Float) {
+
+            }
+
+            override fun onScroll(x: Float, y: Float) {
+                if (image.scale <= 1.01f && abs(y) > 30) {
+                    isDrag = true
+                    startDrag(x, y)
+                }
+            }
+
+            override fun onScrollFinish() {
+                if (isDrag)
+                    onDragFinish()
+            }
+
+            override fun onScrollStart() {
+                isDrag = false
+            }
+        })
+    }
 
     abstract fun getData(): List<T>?
 
@@ -140,11 +185,24 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         )
     }
 
+    private fun onDragFinish() {
+        if (larger_viewpager.scaleX > 0.7f) {
+            LargerAnim.dragFinish(
+                larger_parent,
+                larger_viewpager,
+                currentOriginalScale,
+                setDuration()
+            )
+        } else {
+            //todo  这里有一个bug 不应该直接从 1.0f -----> 0.0f
+            exitAnim()
+        }
+    }
+
+    private var currentOriginalScale = 0f
 
     //拖动
-    open fun startDrag(x: Float, y: Float) {
-
-
+    private fun startDrag(x: Float, y: Float) {
         larger_viewpager.translationX = x
         larger_viewpager.translationY = y
         if (y > 0) {
@@ -154,6 +212,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             if (scale < 1 && scale > 0) {
                 larger_viewpager.scaleX = 1 - scale
                 larger_viewpager.scaleY = 1 - scale
+                currentOriginalScale = 1 - scale
                 larger_parent.setBackgroundColor(
                     ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
                 )

@@ -14,6 +14,50 @@ import com.starot.larger.tools.ImageTool
 object LargerAnim {
 
 
+    fun dragFinish(
+        parent: View,
+        target: View,
+        originalScale: Float,
+        duration: Long
+    ) {
+        startEnterParentAnim(parent, originalScale, duration)
+        translationDrag(duration, originalScale, target)
+    }
+
+    private fun translationDrag(
+        duration: Long,
+        originalScale: Float,
+        target: View
+    ) {
+        val valueAnimator = ValueAnimator()
+        valueAnimator.duration = duration
+        valueAnimator.setFloatValues(originalScale, 1f)
+        valueAnimator.addUpdateListener { animation ->
+            target.scaleX = animation.animatedValue as Float
+            target.scaleY = animation.animatedValue as Float
+        }
+        valueAnimator.start()
+
+        val translationX = target.translationX
+        val translationY = target.translationY
+        val translationXAnim = ValueAnimator()
+        translationXAnim.duration = duration
+        translationXAnim.setFloatValues(translationX, 0f)
+        translationXAnim.addUpdateListener { animation ->
+            target.translationX = animation.animatedValue as Float
+        }
+        translationXAnim.start()
+
+        val translationYAnim = ValueAnimator()
+        translationYAnim.duration = duration
+        translationYAnim.setFloatValues(translationY, 0f)
+        translationYAnim.addUpdateListener { animation ->
+            target.translationY = animation.animatedValue as Float
+        }
+        translationYAnim.start()
+    }
+
+
     fun startExit(
         context: Context,
         parent: View,
@@ -24,7 +68,6 @@ object LargerAnim {
         animatorListener: Animator.AnimatorListener
     ) {
         startExitParentAnim(parent, originalScale, duration)
-//        parent.setBackgroundColor(ColorTool.getColorWithAlpha(Color.BLACK, 0f))
         startExitViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
     }
 
