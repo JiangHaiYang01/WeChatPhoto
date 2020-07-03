@@ -170,7 +170,10 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                         isDrag = true
                         startDrag(x, y)
                     } else {
-                        Log.i(TAG, "拖动 向上")
+                        if (isDrag) {
+                            startDrag(x, y)
+                        } else
+                            Log.i(TAG, "拖动 向上")
                     }
 
                 }
