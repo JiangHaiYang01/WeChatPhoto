@@ -22,7 +22,7 @@ class DefLargerAct : LargerAct<String>() {
 
     //设置 持续时间
     override fun setDuration(): Long {
-        return 2000
+        return 200
     }
 
     override fun item(itemView: View, photoView: PhotoView, position: Int, data: String?) {

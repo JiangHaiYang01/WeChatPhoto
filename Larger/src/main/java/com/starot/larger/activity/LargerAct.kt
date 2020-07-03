@@ -152,7 +152,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             }
 
             override fun onScroll(x: Float, y: Float) {
-                if (image.scale <= 1.01f && abs(y) > 30) {
+                if (image.scale in 1.0f..1.01f && abs(y) > 30) {
                     isDrag = true
                     startDrag(x, y)
                 }
