@@ -24,7 +24,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
 
     //默认显示时间
-    private var defDuration: Long = 300
+    private var defDuration: Long = 200
 
     //当前的index
     private var mCurrentIndex = 0
@@ -299,7 +299,6 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     //拖动
     private fun startDrag(x: Float, y: Float) {
-        Log.i(TAG, "drag ================ $x $y")
         setViewPagerEnable(false)
         setZoomable(false)
         var dampingData = setDamping()
@@ -327,15 +326,6 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             currentOriginalScale = 1.0f
             larger_viewpager.pivotX = (ImageTool.getWindowWidth(this) / 2).toFloat()
             larger_viewpager.pivotY = (ImageTool.getWindowHeight(this) / 2).toFloat()
-//            val scale: Float = abs(y) / ImageTool.getWindowHeight(this)
-//            if (scale < 1 && scale > 0) {
-//                larger_viewpager.scaleX = 1 - scale
-//                larger_viewpager.scaleY = 1 - scale
-//                currentOriginalScale = 1 - scale
-//                larger_parent.setBackgroundColor(
-//                    ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
-//                )
-//            }
         }
     }
 
