@@ -41,8 +41,10 @@ class DefLargerAct : LargerAct<String>() {
         if (data == null) {
             return
         }
+        //这里用到了自己写的一个 进度条 可自定义
         val progressView = itemView.findViewById<CircleProgressView>(R.id.progress)
 
+        //Glide 加载图片的进度 具体可参考代码
         ProgressInterceptor.addListener(data, object : ProgressListener {
             override fun onProgress(progress: Int) {
                 Log.i(TAG, "图片加载进度 $progress ${Thread.currentThread().name}")

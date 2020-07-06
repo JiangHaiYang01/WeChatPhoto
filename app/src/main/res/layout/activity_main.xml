@@ -11,6 +11,6 @@
         android:id="@+id/def_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="默认样式" />
+        android:text="点击查看sample" />
 
 </LinearLayout>
