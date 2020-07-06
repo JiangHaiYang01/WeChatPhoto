@@ -54,8 +54,11 @@ class DefAct : AppCompatActivity() {
 
     private fun startAct(index: Int, images: ArrayList<String>) {
         val intent = Intent(this, DefLargerAct::class.java)
+        //传入图片信息 这里可所以类型
         intent.putStringArrayListExtra(LargerAct.IMAGE, images)
+        //传入当前的 index  用于处理viewpager2 务必添加
         intent.putExtra(LargerAct.INDEX, index)
+        //传入图片的位置信息，点击以后的动画效果需要 务必添加
         intent.putParcelableArrayListExtra(
             LargerAct.ORIGINAL,
             arrayListOf(

@@ -47,7 +47,6 @@ class DefLargerAct : LargerAct<String>() {
         //Glide 加载图片的进度 具体可参考代码
         ProgressInterceptor.addListener(data, object : ProgressListener {
             override fun onProgress(progress: Int) {
-                Log.i(TAG, "图片加载进度 $progress ${Thread.currentThread().name}")
                 progressView.visibility = View.VISIBLE
                 progressView.progress = progress
             }
