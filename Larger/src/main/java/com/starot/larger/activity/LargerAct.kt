@@ -136,17 +136,17 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     open fun onLongClickListener() {}
 
     //默认的布局
-    open fun getItemLayout(): Int {
-        return R.layout.item_def
-    }
+    abstract fun getItemLayout(): Int
+
+    abstract fun getPhotoView():Int
 
     abstract fun item(itemView: View, photoView: PhotoView, position: Int, data: T?)
 
     fun item(itemView: View, position: Int, data: T?) {
         try {
-            image = itemView.findViewById(R.id.image)
+            image = itemView.findViewById(getPhotoView())
         } catch (t: Throwable) {
-            throw Throwable("Must add id to be 'image' of PhotoView in your layout")
+            throw Throwable("Must add  PhotoView in your layout")
         }
         item(itemView, image, position, data)
 

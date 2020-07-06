@@ -11,10 +11,12 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.starot.customprogress.CircleProgressView
 import com.starot.larger.activity.LargerAct
 import com.starot.wechat.glide.impl.ProgressListener
 import com.starot.wechat.glide.interceptor.ProgressInterceptor
 import com.starot.larger.view.image.PhotoView
+import com.starot.wechat.R
 
 
 class DefLargerAct : LargerAct<String>() {
@@ -39,10 +41,13 @@ class DefLargerAct : LargerAct<String>() {
         if (data == null) {
             return
         }
+        val progressView = itemView.findViewById<CircleProgressView>(R.id.progress)
 
         ProgressInterceptor.addListener(data, object : ProgressListener {
             override fun onProgress(progress: Int) {
-                Log.i(TAG, "图片加载进度 $progress")
+                Log.i(TAG, "图片加载进度 $progress ${Thread.currentThread().name}")
+                progressView.visibility = View.VISIBLE
+                progressView.progress = progress
             }
         })
         val options = RequestOptions()
@@ -61,6 +66,7 @@ class DefLargerAct : LargerAct<String>() {
                     isFirstResource: Boolean
                 ): Boolean {
                     Log.i(TAG, "图片加载失败")
+                    progressView.visibility = View.GONE
                     return false
                 }
 
@@ -72,6 +78,7 @@ class DefLargerAct : LargerAct<String>() {
                     isFirstResource: Boolean
                 ): Boolean {
                     Log.i(TAG, "图片加载成功")
+                    progressView.visibility = View.GONE
                     return false
                 }
             })
@@ -82,6 +89,15 @@ class DefLargerAct : LargerAct<String>() {
     //长按事件
     override fun onLongClickListener() {
         Toast.makeText(this, "长按图片", Toast.LENGTH_LONG).show()
+    }
+
+    //item 布局
+    override fun getItemLayout(): Int {
+        return R.layout.item_def
+    }
+
+    override fun getPhotoView(): Int {
+        return R.id.image
     }
 
 }

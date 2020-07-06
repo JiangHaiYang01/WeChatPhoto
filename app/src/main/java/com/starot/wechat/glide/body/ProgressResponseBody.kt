@@ -1,6 +1,7 @@
 package com.starot.wechat.glide.body
 
 
+import android.os.Handler
 import com.starot.wechat.glide.impl.ProgressListener
 import com.starot.wechat.glide.interceptor.ProgressInterceptor
 import okhttp3.MediaType
@@ -10,6 +11,7 @@ import okio.*
 
 class ProgressResponseBody(
     url: String,
+    private val handler: Handler,
     private var responseBody: ResponseBody
 ) : ResponseBody() {
 
@@ -42,7 +44,9 @@ class ProgressResponseBody(
             }
             val progress = (100f * totalBytesRead / fullLength).toInt()
             if (progress != currentProgress) {
-                listener?.onProgress(progress)
+                handler.post {
+                    listener?.onProgress(progress)
+                }
             }
             currentProgress = progress;
             return bytesRead

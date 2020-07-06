@@ -1,5 +1,7 @@
 package com.starot.wechat.glide.interceptor
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import com.starot.wechat.glide.impl.ProgressListener
 import com.starot.wechat.glide.body.ProgressResponseBody
@@ -15,9 +17,11 @@ object ProgressInterceptor : Interceptor {
         val response = chain.proceed(request)
         val url: String = request.url().toString()
         val body = response.body()
+        val handler = Handler(Looper.getMainLooper())
         return response.newBuilder().body(body?.let {
             ProgressResponseBody(
                 url,
+                handler,
                 it
             )
         }).build()

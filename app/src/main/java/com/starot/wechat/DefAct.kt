@@ -18,10 +18,10 @@ class DefAct : AppCompatActivity() {
 
 
         val images = arrayListOf(
-            "https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3656672875,122433815&fm=26&gp=0.jpg",
-            "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1766518855,3266540025&fm=26&gp=0.jpg",
-            "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3344832883,2462232837&fm=26&gp=0.jpg",
-            "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2480960326,1678684230&fm=26&gp=0.jpg"
+            "http://img.netbian.com/file/2019/0722/46a77e637238b439e445a8e11279eb28.jpg",
+            "http://img.netbian.com/file/2019/1214/552b1999aa4d5a2e75352fa2f6e93d51.jpg",
+            "http://img.netbian.com/file/2020/0628/60cb9c1b9c5fecdb8ffe1e686ca7ef1d.jpg",
+            "http://pic.jj20.com/up/allimg/1111/0H91Q05918/1PH9105918-1-1200.jpg"
         )
 
 
