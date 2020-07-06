@@ -29,6 +29,8 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     //当前的index
     private var mCurrentIndex = 0
 
+    //默认拖动时候的阻尼系数   [1.0----4.0f]
+    private var damping: Float = 1.0f
 
     //是否发生过移动
     private var isDrag = false
@@ -106,7 +108,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 }
 
                 override fun onAnimationEnd(p0: Animator?) {
-                    Log.i(TAG, "进入的动画 end")
+//                    Log.i(TAG, "进入的动画 end")
                     setViewPagerEnable(true)
                     isAnimIng = false
                 }
@@ -115,7 +117,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 }
 
                 override fun onAnimationStart(p0: Animator?) {
-                    Log.i(TAG, "进入的动画 start")
+//                    Log.i(TAG, "进入的动画 start")
                     setViewPagerEnable(false)
                     isAnimIng = true
                 }
@@ -129,6 +131,9 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         larger_viewpager.isUserInputEnabled = isUserInputEnabled //true:滑动，false：禁止滑动
     }
 
+
+    //长按的事件
+    open fun onLongClickListener() {}
 
     //默认的布局
     open fun getItemLayout(): Int {
@@ -150,6 +155,11 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             exitAnim()
         }
 
+        image.setOnLongClickListener {
+            onLongClickListener()
+            return@setOnLongClickListener false
+        }
+
 
         //移动
         image.setOnViewDragListener(object : OnViewDragListener {
@@ -158,24 +168,33 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             }
 
             override fun onScroll(x: Float, y: Float) {
-                if (abs(y) > 30) {
-                    Log.i(TAG, "拖动 是都在播放动画 $isAnimIng")
+                //这里 需要判断一下滑动的角度  防止和 viewpager 滑动冲突
+                if (isDrag) {
+                    //正在播放动画 不给滑动
                     if (isAnimIng) {
                         return
                     }
-                }
-                if (image.scale in 1.0f..1.01f && abs(y) > 30) {
-                    //只有向下可以 向上不拖动
-                    if (y > 0) {
-                        isDrag = true
-                        startDrag(x, y)
-                    } else {
-                        if (isDrag) {
-                            startDrag(x, y)
-                        } else
-                            Log.i(TAG, "拖动 向上")
+                    //图片处于缩放状态
+                    if (image.scale != 1.0f) {
+                        return
                     }
-
+                    startDrag(x, y)
+                } else {
+                    if (abs(x) > 30 && abs(y) > 60) {
+                        //正在播放动画 不给滑动
+                        if (isAnimIng) {
+                            return
+                        }
+                        //图片处于缩放状态
+                        if (image.scale != 1.0f) {
+                            return
+                        }
+                        // 一开始向上滑动无效的
+                        if (y > 0) {
+                            isDrag = true
+                            startDrag(x, y)
+                        }
+                    }
                 }
             }
 
@@ -218,6 +237,10 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
 
+    open fun setDamping(): Float {
+        return damping
+    }
+
     override fun onBackPressed() {
         //点击返回无效
     }
@@ -248,7 +271,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     private fun onDragFinish() {
         setViewPagerEnable(true)
         setZoomable(true)
-        Log.i(TAG, "drag finish ${larger_viewpager.scaleX}")
+//        Log.i(TAG, "drag finish ${larger_viewpager.scaleX}")
         if (larger_viewpager.scaleX > 0.7f) {
             LargerAnim.dragFinish(
                 larger_parent,
@@ -276,10 +299,18 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     //拖动
     private fun startDrag(x: Float, y: Float) {
+        Log.i(TAG, "drag ================ $x $y")
         setViewPagerEnable(false)
         setZoomable(false)
-        larger_viewpager.translationX = x
-        larger_viewpager.translationY = y
+        var dampingData = setDamping()
+        if (dampingData >= 4.0f) {
+            dampingData = 4.0f
+        } else if (dampingData < 0f) {
+            dampingData = 0f
+        }
+
+        larger_viewpager.translationX = x * dampingData
+        larger_viewpager.translationY = y * dampingData
         if (y > 0) {
             larger_viewpager.pivotX = (ImageTool.getWindowWidth(this) / 2).toFloat()
             larger_viewpager.pivotY = (ImageTool.getWindowHeight(this) / 2).toFloat()
@@ -294,6 +325,17 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             }
         } else {
             currentOriginalScale = 1.0f
+            larger_viewpager.pivotX = (ImageTool.getWindowWidth(this) / 2).toFloat()
+            larger_viewpager.pivotY = (ImageTool.getWindowHeight(this) / 2).toFloat()
+//            val scale: Float = abs(y) / ImageTool.getWindowHeight(this)
+//            if (scale < 1 && scale > 0) {
+//                larger_viewpager.scaleX = 1 - scale
+//                larger_viewpager.scaleY = 1 - scale
+//                currentOriginalScale = 1 - scale
+//                larger_parent.setBackgroundColor(
+//                    ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
+//                )
+//            }
         }
     }
 
@@ -302,7 +344,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
     override fun onAnimationEnd(p0: Animator?) {
-        Log.i(TAG, "退出的动画 end")
+//        Log.i(TAG, "退出的动画 end")
         isAnimIng = false
         setViewPagerEnable(true)
         finish()
@@ -315,7 +357,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     override fun onAnimationStart(p0: Animator?) {
         setViewPagerEnable(false)
-        Log.i(TAG, "退出的动画 start")
+//        Log.i(TAG, "退出的动画 start")
         isAnimIng = true
     }
 
