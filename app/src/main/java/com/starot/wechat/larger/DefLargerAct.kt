@@ -50,6 +50,8 @@ class DefLargerAct : LargerAct<String>() {
                 progressView.progress = progress
             }
         })
+
+        //这里为了演示效果  取消了缓存  正常使用是不需要的
         val options = RequestOptions()
             .skipMemoryCache(true)
             .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -96,6 +98,7 @@ class DefLargerAct : LargerAct<String>() {
         return R.layout.item_def
     }
 
+    //一定要返回一个 PhotoView 的id  内部处理还是需要用到的
     override fun getPhotoView(): Int {
         return R.id.image
     }
