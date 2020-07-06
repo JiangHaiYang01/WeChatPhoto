@@ -1,4 +1,4 @@
-package com.starot.larger.view.glide.module
+package com.starot.wechat.glide.module
 
 import android.content.Context
 import android.util.Log
@@ -8,8 +8,7 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.bumptech.glide.module.LibraryGlideModule
-import com.starot.larger.view.glide.interceptor.ProgressInterceptor
+import com.starot.wechat.glide.interceptor.ProgressInterceptor
 import okhttp3.OkHttpClient
 import java.io.InputStream
 
@@ -20,7 +19,6 @@ class MyGlideModule : AppGlideModule() {
         glide: Glide,
         registry: Registry
     ) {
-        Log.i("Allens","MyGlideModule")
         //添加拦截器到Glide
         val builder = OkHttpClient.Builder()
         builder.addInterceptor(ProgressInterceptor)

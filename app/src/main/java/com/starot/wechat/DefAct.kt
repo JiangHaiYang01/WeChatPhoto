@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.starot.larger.activity.LargerAct
 import com.starot.larger.tools.ImageTool
-import com.starot.larger.activity.DefLargerAct
+import com.starot.wechat.larger.DefLargerAct
 import kotlinx.android.synthetic.main.activity_def.*
 
 class DefAct : AppCompatActivity() {

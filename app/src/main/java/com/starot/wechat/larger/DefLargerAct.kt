@@ -1,4 +1,4 @@
-package com.starot.larger.activity
+package com.starot.wechat.larger
 
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -11,8 +11,9 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
-import com.starot.larger.view.glide.impl.ProgressListener
-import com.starot.larger.view.glide.interceptor.ProgressInterceptor
+import com.starot.larger.activity.LargerAct
+import com.starot.wechat.glide.impl.ProgressListener
+import com.starot.wechat.glide.interceptor.ProgressInterceptor
 import com.starot.larger.view.image.PhotoView
 
 

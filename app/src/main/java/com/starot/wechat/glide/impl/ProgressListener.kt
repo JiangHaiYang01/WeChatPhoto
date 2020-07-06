@@ -1,4 +1,4 @@
-package com.starot.larger.view.glide.impl
+package com.starot.wechat.glide.impl
 
 
 interface ProgressListener {

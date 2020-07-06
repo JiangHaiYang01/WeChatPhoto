@@ -1,9 +1,8 @@
-package com.starot.larger.view.glide.body
+package com.starot.wechat.glide.body
 
 
-import android.util.Log
-import com.starot.larger.view.glide.impl.ProgressListener
-import com.starot.larger.view.glide.interceptor.ProgressInterceptor
+import com.starot.wechat.glide.impl.ProgressListener
+import com.starot.wechat.glide.interceptor.ProgressInterceptor
 import okhttp3.MediaType
 import okhttp3.ResponseBody
 import okio.*
@@ -32,7 +31,7 @@ class ProgressResponseBody(
 
         private var totalBytesRead: Long = 0
 
-        var currentProgress = 0
+        private var currentProgress = 0
         override fun read(sink: Buffer, byteCount: Long): Long {
             val bytesRead = super.read(sink, byteCount)
             val fullLength = responseBody.contentLength()

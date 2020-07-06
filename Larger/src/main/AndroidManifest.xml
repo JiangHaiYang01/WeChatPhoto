@@ -2,10 +2,6 @@
     package="com.starot.larger">
 
     <application>
-        <activity
-            android:name=".activity.LargerAct"
-            android:screenOrientation="portrait"
-            android:theme="@style/custom_larger" />
 
     </application>
 
