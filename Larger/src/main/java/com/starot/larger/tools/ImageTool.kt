@@ -11,7 +11,7 @@ import com.starot.larger.bean.ImageInfo
 
 object ImageTool {
 
-     const val TAG = "ALLENS"
+    const val TAG = "ALLENS"
 
 
     //获取ImageView 坐标
@@ -61,10 +61,6 @@ object ImageTool {
             ImageView.ScaleType.MATRIX -> {
             }
             ImageView.ScaleType.FIT_XY -> {
-                result.right = result.right
-                result.top = result.top
-                result.left = result.left
-                result.bottom = result.bottom
             }
 
             ImageView.ScaleType.FIT_START -> {
@@ -89,6 +85,11 @@ object ImageTool {
 
             }
             ImageView.ScaleType.CENTER_CROP -> {
+
+//                result.right = result.right * 2
+//                result.top = result.top * 2
+//                result.left = result.left * 2
+//                result.bottom = result.bottom * 2
             }
             ImageView.ScaleType.CENTER_INSIDE -> {
                 result.left = (result.left + (w / 2) + 0.5f).toInt()
@@ -132,7 +133,7 @@ object ImageTool {
         } else {
             height * 1.0f / getWindowHeight(context)
         }
-        Log.i(TAG, "原始图片 缩放度 ------>" + fl)
+        Log.i(TAG, "原始图片 缩放度 ------>$fl  mWindowScale $mWindowScale  imgScale $imgScale")
         return fl
     }
 

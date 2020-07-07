@@ -29,7 +29,7 @@ class DefLargerAct : LargerAct<String>() {
 
     //设置 持续时间
     override fun setDuration(): Long {
-        return 200
+        return 2000
     }
 
     //设置阻尼系数
@@ -54,8 +54,8 @@ class DefLargerAct : LargerAct<String>() {
 
         //这里为了演示效果  取消了缓存  正常使用是不需要的
         val options = RequestOptions()
-            .skipMemoryCache(true)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
+//            .skipMemoryCache(true)
+//            .diskCacheStrategy(DiskCacheStrategy.NONE)
 
 
         Glide.with(this)
