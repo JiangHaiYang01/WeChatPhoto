@@ -18,10 +18,22 @@ class DefAct : AppCompatActivity() {
 
 
         val images = arrayListOf(
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg",
+//            "https://upload-images.jianshu.io/upload_images/9947322-01b4a6dba68e95dd.jpg"
             "http://img.netbian.com/file/2019/0722/46a77e637238b439e445a8e11279eb28.jpg",
             "http://img.netbian.com/file/2019/1214/552b1999aa4d5a2e75352fa2f6e93d51.jpg",
             "http://img.netbian.com/file/2020/0628/60cb9c1b9c5fecdb8ffe1e686ca7ef1d.jpg",
-            "http://pic.jj20.com/up/allimg/1111/0H91Q05918/1PH9105918-1-1200.jpg"
+            "http://pic.jj20.com/up/allimg/1111/0H91Q05918/1PH9105918-1-1200.jpg",
+            "http://pic.jj20.com/up/allimg/1111/0H91Q05918/1PH9105918-1-1200.jpg",
+            "http://pic.jj20.com/up/allimg/1111/0H91Q05918/1PH9105918-1-1200.jpg",
+            "http://pic.jj20.com/up/allimg/1111/0H91Q05918/1PH9105918-1-1200.jpg",
+            "http://pic1.win4000.com/mobile/2020-06-12/5ee33a090097d.jpg"
         )
 
 
@@ -37,6 +49,18 @@ class DefAct : AppCompatActivity() {
         Glide.with(this)
             .load(images[3])
             .into(image_4)
+        Glide.with(this)
+            .load(images[4])
+            .into(image_5)
+        Glide.with(this)
+            .load(images[5])
+            .into(image_6)
+        Glide.with(this)
+            .load(images[6])
+            .into(image_7)
+        Glide.with(this)
+            .load(images[7])
+            .into(image_8)
 
         image_1.setOnClickListener {
             startAct(0, images)
@@ -49,6 +73,18 @@ class DefAct : AppCompatActivity() {
         }
         image_4.setOnClickListener {
             startAct(3, images)
+        }
+        image_5.setOnClickListener {
+            startAct(4, images)
+        }
+        image_6.setOnClickListener {
+            startAct(5, images)
+        }
+        image_7.setOnClickListener {
+            startAct(6, images)
+        }
+        image_8.setOnClickListener {
+            startAct(7, images)
         }
     }
 
@@ -65,7 +101,11 @@ class DefAct : AppCompatActivity() {
                 ImageTool.getImageInfo(image_1),
                 ImageTool.getImageInfo(image_2),
                 ImageTool.getImageInfo(image_3),
-                ImageTool.getImageInfo(image_4)
+                ImageTool.getImageInfo(image_4),
+                ImageTool.getImageInfo(image_5),
+                ImageTool.getImageInfo(image_6),
+                ImageTool.getImageInfo(image_7),
+                ImageTool.getImageInfo(image_8)
             )
         )
         startActivity(intent)

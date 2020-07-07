@@ -142,7 +142,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
 
     abstract fun item(itemView: View, photoView: PhotoView, position: Int, data: T?)
 
-    fun item(itemView: View, position: Int, data: T?) {
+    private fun item(itemView: View, position: Int, data: T?) {
         try {
             image = itemView.findViewById(getPhotoView())
         } catch (t: Throwable) {

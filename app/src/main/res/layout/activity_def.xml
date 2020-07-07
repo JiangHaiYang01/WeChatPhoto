@@ -13,6 +13,7 @@
         android:layout_height="90dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:scaleType="matrix"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,6 +23,7 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginStart="20dp"
+        android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintLeft_toRightOf="@+id/image_1"
         app:layout_constraintTop_toTopOf="@+id/image_1" />
@@ -30,10 +32,11 @@
         android:id="@+id/image_3"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:scaleType="fitStart"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintLeft_toLeftOf="@+id/image_1"
-        app:layout_constraintTop_toBottomOf="@+id/image_1" />
+        app:layout_constraintLeft_toRightOf="@+id/image_2"
+        app:layout_constraintTop_toTopOf="@+id/image_2" />
 
 
     <ImageView
@@ -41,9 +44,50 @@
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginTop="20dp"
+        android:scaleType="fitCenter"
         android:src="@mipmap/ic_launcher"
-        app:layout_constraintLeft_toLeftOf="@+id/image_2"
-        app:layout_constraintTop_toBottomOf="@+id/image_2" />
+        app:layout_constraintLeft_toLeftOf="@+id/image_1"
+        app:layout_constraintTop_toBottomOf="@+id/image_1" />
+
+    <ImageView
+        android:id="@+id/image_5"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:scaleType="fitEnd"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toRightOf="@+id/image_4"
+        app:layout_constraintTop_toTopOf="@+id/image_4" />
+
+    <ImageView
+        android:id="@+id/image_6"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:scaleType="center"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toRightOf="@+id/image_5"
+        app:layout_constraintTop_toTopOf="@+id/image_5" />
+
+    <ImageView
+        android:id="@+id/image_7"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="20dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toLeftOf="@+id/image_4"
+        app:layout_constraintTop_toBottomOf="@+id/image_4" />
+
+    <ImageView
+        android:id="@+id/image_8"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintLeft_toRightOf="@+id/image_7"
+        app:layout_constraintTop_toTopOf="@+id/image_7" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
