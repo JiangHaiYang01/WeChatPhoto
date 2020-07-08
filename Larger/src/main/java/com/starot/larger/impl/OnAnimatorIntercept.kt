@@ -14,7 +14,8 @@ interface OnAnimatorIntercept {
         fullView: ImageView,
         thumbnailView: ImageView,
         holder: RecyclerView.ViewHolder,
-        listener: OnAnimatorListener
+        listener: OnAnimatorListener,
+        afterTransitionListener: OnAfterTransitionListener
     ) {
         beforeTransition(fullView, thumbnailView)
 
@@ -25,7 +26,7 @@ interface OnAnimatorIntercept {
                     it.addListener(object : Transition.TransitionListener {
                         override fun onTransitionEnd(transition: Transition?) {
                             listener.OnAnimatorEnd()
-                            afterTransition()
+                            afterTransition(afterTransitionListener)
                         }
 
                         override fun onTransitionResume(transition: Transition?) {
@@ -60,7 +61,7 @@ interface OnAnimatorIntercept {
 
     fun transitionSet(durationTime: Long): Transition
 
-    fun afterTransition()
+    fun afterTransition(afterTransitionListener: OnAfterTransitionListener)
 
     fun getLocationOnScreen(thumbnailView: ImageView): IntArray {
         val location = IntArray(2)

@@ -1,7 +1,5 @@
 package com.starot.larger.activity
 
-import android.animation.Animator
-import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,6 +9,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.anim.AnimEnterHelper
+import com.starot.larger.anim.AnimExitHelper
+import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorListener
 import com.starot.larger.view.image.PhotoView
 import kotlinx.android.synthetic.main.activity_larger_base.*
@@ -57,26 +57,26 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
     //退出的动画效果
-    private val exitAnimListener = object : Animator.AnimatorListener {
-        override fun onAnimationRepeat(p0: Animator?) {
-
+    private val exitAnimListener = object : OnAnimatorListener {
+        override fun OnAnimatorStart() {
+            setViewPagerEnable(false)
+            Log.i(TAG, "退出的动画 start")
+            isAnimIng = true
         }
 
-        override fun onAnimationEnd(p0: Animator?) {
+        override fun OnAnimatorEnd() {
             Log.i(TAG, "退出的动画 end")
             isAnimIng = false
             setViewPagerEnable(true)
             finish()
             overridePendingTransition(0, 0)
         }
+    }
 
-        override fun onAnimationCancel(p0: Animator?) {
-        }
-
-        override fun onAnimationStart(p0: Animator?) {
-            setViewPagerEnable(false)
-            Log.i(TAG, "退出的动画 start")
-            isAnimIng = true
+    //动画执行以后
+    private val afterTransitionListener = object : OnAfterTransitionListener {
+        override fun afterTransitionLoad() {
+            itemBindViewHolder(viewHolder.itemView, mCurrentIndex, getData()?.get(mCurrentIndex))
         }
     }
 
@@ -90,7 +90,6 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
     //current item viewHolder
     private lateinit var viewHolder: ViewPagerAdapter.PhotoViewHolder
-
 
     //当前的index
     private var mCurrentIndex = 0
@@ -119,8 +118,9 @@ abstract class LargerAct<T> : AppCompatActivity() {
                         setDuration(),
                         image,
                         getImageArrayList()[mCurrentIndex],
-                        holder,
-                        enterAnimListener
+                        viewHolder,
+                        enterAnimListener,
+                        afterTransitionListener
                     )
                 }
             })
@@ -148,6 +148,10 @@ abstract class LargerAct<T> : AppCompatActivity() {
             throw Throwable("Must add  PhotoView in your layout")
         }
 
+        //单点击退出
+        image.setOnPhotoTapListener { _, _, _ ->
+            exitAnim()
+        }
     }
 
 
@@ -166,6 +170,20 @@ abstract class LargerAct<T> : AppCompatActivity() {
     //==============================================================================================
     // 对外的方法
     //==============================================================================================
+
+
+    //退出的动画
+    open fun exitAnim() {
+        //大图片---->  小图的动画
+        AnimExitHelper.start(
+            setDuration(),
+            image,
+            getImageArrayList()[mCurrentIndex],
+            viewHolder,
+            exitAnimListener,
+            afterTransitionListener
+        )
+    }
 
     //长按的事件
     open fun onLongClickListener() {}

@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.starot.customprogress.CircleProgressView
 import com.starot.larger.activity.LargerAct
+import com.starot.larger.view.image.PhotoView
 import com.starot.wechat.ImagesHelper
 import com.starot.wechat.R
 import com.starot.wechat.glide.impl.ProgressListener
@@ -76,6 +77,7 @@ class SampleAct : LargerAct<String>() {
         }
         //这里用到了自己写的一个 进度条 可自定义
         val progressView = itemView.findViewById<CircleProgressView>(R.id.progress)
+        val imageView = itemView.findViewById<PhotoView>(R.id.image)
 
         //Glide 加载图片的进度 具体可参考代码
         ProgressInterceptor.addListener(data, object : ProgressListener {
@@ -87,6 +89,8 @@ class SampleAct : LargerAct<String>() {
 
         //这里为了演示效果  取消了缓存  正常使用是不需要的
         val options = RequestOptions()
+            .placeholder(imageView.drawable)
+            .override(imageView.width, imageView.height)
 //            .skipMemoryCache(true)
 //            .diskCacheStrategy(DiskCacheStrategy.NONE)
 
@@ -118,7 +122,7 @@ class SampleAct : LargerAct<String>() {
                     return false
                 }
             })
-            .into(itemView.findViewById(R.id.image))
+            .into(imageView)
     }
 
 
