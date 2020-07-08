@@ -41,6 +41,9 @@ abstract class LargerAct<T> : AppCompatActivity() {
     //是否正在动画
     private var isAnimIng = false
 
+    //进入的动画播放完成了
+    private var animFinish = false
+
     //进入动画效果
     private val enterAnimListener = object : OnAnimatorListener {
         override fun OnAnimatorStart() {
@@ -113,18 +116,12 @@ abstract class LargerAct<T> : AppCompatActivity() {
                     item(itemView, position, data?.get(position))
                     //用户自己处理加载逻辑
                     itemBindViewHolder(itemView, position, data?.get(position))
-                    //小图片---->  大图的动画
-                    AnimEnterHelper.start(
-                        setDuration(),
-                        image,
-                        getImageArrayList()[mCurrentIndex],
-                        viewHolder,
-                        enterAnimListener,
-                        afterTransitionListener
-                    )
+
+                    enterAnim()
                 }
             })
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
@@ -167,13 +164,26 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
 
-    //==============================================================================================
-    // 对外的方法
-    //==============================================================================================
-
+    //进入动画
+    private fun enterAnim() {
+        //防止viewpager 滑动时候再次触发
+        if (animFinish) {
+            return
+        }
+        animFinish = true
+        //小图片---->  大图的动画
+        AnimEnterHelper.start(
+            setDuration(),
+            image,
+            getImageArrayList()[mCurrentIndex],
+            viewHolder,
+            enterAnimListener,
+            afterTransitionListener
+        )
+    }
 
     //退出的动画
-    open fun exitAnim() {
+    private fun exitAnim() {
         //大图片---->  小图的动画
         AnimExitHelper.start(
             setDuration(),
@@ -184,6 +194,11 @@ abstract class LargerAct<T> : AppCompatActivity() {
             afterTransitionListener
         )
     }
+
+    //==============================================================================================
+    // 对外的方法
+    //==============================================================================================
+
 
     //长按的事件
     open fun onLongClickListener() {}
