@@ -2,8 +2,11 @@ package com.starot.wechat
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.starot.wechat.larger.SampleAct
 import kotlinx.android.synthetic.main.activity_def.*
@@ -41,8 +44,12 @@ class DefAct : AppCompatActivity() {
         ImagesHelper.images = imageViews
 
 
+        initLoad()
+    }
+
+    private fun initLoad() {
         for (index in imageViews.indices) {
-            imageViews[index].scaleType = ImageView.ScaleType.CENTER_CROP
+            imageViews[index].scaleType = scaleType
             Glide.with(this)
                 .load(images[index])
                 .into(imageViews[index])
@@ -52,6 +59,51 @@ class DefAct : AppCompatActivity() {
         }
     }
 
+    private var scaleType = ImageView.ScaleType.CENTER_CROP
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menu?.add(1, 1, 1, "MATRIX")
+        menu?.add(1, 2, 1, "FIT_XY")
+        menu?.add(1, 3, 1, "FIT_START")
+        menu?.add(1, 4, 1, "FIT_CENTER")
+        menu?.add(1, 5, 1, "FIT_END")
+        menu?.add(1, 6, 1, "CENTER")
+        menu?.add(1, 7, 1, "CENTER_CROP")
+        menu?.add(1, 8, 1, "CENTER_INSIDE")
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            1 -> {
+                scaleType = ImageView.ScaleType.MATRIX
+            }
+            2 -> {
+                scaleType = ImageView.ScaleType.FIT_XY
+            }
+            3 -> {
+                scaleType = ImageView.ScaleType.FIT_START
+            }
+            4 -> {
+                scaleType = ImageView.ScaleType.FIT_CENTER
+            }
+            5 -> {
+                scaleType = ImageView.ScaleType.FIT_END
+            }
+            6 -> {
+                scaleType = ImageView.ScaleType.CENTER
+            }
+            7 -> {
+                scaleType = ImageView.ScaleType.CENTER_CROP
+            }
+            8 -> {
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
+            }
+        }
+        initLoad()
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun startAct(
         index: Int,
