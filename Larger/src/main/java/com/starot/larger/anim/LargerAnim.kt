@@ -1,18 +1,15 @@
 package com.starot.larger.anim
 
 import android.animation.Animator
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.Color
 import android.view.View
+import android.widget.ImageView
+import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.bean.ImageInfo
-import com.starot.larger.tools.ColorTool
-import com.starot.larger.tools.ImageTool
 
 object LargerAnim {
 
+    var imageViews = ArrayList<ImageView>()
 
     fun dragFinish(
         parent: View,
@@ -20,42 +17,10 @@ object LargerAnim {
         originalScale: Float,
         duration: Long
     ) {
-        startEnterParentAnim(parent, originalScale, duration)
-        translationDrag(duration, originalScale, target)
+        LargerEnterAnim.startEnterParentAnim(parent, originalScale, duration)
+        LargerDragAnim.translationDrag(duration, originalScale, target)
     }
 
-    private fun translationDrag(
-        duration: Long,
-        originalScale: Float,
-        target: View
-    ) {
-        val valueAnimator = ValueAnimator()
-        valueAnimator.duration = duration
-        valueAnimator.setFloatValues(originalScale, 1f)
-        valueAnimator.addUpdateListener { animation ->
-            target.scaleX = animation.animatedValue as Float
-            target.scaleY = animation.animatedValue as Float
-        }
-        valueAnimator.start()
-
-        val translationX = target.translationX
-        val translationY = target.translationY
-        val translationXAnim = ValueAnimator()
-        translationXAnim.duration = duration
-        translationXAnim.setFloatValues(translationX, 0f)
-        translationXAnim.addUpdateListener { animation ->
-            target.translationX = animation.animatedValue as Float
-        }
-        translationXAnim.start()
-
-        val translationYAnim = ValueAnimator()
-        translationYAnim.duration = duration
-        translationYAnim.setFloatValues(translationY, 0f)
-        translationYAnim.addUpdateListener { animation ->
-            target.translationY = animation.animatedValue as Float
-        }
-        translationYAnim.start()
-    }
 
     fun startExitDrag(
         context: Context,
@@ -67,8 +32,15 @@ object LargerAnim {
         duration: Long,
         animatorListener: Animator.AnimatorListener
     ) {
-        startExitParentAnimWithStart(currentScale, parent, originalScale, duration)
-        startExitViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
+        LargerDragAnim.startExitParentAnimDrag(currentScale, parent, originalScale, duration)
+        LargerExitAnim.startExitViewScaleAnim(
+            context,
+            target,
+            originalScale,
+            info,
+            duration,
+            animatorListener
+        )
     }
 
     fun startExit(
@@ -80,11 +52,19 @@ object LargerAnim {
         duration: Long,
         animatorListener: Animator.AnimatorListener
     ) {
-        startExitParentAnim(parent, originalScale, duration)
-        startExitViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
+        LargerExitAnim.startExitParentAnim(parent, originalScale, duration)
+        LargerExitAnim.startExitViewScaleAnim(
+            context,
+            target,
+            originalScale,
+            info,
+            duration,
+            animatorListener
+        )
     }
 
 
+    //小图 ---> 大图 动画
     fun startEnter(
         context: Context,
         parent: View,
@@ -94,168 +74,43 @@ object LargerAnim {
         duration: Long,
         animatorListener: Animator.AnimatorListener?
     ) {
-        startEnterParentAnim(parent, originalScale, duration)
-        startEnterViewScaleAnim(context, target, originalScale, info, duration, animatorListener)
-    }
-
-    //修改进入的时候背景 渐变 黑色
-    private fun startExitParentAnim(
-        parent: View,
-        originalScale: Float,
-        duration: Long
-    ) {
-        val valueAnimator = ValueAnimator()
-        valueAnimator.duration = duration
-        valueAnimator.setFloatValues(1f, originalScale)
-        valueAnimator.addUpdateListener { animation ->
-            parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
-            )
-        }
-        valueAnimator.start()
-    }
-
-    private fun startExitParentAnimWithStart(
-        start: Float,
-        parent: View,
-        end: Float,
-        duration: Long
-    ) {
-        val valueAnimator = ValueAnimator()
-        valueAnimator.duration = duration
-        valueAnimator.setFloatValues(start, end)
-        valueAnimator.addUpdateListener { animation ->
-            parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
-            )
-        }
-        valueAnimator.start()
-    }
-
-
-    //修改进入的时候背景 渐变 黑色
-    private fun startEnterParentAnim(
-        parent: View,
-        originalScale: Float,
-        duration: Long
-    ) {
-        val valueAnimator = ValueAnimator()
-        valueAnimator.duration = duration
-        valueAnimator.setFloatValues(originalScale, 1f)
-        valueAnimator.addUpdateListener { animation ->
-            parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
-            )
-        }
-        valueAnimator.start()
-    }
-
-
-    private fun startExitViewScaleAnim(
-        context: Context,
-        target: View,
-        originalScale: Float,
-        info: ImageInfo,
-        duration: Long,
-        animatorListener: Animator.AnimatorListener
-    ) {
-        val pivotX: Float
-        val pivotY: Float
-        val animImgStartHeight: Float
-        val animImgStartWidth: Float
-        val width: Float = info.width
-        val height: Float = info.height
-        val localX: Float = info.left
-        val localY: Float = info.top
-        val windowScale: Float = ImageTool.getWindowScale(context)
-        val imgScale: Float = ImageTool.getImgScale(width, height)
-        if (imgScale >= windowScale) {
-            animImgStartHeight = ImageTool.getWindowHeight(context) * originalScale
-            pivotX = localX / (1 - originalScale)
-            pivotY = (localY - (animImgStartHeight - height) / 2) / (1 - originalScale)
-        } else {
-            animImgStartWidth = ImageTool.getWindowWidth(context) * originalScale
-            pivotX = (localX - (animImgStartWidth - width) / 2) / (1 - originalScale)
-            pivotY = localY / (1 - originalScale)
-        }
-        target.pivotX = pivotX
-        target.pivotY = pivotY
-        val animatorX = ObjectAnimator.ofFloat(
-            target, View.SCALE_X,
-            target.scaleX,
-            originalScale
-        )
-        val animatorY = ObjectAnimator.ofFloat(
-            target, View.SCALE_Y,
-            target.scaleY,
-            originalScale
-        )
-        val animatorTransX: ObjectAnimator = ObjectAnimator.ofFloat(
+        LargerEnterAnim.startEnterParentAnim(parent, originalScale, duration)
+        LargerEnterAnim.startEnterViewScaleAnim(
+            context,
             target,
-            View.TRANSLATION_X,
-            target.translationX + (ImageTool.getWindowWidth(context) / 2 * (1 - target.scaleX) - target.pivotX * (1 - target.scaleX)),
-            0f
+            originalScale,
+            info,
+            duration,
+            animatorListener
         )
-        val animatorTransY: ObjectAnimator = ObjectAnimator.ofFloat(
-            target,
-            View.TRANSLATION_Y,
-            target.translationY + (ImageTool.getWindowHeight(context) / 2 * (1 - target.scaleY) - target.pivotY * (1 - target.scaleY)),
-            0f
-        )
-        val set = AnimatorSet()
-        set.playTogether(animatorX, animatorY, animatorTransX, animatorTransY)
-        set.duration = duration
-        set.addListener(animatorListener)
-        set.start()
     }
 
-    //小图片 到 大图的动画
-    private fun startEnterViewScaleAnim(
-        context: Context,
-        target: View,
+    fun startEnter(
+        parent: View,
         originalScale: Float,
-        info: ImageInfo,
         duration: Long,
+        photoViewId: Int,
+        holder: ViewPagerAdapter.PhotoViewHolder,
+        index: Int,
         animatorListener: Animator.AnimatorListener?
     ) {
-
-        val pivotX: Float
-        val pivotY: Float
-        val animImgStartHeight: Float
-        val animImgStartWidth: Float
-        val width: Float = info.width
-        val height: Float = info.height
-        val localX: Float = info.left
-        val localY: Float = info.top
-        val windowScale: Float = ImageTool.getWindowScale(context)
-        val imgScale: Float = ImageTool.getImgScale(width, height)
-        if (imgScale >= windowScale) {
-            animImgStartHeight = ImageTool.getWindowHeight(context) * originalScale
-            pivotX = localX / (1 - originalScale)
-            pivotY = (localY - (animImgStartHeight - height) / 2) / (1 - originalScale)
-        } else {
-            animImgStartWidth = ImageTool.getWindowWidth(context) * originalScale
-            pivotX = (localX - (animImgStartWidth - width) / 2) / (1 - originalScale)
-            pivotY = localY / (1 - originalScale)
-        }
-        target.pivotX = pivotX
-        target.pivotY = pivotY
-        val animatorX = ObjectAnimator.ofFloat(
-            target, View.SCALE_X,
-            originalScale,
-            1.0f
-        )
-        val animatorY = ObjectAnimator.ofFloat(
-            target, View.SCALE_Y,
-            originalScale,
-            1.0f
-        )
-        val set = AnimatorSet()
-        set.playTogether(animatorX, animatorY)
-        set.duration = duration
-        if (animatorListener != null)
-            set.addListener(animatorListener)
-        set.start()
-
+        LargerEnterAnim.startEnterParentAnim(parent, originalScale, duration)
+        TransitionEnterAnimHelper.start(duration, photoViewId, holder, index,animatorListener)
     }
+
+
+    fun startExit(
+        parent: View,
+        originalScale: Float,
+        duration: Long,
+        photoViewId: Int,
+        holder: ViewPagerAdapter.PhotoViewHolder,
+        index: Int,
+        animatorListener: Animator.AnimatorListener?
+    ) {
+        LargerExitAnim.startExitParentAnim(parent, originalScale, duration)
+        TransitionExitAnimHelper.start(duration, photoViewId, holder, index,animatorListener)
+    }
+
+
 }

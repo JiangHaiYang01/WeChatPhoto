@@ -1,12 +1,14 @@
 package com.starot.larger.tools
 
-import android.R.drawable
 import android.content.Context
 import android.graphics.Matrix
 import android.graphics.Rect
 import android.util.Log
 import android.widget.ImageView
+import com.starot.larger.anim.LargerAnim
+import com.starot.larger.anim.TransitionEnterAnimHelper
 import com.starot.larger.bean.ImageInfo
+import com.starot.larger.bean.RectInfo
 
 
 object ImageTool {
@@ -15,7 +17,7 @@ object ImageTool {
 
 
     //获取ImageView 坐标
-    private fun getImageRect(image: ImageView): Rect {
+    private fun getImageRect(image: ImageView): RectInfo {
 
         Log.i(
             TAG,
@@ -56,12 +58,12 @@ object ImageTool {
         image.getGlobalVisibleRect(result)
 
         Log.i(TAG, "scaleType==========>" + image.scaleType)
+        var isCenter = false
         when (image.scaleType) {
-
-            ImageView.ScaleType.MATRIX -> {
-            }
-            ImageView.ScaleType.FIT_XY -> {
-            }
+//            ImageView.ScaleType.MATRIX -> {
+//            }
+//            ImageView.ScaleType.FIT_XY -> {
+//            }
 
             ImageView.ScaleType.FIT_START -> {
                 result.right = (result.right - w + 0.5f).toInt()
@@ -81,35 +83,38 @@ object ImageTool {
                 result.right = result.right
                 result.bottom = result.bottom
             }
-            ImageView.ScaleType.CENTER -> {
-
-            }
-            ImageView.ScaleType.CENTER_CROP -> {
-
-//                result.right = result.right * 2
-//                result.top = result.top * 2
-//                result.left = result.left * 2
-//                result.bottom = result.bottom * 2
-            }
+//            ImageView.ScaleType.CENTER -> {
+//
+//            }
+//            ImageView.ScaleType.CENTER_CROP -> {
+//
+//            }
             ImageView.ScaleType.CENTER_INSIDE -> {
                 result.left = (result.left + (w / 2) + 0.5f).toInt()
                 result.top = (result.top + (h / 2) + 0.5f).toInt()
                 result.right = (result.right - (w / 2) + 0.5f).toInt()
                 result.bottom = (result.bottom - (h / 2) + 0.5f).toInt()
             }
+            else->{
+                isCenter = true
+            }
         }
         Log.i(TAG, "result==========>$result")
-        return result
+        return RectInfo(result,isCenter)
     }
 
     //获取 图片信息
     fun getImageInfo(image: ImageView): ImageInfo {
-        val imageRect = getImageRect(image)
+        val imageRectInfo = getImageRect(image)
+        val imageRect = imageRectInfo.rect
+        //将所有的imageView 记录下来 后续会从中获取当前的图片大小进行判断
+        LargerAnim.imageViews.add(image)
         return ImageInfo(
             imageRect.height().toFloat(),
             imageRect.width().toFloat(),
             imageRect.left.toFloat(),
-            imageRect.top.toFloat()
+            imageRect.top.toFloat(),
+            imageRectInfo.isCenter
         )
     }
 

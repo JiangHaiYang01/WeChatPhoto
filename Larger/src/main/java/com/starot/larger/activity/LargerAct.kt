@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.math.abs
 
 
-abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
+abstract class LargerAct<T> : AppCompatActivity() {
 
 
     //默认显示时间
@@ -35,20 +35,73 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     //是否发生过移动
     private var isDrag = false
 
+    //动画是都已经播放过了
+    private var isFinishAnim = false
+
     companion object {
         const val IMAGE = "images"
         const val INDEX = "index"
         const val ORIGINAL = "ORIGINAL"
-        const val TAG = "TAG_LARGER"
+        const val TAG = ImageTool.TAG
     }
 
+    //图片缩放比例
     private var currentOriginalScale = 0f
 
+    //根据外部布局 传入的id  获取到的 PhotoView
     private lateinit var image: PhotoView
 
-
+    //是否正在动画
     private var isAnimIng = false
 
+    //进入动画效果
+    private var enterAnimListener = object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {
+
+        }
+
+        override fun onAnimationEnd(p0: Animator?) {
+            Log.i(TAG, "进入的动画 end")
+            setViewPagerEnable(true)
+            isAnimIng = false
+        }
+
+        override fun onAnimationCancel(p0: Animator?) {
+        }
+
+        override fun onAnimationStart(p0: Animator?) {
+            Log.i(TAG, "进入的动画 start")
+            setViewPagerEnable(false)
+            isAnimIng = true
+        }
+    }
+
+    //退出的动画效果
+    private var exitAnimListener = object : Animator.AnimatorListener {
+        override fun onAnimationRepeat(p0: Animator?) {
+
+        }
+
+        override fun onAnimationEnd(p0: Animator?) {
+            Log.i(TAG, "退出的动画 end")
+            isAnimIng = false
+            setViewPagerEnable(true)
+            finish()
+            overridePendingTransition(0, 0)
+        }
+
+        override fun onAnimationCancel(p0: Animator?) {
+        }
+
+        override fun onAnimationStart(p0: Animator?) {
+            setViewPagerEnable(false)
+            Log.i(TAG, "退出的动画 start")
+            isAnimIng = true
+        }
+    }
+
+    //item viewHolder
+    private lateinit var viewHolder: ViewPagerAdapter.PhotoViewHolder
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
@@ -64,15 +117,18 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             getItemLayout(),
             object : ViewPagerAdapter.OnBindViewHolderListener {
                 override fun onBindViewHolder(
-                    holder: ViewPagerAdapter.MyViewHolder,
+                    holder: ViewPagerAdapter.PhotoViewHolder,
                     position: Int
                 ) {
+                    viewHolder = holder
+                    Log.i(TAG, "onBindViewHolder")
                     val itemView = holder.itemView
                     if (data == null) {
                         item(itemView, position, null)
                     } else {
                         item(itemView, position, data[position])
                     }
+                    startEnterAnim()
                 }
             })
 
@@ -87,42 +143,39 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         })
     }
 
+    //启动小图片 到大图的动画效果
+    private fun startEnterAnim() {
+        //防止多次启动
+        if (!isFinishAnim) {
+            val info = getImageInfo()[getCurrentItemIndex()]
+            //当前的图片 模式 做了裁剪或者center 等 处理
+            val originalScale =
+                ImageTool.getCurrentPicOriginalScale(applicationContext, info)
+            if (info.isCenter) {
 
-    override fun onResume() {
-        super.onResume()
-        //从小图片 到 大图片的动画
-        val info = getImageInfo()[getCurrentItemIndex()]
-        val originalScale =
-            ImageTool.getCurrentPicOriginalScale(this, info)
+                LargerAnim.startEnter(
+                    larger_parent,
+                    originalScale,
+                    setDuration(),
+                    getPhotoViewId(),
+                    viewHolder,
+                    getCurrentItemIndex(),
+                    enterAnimListener
 
-        LargerAnim.startEnter(
-            this,
-            larger_parent,
-            larger_viewpager,
-            originalScale,
-            info,
-            setDuration(),
-            object : Animator.AnimatorListener {
-                override fun onAnimationRepeat(p0: Animator?) {
-
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
-//                    Log.i(TAG, "进入的动画 end")
-                    setViewPagerEnable(true)
-                    isAnimIng = false
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-                }
-
-                override fun onAnimationStart(p0: Animator?) {
-//                    Log.i(TAG, "进入的动画 start")
-                    setViewPagerEnable(false)
-                    isAnimIng = true
-                }
+                )
+            } else {
+                LargerAnim.startEnter(
+                    this,
+                    larger_parent,
+                    larger_viewpager,
+                    originalScale,
+                    info,
+                    setDuration(),
+                    enterAnimListener
+                )
             }
-        )
+            isFinishAnim = true
+        }
     }
 
 
@@ -132,19 +185,9 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
     }
 
 
-    //长按的事件
-    open fun onLongClickListener() {}
-
-    //默认的布局
-    abstract fun getItemLayout(): Int
-
-    abstract fun getPhotoView():Int
-
-    abstract fun item(itemView: View, photoView: PhotoView, position: Int, data: T?)
-
     private fun item(itemView: View, position: Int, data: T?) {
         try {
-            image = itemView.findViewById(getPhotoView())
+            image = itemView.findViewById(getPhotoViewId())
         } catch (t: Throwable) {
             throw Throwable("Must add  PhotoView in your layout")
         }
@@ -155,6 +198,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             exitAnim()
         }
 
+        //长按
         image.setOnLongClickListener {
             onLongClickListener()
             return@setOnLongClickListener false
@@ -215,7 +259,6 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         image.setCustomZoomable(isZoomable)
     }
 
-    abstract fun getData(): List<T>?
 
     //当前选中的下标
     private fun getCurrentItemIndex(): Int {
@@ -231,15 +274,6 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
             throw   Throwable("Please set the putParcelableArrayListExtra; TAG is the ORIGINAL data set, which contains the information of the small graph")
     }
 
-    //设置显示时间
-    open fun setDuration(): Long {
-        return defDuration
-    }
-
-
-    open fun setDamping(): Float {
-        return damping
-    }
 
     override fun onBackPressed() {
         //点击返回无效
@@ -257,15 +291,28 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         val info = getImageInfo()[getCurrentItemIndex()]
         val originalScale =
             ImageTool.getCurrentPicOriginalScale(this, info)
-        LargerAnim.startExit(
-            this,
-            larger_parent,
-            larger_viewpager,
-            originalScale,
-            info,
-            setDuration(),
-            this
-        )
+        if (info.isCenter) {
+            LargerAnim.startExit(
+                larger_parent,
+                originalScale,
+                setDuration(),
+                getPhotoViewId(),
+                viewHolder,
+                getCurrentItemIndex(),
+                exitAnimListener
+
+            )
+        } else {
+            LargerAnim.startExit(
+                this,
+                larger_parent,
+                larger_viewpager,
+                originalScale,
+                info,
+                setDuration(),
+                exitAnimListener
+            )
+        }
     }
 
     private fun onDragFinish() {
@@ -291,7 +338,7 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
                 currentOriginalScale,
                 info,
                 setDuration(),
-                this
+                exitAnimListener
             )
         }
     }
@@ -329,27 +376,36 @@ abstract class LargerAct<T> : AppCompatActivity(), Animator.AnimatorListener {
         }
     }
 
-    override fun onAnimationRepeat(p0: Animator?) {
 
+    override fun onDestroy() {
+        super.onDestroy()
+        LargerAnim.imageViews.clear()
     }
 
-    override fun onAnimationEnd(p0: Animator?) {
-//        Log.i(TAG, "退出的动画 end")
-        isAnimIng = false
-        setViewPagerEnable(true)
-        finish()
-        overridePendingTransition(0, 0)
 
+    //设置显示时间
+    open fun setDuration(): Long {
+        return defDuration
     }
 
-    override fun onAnimationCancel(p0: Animator?) {
+    //拖动时候的阻尼系数
+    open fun setDamping(): Float {
+        return damping
     }
 
-    override fun onAnimationStart(p0: Animator?) {
-        setViewPagerEnable(false)
-//        Log.i(TAG, "退出的动画 start")
-        isAnimIng = true
-    }
+    //长按的事件
+    open fun onLongClickListener() {}
+
+    //默认的布局
+    abstract fun getItemLayout(): Int
+
+    //获取 PhotoViewId
+    abstract fun getPhotoViewId(): Int
+
+    //数据源
+    abstract fun getData(): List<T>?
+
+    abstract fun item(itemView: View, photoView: PhotoView, position: Int, data: T?)
 
 
 }

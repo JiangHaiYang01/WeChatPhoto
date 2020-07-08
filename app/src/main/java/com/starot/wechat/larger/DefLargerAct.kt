@@ -100,7 +100,7 @@ class DefLargerAct : LargerAct<String>() {
     }
 
     //一定要返回一个 PhotoView 的id  内部处理还是需要用到的
-    override fun getPhotoView(): Int {
+    override fun getPhotoViewId(): Int {
         return R.id.image
     }
 

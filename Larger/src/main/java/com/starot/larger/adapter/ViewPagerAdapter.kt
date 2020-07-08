@@ -3,9 +3,7 @@ package com.starot.larger.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.starot.larger.R
 
 
 class ViewPagerAdapter<T>(
@@ -13,12 +11,12 @@ class ViewPagerAdapter<T>(
     private val layoutId: Int,
     private val listener: OnBindViewHolderListener
 ) :
-    RecyclerView.Adapter<ViewPagerAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<ViewPagerAdapter.PhotoViewHolder>() {
 
-    class MyViewHolder(inflate: View) : RecyclerView.ViewHolder(inflate)
+    class PhotoViewHolder(inflate: View) : RecyclerView.ViewHolder(inflate)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
+        return PhotoViewHolder(
             LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
         )
     }
@@ -30,11 +28,11 @@ class ViewPagerAdapter<T>(
         return 0
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
         listener.onBindViewHolder(holder, position)
     }
 
     interface OnBindViewHolderListener {
-        fun onBindViewHolder(holder: MyViewHolder, position: Int)
+        fun onBindViewHolder(holder: PhotoViewHolder, position: Int)
     }
 }
