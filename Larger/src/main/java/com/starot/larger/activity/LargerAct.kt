@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
+import com.starot.larger.anim.AnimBgEnterHelper
+import com.starot.larger.anim.AnimBgExitHelper
 import com.starot.larger.anim.AnimEnterHelper
 import com.starot.larger.anim.AnimExitHelper
 import com.starot.larger.impl.OnAfterTransitionListener
@@ -97,6 +99,8 @@ abstract class LargerAct<T> : AppCompatActivity() {
     //当前的index
     private var mCurrentIndex = 0
 
+    //根视图
+    private lateinit var parentView: View
 
     //适配器
     private val adapter by lazy {
@@ -116,7 +120,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
                     item(itemView, position, data?.get(position))
                     //用户自己处理加载逻辑
                     itemBindViewHolder(itemView, position, data?.get(position))
-
+                    //进入动画
                     enterAnim()
                 }
             })
@@ -127,6 +131,8 @@ abstract class LargerAct<T> : AppCompatActivity() {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_larger_base)
+        //根视图
+        parentView = larger_parent
         //当前的下标
         mCurrentIndex = getIndex()
         //设置适配器
@@ -186,6 +192,8 @@ abstract class LargerAct<T> : AppCompatActivity() {
             enterAnimListener,
             afterTransitionListener
         )
+        //背景颜色变化
+        AnimBgEnterHelper.start(parentView, 0f, setDuration())
     }
 
     //退出的动画
@@ -199,6 +207,8 @@ abstract class LargerAct<T> : AppCompatActivity() {
             exitAnimListener,
             afterTransitionListener
         )
+        //背景颜色变化
+        AnimBgExitHelper.start(parentView, 1.0f, setDuration())
     }
 
     //==============================================================================================
