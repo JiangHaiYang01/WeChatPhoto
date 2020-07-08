@@ -70,7 +70,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
     //动画执行以后
     private val afterTransitionListener = object : OnAfterTransitionListener {
         override fun afterTransitionLoad(holder: RecyclerView.ViewHolder) {
-            itemBindViewHolder(holder.itemView, mCurrentIndex, getData()?.get(mCurrentIndex))
+            itemBindViewHolder(true, holder.itemView, mCurrentIndex, getData()?.get(mCurrentIndex))
         }
     }
 
@@ -103,7 +103,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
                     //通用方法
                     item(holder, position, data?.get(position))
                     //用户自己处理加载逻辑
-                    itemBindViewHolder(itemView, position, data?.get(position))
+                    itemBindViewHolder(false, itemView, position, data?.get(position))
                     //进入动画
                     enterAnim(holder)
                 }
@@ -136,7 +136,6 @@ abstract class LargerAct<T> : AppCompatActivity() {
             image.translationX = x / 2 * dampingData
 
 
-
             //已经向上了 就黑色背景 不需要改动了
             if (y > 0) {
                 //背景的颜色 变化
@@ -163,13 +162,14 @@ abstract class LargerAct<T> : AppCompatActivity() {
                 fraction = 0f
             }
             if (abs(image.translationY) < image.height * fraction) {
-                animate(image)
-                    .translationX(0f)
-                    .translationY(0f)
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setDuration(setDuration())
-                    .start()
+                AnimDragHelper.start(
+                    setDuration(),
+                    image,
+                    getImageArrayList()[mCurrentIndex],
+                    holder,
+                    enterAnimListener,
+                    afterTransitionListener
+                )
                 //背景颜色变化
                 AnimBgEnterHelper.start(parentView, currentScale, setDuration())
             } else {
@@ -315,7 +315,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
     abstract fun getIndex(): Int
 
     //加载图片
-    abstract fun itemBindViewHolder(itemView: View, position: Int, data: T?)
+    abstract fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?)
 
 
 }

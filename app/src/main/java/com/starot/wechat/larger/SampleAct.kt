@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -76,7 +77,12 @@ class SampleAct : LargerAct<String>() {
     }
 
     //处理自己的业务逻辑
-    override fun itemBindViewHolder(itemView: View, position: Int, data: String?) {
+    override fun itemBindViewHolder(
+        isLoadFull: Boolean,
+        itemView: View,
+        position: Int,
+        data: String?
+    ) {
         if (data == null) {
             return
         }
@@ -94,10 +100,12 @@ class SampleAct : LargerAct<String>() {
 
         //这里为了演示效果  取消了缓存  正常使用是不需要的
         val options = RequestOptions()
-            .placeholder(imageView.drawable)
-            .override(imageView.width, imageView.height)
-//            .skipMemoryCache(true)
-//            .diskCacheStrategy(DiskCacheStrategy.NONE)
+        if (isLoadFull)
+            options
+                .placeholder(imageView.drawable)
+                .override(imageView.width, imageView.height)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
 
 
         Glide.with(this)
