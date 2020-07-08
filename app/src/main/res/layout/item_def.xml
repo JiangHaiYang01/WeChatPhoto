@@ -16,12 +16,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <View
-        android:background="@color/colorPrimary"
-        android:layout_width="100px"
-        android:layout_height="100px"/>
-
-
     <com.starot.customprogress.CircleProgressView
         android:id="@+id/progress"
         android:layout_width="0dp"

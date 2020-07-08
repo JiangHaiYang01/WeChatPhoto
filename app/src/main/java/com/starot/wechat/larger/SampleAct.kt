@@ -3,29 +3,56 @@ package com.starot.wechat.larger
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.starot.customprogress.CircleProgressView
 import com.starot.larger.activity.LargerAct
+import com.starot.wechat.ImagesHelper
+import com.starot.wechat.R
 import com.starot.wechat.glide.impl.ProgressListener
 import com.starot.wechat.glide.interceptor.ProgressInterceptor
-import com.starot.larger.view.image.PhotoView
-import com.starot.wechat.R
+import javax.sql.DataSource
 
 
-class DefLargerAct : LargerAct<String>() {
+//sample
+class SampleAct : LargerAct<String>() {
 
 
-    override fun getData(): List<String>? {
+    companion object {
+        const val IMAGE = "images"
+        const val INDEX = "index"
+    }
+
+
+    //添加数据源
+    override fun getData(): ArrayList<String>? {
         return intent.getStringArrayListExtra(IMAGE)
     }
 
+    //长按事件
+    override fun onLongClickListener() {
+        Toast.makeText(this, "长按图片", Toast.LENGTH_LONG).show()
+    }
+
+    //item 布局
+    override fun getItemLayout(): Int {
+        return R.layout.item_def
+    }
+
+    //一定要返回一个 PhotoView 的id  内部处理还是需要用到的
+    override fun getPhotoViewId(): Int {
+        return R.id.image
+    }
+
+    //当前是第几个图片  index 和 image 一一对应
+    override fun getIndex(): Int {
+        return intent.getIntExtra(INDEX, 0)
+    }
 
     //设置 持续时间
     override fun setDuration(): Long {
@@ -37,7 +64,13 @@ class DefLargerAct : LargerAct<String>() {
         return 1.0f
     }
 
-    override fun item(itemView: View, photoView: PhotoView, position: Int, data: String?) {
+    //设置原来的图片源
+    override fun getImageArrayList(): ArrayList<ImageView> {
+        return ImagesHelper.images
+    }
+
+    //处理自己的业务逻辑
+    override fun itemBindViewHolder(itemView: View, position: Int, data: String?) {
         if (data == null) {
             return
         }
@@ -77,7 +110,7 @@ class DefLargerAct : LargerAct<String>() {
                     resource: Drawable?,
                     model: Any?,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: com.bumptech.glide.load.DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
                     Log.i(TAG, "图片加载成功")
@@ -85,23 +118,8 @@ class DefLargerAct : LargerAct<String>() {
                     return false
                 }
             })
-            .into(photoView)
+            .into(itemView.findViewById(R.id.image))
     }
 
-
-    //长按事件
-    override fun onLongClickListener() {
-        Toast.makeText(this, "长按图片", Toast.LENGTH_LONG).show()
-    }
-
-    //item 布局
-    override fun getItemLayout(): Int {
-        return R.layout.item_def
-    }
-
-    //一定要返回一个 PhotoView 的id  内部处理还是需要用到的
-    override fun getPhotoViewId(): Int {
-        return R.id.image
-    }
 
 }

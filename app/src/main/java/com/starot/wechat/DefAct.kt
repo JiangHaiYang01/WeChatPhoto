@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.starot.larger.activity.LargerAct
-import com.starot.larger.bean.ImageInfo
-import com.starot.larger.tools.ImageTool
-import com.starot.wechat.larger.DefLargerAct
+import com.starot.wechat.larger.SampleAct
 import kotlinx.android.synthetic.main.activity_def.*
 
 class DefAct : AppCompatActivity() {
@@ -24,6 +21,7 @@ class DefAct : AppCompatActivity() {
             image_8
         )
     }
+
     private val images = arrayListOf(
         "http://img.netbian.com/file/2019/0722/46a77e637238b439e445a8e11279eb28.jpg",
         "http://img.netbian.com/file/2019/1214/552b1999aa4d5a2e75352fa2f6e93d51.jpg",
@@ -39,6 +37,8 @@ class DefAct : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_def)
 
+        //记录小图的图片信息
+        ImagesHelper.images = imageViews
 
 
         for (index in imageViews.indices) {
@@ -47,34 +47,21 @@ class DefAct : AppCompatActivity() {
                 .load(images[index])
                 .into(imageViews[index])
             imageViews[index].setOnClickListener {
-                startAct(index, images, getInfo())
+                startAct(index, images)
             }
         }
     }
 
-    private fun getInfo(): ArrayList<ImageInfo> {
-        val info = arrayListOf<ImageInfo>()
-        for (index in imageViews.indices) {
-            info.add(ImageTool.getImageInfo(imageViews[index]))
-        }
-        return info
-    }
 
     private fun startAct(
         index: Int,
-        images: ArrayList<String>,
-        info: ArrayList<ImageInfo>
+        images: ArrayList<String>
     ) {
-        val intent = Intent(this, DefLargerAct::class.java)
-        //传入图片信息 这里可所以类型
-        intent.putStringArrayListExtra(LargerAct.IMAGE, images)
-        //传入当前的 index  用于处理viewpager2 务必添加
-        intent.putExtra(LargerAct.INDEX, index)
-        //传入图片的位置信息，点击以后的动画效果需要 务必添加
-        intent.putParcelableArrayListExtra(
-            LargerAct.ORIGINAL,
-            info
-        )
+        val intent = Intent(this, SampleAct::class.java)
+        //传入图片信息 按需求自定义
+        intent.putStringArrayListExtra(SampleAct.IMAGE, images)
+        //传入当前的 index  用于处理viewpager
+        intent.putExtra(SampleAct.INDEX, index)
         startActivity(intent)
     }
 }
