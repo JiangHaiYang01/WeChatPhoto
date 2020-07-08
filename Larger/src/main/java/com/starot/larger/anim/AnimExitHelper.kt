@@ -9,7 +9,11 @@ import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 
 object AnimExitHelper : OnAnimatorIntercept {
-    override fun beforeTransition(fullView: ImageView, thumbnailView: ImageView) {
+    override fun beforeTransition(
+        photoId: Int,
+        fullView: ImageView,
+        thumbnailView: ImageView
+    ) {
 
     }
 

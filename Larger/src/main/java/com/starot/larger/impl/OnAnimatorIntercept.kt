@@ -10,6 +10,7 @@ interface OnAnimatorIntercept {
 
 
     fun start(
+        photoId: Int,
         duration: Long,
         fullView: ImageView,
         thumbnailView: ImageView,
@@ -17,7 +18,7 @@ interface OnAnimatorIntercept {
         listener: OnAnimatorListener,
         afterTransitionListener: OnAfterTransitionListener
     ) {
-        beforeTransition(fullView, thumbnailView)
+        beforeTransition(photoId,fullView, thumbnailView)
 
         holder.itemView.postDelayed({
             TransitionManager.beginDelayedTransition(
@@ -49,6 +50,7 @@ interface OnAnimatorIntercept {
     }
 
     fun beforeTransition(
+        photoId: Int,
         fullView: ImageView,
         thumbnailView: ImageView
     )

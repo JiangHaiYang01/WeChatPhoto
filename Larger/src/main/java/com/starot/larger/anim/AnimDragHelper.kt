@@ -1,19 +1,20 @@
 package com.starot.larger.anim
 
 import android.transition.*
-import android.util.Log
-import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.starot.larger.activity.LargerAct
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 
 object AnimDragHelper : OnAnimatorIntercept {
 
 
-    override fun beforeTransition(fullView: ImageView, thumbnailView: ImageView) {
+    override fun beforeTransition(
+        photoId: Int,
+        fullView: ImageView,
+        thumbnailView: ImageView
+    ) {
 
     }
 

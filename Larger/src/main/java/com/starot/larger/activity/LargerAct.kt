@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat.animate
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.R
@@ -163,6 +162,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
             }
             if (abs(image.translationY) < image.height * fraction) {
                 AnimDragHelper.start(
+                    getPhotoViewId(),
                     setDuration(),
                     image,
                     getImageArrayList()[mCurrentIndex],
@@ -232,6 +232,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
         Log.i(TAG, "小图片---->  大图的动画")
         val image = holder.itemView.findViewById<PhotoView>(getPhotoViewId())
         AnimEnterHelper.start(
+            getPhotoViewId(),
             setDuration(),
             image,
             getImageArrayList()[mCurrentIndex],
@@ -249,6 +250,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
         Log.i(TAG, "大图片---->  小图的动画 $holder")
         val image = holder.itemView.findViewById<PhotoView>(getPhotoViewId())
         AnimExitHelper.start(
+            getPhotoViewId(),
             setDuration(),
             image,
             getImageArrayList()[mCurrentIndex],
