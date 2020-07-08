@@ -136,12 +136,17 @@ abstract class LargerAct<T> : AppCompatActivity() {
             image.translationX = x / 2 * dampingData
 
 
-            //背景的颜色 变化
-            val scale: Float = abs(y) / ScaleHelper.getWindowHeight(applicationContext)
-            currentScale = 1 - scale
-            parentView.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
-            )
+
+            //已经向上了 就黑色背景 不需要改动了
+            if (y > 0) {
+                //背景的颜色 变化
+                val scale: Float = abs(y) / ScaleHelper.getWindowHeight(applicationContext)
+                currentScale = 1 - scale
+                parentView.setBackgroundColor(
+                    ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
+                )
+            }
+
         }
 
         override fun onEndDrag(

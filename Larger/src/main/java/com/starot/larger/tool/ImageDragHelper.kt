@@ -62,7 +62,7 @@ object ImageDragHelper {
             }
 
             override fun onScrollStart() {
-                isDragIng = true
+                isDragIng = false
             }
         })
 
