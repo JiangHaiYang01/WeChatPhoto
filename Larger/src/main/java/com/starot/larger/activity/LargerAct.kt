@@ -1,22 +1,28 @@
 package com.starot.larger.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat.animate
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
-import com.starot.larger.anim.AnimBgEnterHelper
-import com.starot.larger.anim.AnimBgExitHelper
-import com.starot.larger.anim.AnimEnterHelper
-import com.starot.larger.anim.AnimExitHelper
+import com.starot.larger.anim.*
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorListener
+import com.starot.larger.impl.OnDragAnimListener
+import com.starot.larger.tool.ColorTool
+import com.starot.larger.tool.ImageDragHelper
+import com.starot.larger.tool.ScaleHelper
 import com.starot.larger.view.image.PhotoView
 import kotlinx.android.synthetic.main.activity_larger_base.*
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 
 abstract class LargerAct<T> : AppCompatActivity() {
@@ -26,21 +32,6 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
 
-    //默认显示时间
-    private var defDuration: Long = 300
-
-    //默认拖动时候的阻尼系数   [1.0----4.0f]
-    private var damping: Float = 1.0f
-
-//    //是否发生过移动
-//    private var isDrag = false
-//
-//    //图片缩放比例
-//    private var currentOriginalScale = 0f
-
-    //是否正在动画
-    private var isAnimIng = false
-
     //进入的动画播放完成了
     private var animFinish = false
 
@@ -49,13 +40,13 @@ abstract class LargerAct<T> : AppCompatActivity() {
         override fun onAnimatorStart() {
             Log.i(TAG, "进入的动画 start")
             setViewPagerEnable(false)
-            isAnimIng = true
+            ImageDragHelper.isAnimIng = true
         }
 
         override fun onAnimatorEnd() {
             Log.i(TAG, "进入的动画 end")
             setViewPagerEnable(true)
-            isAnimIng = false
+            ImageDragHelper.isAnimIng = false
         }
     }
 
@@ -64,12 +55,12 @@ abstract class LargerAct<T> : AppCompatActivity() {
         override fun onAnimatorStart() {
             setViewPagerEnable(false)
             Log.i(TAG, "退出的动画 start")
-            isAnimIng = true
+            ImageDragHelper.isAnimIng = true
         }
 
         override fun onAnimatorEnd() {
             Log.i(TAG, "退出的动画 end")
-            isAnimIng = false
+            ImageDragHelper.isAnimIng = false
             setViewPagerEnable(true)
             finish()
             overridePendingTransition(0, 0)
@@ -120,6 +111,61 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
 
+    //图片缩放比例
+    private var currentScale = 0f
+
+    //手指移动
+    private val onDragListener = object : OnDragAnimListener {
+        override fun onStartDrag(image: PhotoView, x: Float, y: Float) {
+            setViewPagerEnable(false)
+            setZoomable(image, false)
+            //默认拖动时候的阻尼系数
+            var dampingData = setDamping()
+            if (dampingData >= 1.0f) {
+                dampingData = 1.0f
+            } else if (dampingData < 0f) {
+                dampingData = 0f
+            }
+            //图片的缩放 和位置变化
+            val fixedOffsetY = y - 0
+            val fraction = abs(max(-1f, min(1f, fixedOffsetY / image.height)))
+            val fakeScale = 1 - min(0.4f, fraction)
+            image.scaleX = fakeScale
+            image.scaleY = fakeScale
+            image.translationY = fixedOffsetY * dampingData
+            image.translationX = x / 2 * dampingData
+
+
+            //背景的颜色 变化
+            val scale: Float = abs(y) / ScaleHelper.getWindowHeight(applicationContext)
+            currentScale = 1 - scale
+            parentView.setBackgroundColor(
+                ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
+            )
+        }
+
+        override fun onEndDrag(
+            image: PhotoView,
+            holder: ViewPagerAdapter.PhotoViewHolder
+        ) {
+            setViewPagerEnable(true)
+            setZoomable(image, true)
+            if (abs(image.translationY) < image.height * 0.12f) {
+                animate(image)
+                    .translationX(0f)
+                    .translationY(0f)
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(setDuration())
+                    .start()
+                //背景颜色变化
+                AnimBgEnterHelper.start(parentView, currentScale, setDuration())
+            } else {
+                exitAnim(currentScale, holder)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
@@ -143,7 +189,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
         //单点击退出
         image.setOnPhotoTapListener { _, _, _ ->
             onSingleClickListener()
-            exitAnim(holder)
+            exitAnim(1.0f, holder)
         }
 
         //长按
@@ -151,13 +197,10 @@ abstract class LargerAct<T> : AppCompatActivity() {
             onLongClickListener()
             return@setOnLongClickListener false
         }
+
+        //移动
+        ImageDragHelper.startDrag(image, holder, onDragListener)
     }
-
-
-//    //是否可以方法缩小 移动过程中不可以方法缩小
-//    private fun setZoomable(isZoomable: Boolean) {
-////        image.setCustomZoomable(isZoomable)
-//    }
 
 
     //设置viewpager 是否可以滑动
@@ -189,7 +232,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
     //退出的动画
-    private fun exitAnim(holder: ViewPagerAdapter.PhotoViewHolder) {
+    private fun exitAnim(start: Float, holder: ViewPagerAdapter.PhotoViewHolder) {
         //大图片---->  小图的动画
         Log.i(TAG, "大图片---->  小图的动画 $holder")
         val image = holder.itemView.findViewById<PhotoView>(getPhotoViewId())
@@ -202,7 +245,13 @@ abstract class LargerAct<T> : AppCompatActivity() {
             afterTransitionListener
         )
         //背景颜色变化
-        AnimBgExitHelper.start(parentView, 1.0f, setDuration())
+        AnimBgExitHelper.start(parentView, start, setDuration())
+    }
+
+
+    //是否可以方法缩小 移动过程中不可以方法缩小
+    private fun setZoomable(image: PhotoView, isZoomable: Boolean) {
+        image.setCustomZoomable(isZoomable)
     }
 
     //==============================================================================================
@@ -218,14 +267,14 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
     }
 
-    //设置显示时间
+    //设置显示时间 默认300ms
     open fun setDuration(): Long {
-        return defDuration
+        return 300
     }
 
-    //拖动时候的阻尼系数
+    //默认拖动时候的阻尼系数   [0.0f----1.0f] 越小越难滑动
     open fun setDamping(): Float {
-        return damping
+        return 1.0f
     }
 
     //==============================================================================================

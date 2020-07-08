@@ -16,7 +16,7 @@ object AnimBgExitHelper {
     }
 
 
-    fun startWithRange(
+    private fun startWithRange(
         start: Float,
         end: Float,
         parent: View,
