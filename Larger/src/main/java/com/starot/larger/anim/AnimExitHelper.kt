@@ -4,6 +4,7 @@ import android.transition.*
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 
@@ -39,6 +40,9 @@ object AnimExitHelper : OnAnimatorIntercept {
         }
     }
 
-    override fun afterTransition(afterTransitionListener: OnAfterTransitionListener) {
+    override fun afterTransition(
+        afterTransitionListener: OnAfterTransitionListener,
+        holder: RecyclerView.ViewHolder
+    ) {
     }
 }

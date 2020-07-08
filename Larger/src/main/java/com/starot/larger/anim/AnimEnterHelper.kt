@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.activity.LargerAct
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
@@ -16,7 +17,6 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
 
     override fun beforeTransition(fullView: ImageView, thumbnailView: ImageView) {
-        Log.i(LargerAct.TAG, "小图 --->  大图 动画 beforeTransition")
         fullView.scaleType = thumbnailView.scaleType
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
@@ -51,9 +51,12 @@ object AnimEnterHelper : OnAnimatorIntercept {
         }
     }
 
-    override fun afterTransition(afterTransitionListener: OnAfterTransitionListener) {
+    override fun afterTransition(
+        afterTransitionListener: OnAfterTransitionListener,
+        holder: RecyclerView.ViewHolder
+    ) {
         Log.i(LargerAct.TAG, "动画加载结束，加载高清大图")
-        afterTransitionListener.afterTransitionLoad()
+        afterTransitionListener.afterTransitionLoad(holder)
     }
 
 
