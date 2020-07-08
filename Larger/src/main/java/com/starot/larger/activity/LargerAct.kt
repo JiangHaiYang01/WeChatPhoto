@@ -150,7 +150,14 @@ abstract class LargerAct<T> : AppCompatActivity() {
         ) {
             setViewPagerEnable(true)
             setZoomable(image, true)
-            if (abs(image.translationY) < image.height * 0.12f) {
+
+            var fraction = setFraction()
+            if (fraction > 1f) {
+                fraction = 1f
+            } else if (fraction < 0f) {
+                fraction = 0f
+            }
+            if (abs(image.translationY) < image.height * fraction) {
                 animate(image)
                     .translationX(0f)
                     .translationY(0f)
@@ -267,14 +274,20 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
     }
 
-    //设置显示时间 默认300ms
+    //设置持续时间
     open fun setDuration(): Long {
-        return 300
+        return 200
     }
 
     //默认拖动时候的阻尼系数   [0.0f----1.0f] 越小越难滑动
     open fun setDamping(): Float {
         return 1.0f
+    }
+
+
+    //设置下拉的参数 [0.0f----1.0f] 越小越容易退出
+    open fun setFraction(): Float {
+        return 0.5f
     }
 
     //==============================================================================================

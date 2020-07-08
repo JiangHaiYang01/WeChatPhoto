@@ -55,14 +55,19 @@ class SampleAct : LargerAct<String>() {
         return intent.getIntExtra(INDEX, 0)
     }
 
-    //设置 持续时间
+    //设置持续时间
     override fun setDuration(): Long {
-        return 2000
+        return 200
     }
 
-    //设置阻尼系数
+    //默认拖动时候的阻尼系数   [0.0f----1.0f] 越小越难滑动
     override fun setDamping(): Float {
         return 1.0f
+    }
+
+    //设置下拉的参数 [0.0f----1.0f] 越小越容易退出
+    override fun setFraction(): Float {
+        return 0.5f
     }
 
     //设置原来的图片源
