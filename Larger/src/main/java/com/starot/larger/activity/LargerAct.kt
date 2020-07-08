@@ -147,7 +147,13 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
         //单点击退出
         image.setOnPhotoTapListener { _, _, _ ->
-            exitAnim()
+            onSingleClickListener()
+        }
+
+        //长按
+        image.setOnLongClickListener {
+            onLongClickListener()
+            return@setOnLongClickListener false
         }
     }
 
@@ -202,6 +208,12 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
     //长按的事件
     open fun onLongClickListener() {}
+
+    //单次点击事件
+    open fun onSingleClickListener() {
+        //默认实现了退出 可重写
+        exitAnim()
+    }
 
     //设置显示时间
     open fun setDuration(): Long {
