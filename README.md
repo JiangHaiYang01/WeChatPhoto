@@ -33,8 +33,9 @@
 最终的项目效果如下图所示
 
 
-<video src='https://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/zdcp8.mp4' type='video/mp4' controls='controls'  width='50%' height='50%'>
-</video>
+
+
+[![Watch the video](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/zdcp8.mp4)
 
 
 
