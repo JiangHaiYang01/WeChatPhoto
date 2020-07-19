@@ -4,6 +4,7 @@
 
 <!-- more -->
 
+> 建议在 [个人博客](https://allens.icu/posts/30acc017/#more) 中查看,阅读体验更佳
 
 # 前言
 
