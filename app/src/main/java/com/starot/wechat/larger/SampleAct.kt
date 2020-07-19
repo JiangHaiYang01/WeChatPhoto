@@ -58,7 +58,7 @@ class SampleAct : LargerAct<String>() {
 
     //设置持续时间
     override fun setDuration(): Long {
-        return 200
+        return 1000
     }
 
     //默认拖动时候的阻尼系数   [0.0f----1.0f] 越小越难滑动
