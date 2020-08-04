@@ -1,10 +1,12 @@
 
 
+
+> 建议在 [个人博客](https://allens.icu/posts/30acc017/#more) 中查看,阅读体验更佳
+
 高仿微信朋友圈，点击查看大图，放大 缩小，可自定义
 
 <!-- more -->
 
-> 建议在 [个人博客](https://allens.icu/posts/30acc017/#more) 中查看,阅读体验更佳
 
 # 前言
 
@@ -550,6 +552,12 @@ class SampleAct : LargerAct<String>() {
 
 # 更新说明
 
+> 0.0.3
+
+- fix bug 返回的时候不是走的动画，而是直接退出
+- fix viewpager 滑动以后 在单点击返回出问题
+- fix 动画开始以后，可以缩放image
+
 > 0.0.2
 
 在0.0.1 版本 实际使用的时候发现一个问题 当图片是 FIT_XY 或者 CENTER_CROP 等 对图片裁剪的时候 小图到大图的过程中会有问题
@@ -561,6 +569,8 @@ class SampleAct : LargerAct<String>() {
 在 原本图片的 style 是  MATRIX  或者 CENTER 的时候，图片不能很好的从 原来的样式 渐渐切换到 大图的样式，这里的原因我还不知道为啥，知道的的小伙伴可以 说一下
 
 # apk 下载体验
+
+[0.0.3版本](https://gitee.com/_Allens/BlogImage/raw/master/image/20200804201331.apk)
 
 [0.0.2版本](https://gitee.com/_Allens/BlogImage/raw/master/image/arjp8.apk)
 
