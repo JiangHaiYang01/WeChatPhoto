@@ -6,7 +6,7 @@ import com.starot.larger.view.image.OnViewDragListener
 import com.starot.larger.view.image.PhotoView
 import kotlin.math.abs
 
-object ImageDragHelper {
+class ImageDragHelper {
 
 
     //是否正在移动

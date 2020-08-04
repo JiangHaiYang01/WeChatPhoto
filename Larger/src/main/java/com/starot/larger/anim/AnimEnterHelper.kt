@@ -61,7 +61,6 @@ object AnimEnterHelper : OnAnimatorIntercept {
         afterTransitionListener: OnAfterTransitionListener,
         holder: RecyclerView.ViewHolder
     ) {
-        Log.i(LargerAct.TAG, "动画加载结束，加载高清大图")
         afterTransitionListener.afterTransitionLoad(holder)
     }
 

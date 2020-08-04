@@ -31,21 +31,21 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
 
+    private val imageDragHelper = ImageDragHelper()
+
     //进入的动画播放完成了
     private var animFinish = false
 
     //进入动画效果
     private val enterAnimListener = object : OnAnimatorListener {
         override fun onAnimatorStart() {
-            Log.i(TAG, "进入的动画 start")
             setViewPagerEnable(false)
-            ImageDragHelper.isAnimIng = true
+            imageDragHelper.isAnimIng = true
         }
 
         override fun onAnimatorEnd() {
-            Log.i(TAG, "进入的动画 end")
             setViewPagerEnable(true)
-            ImageDragHelper.isAnimIng = false
+            imageDragHelper.isAnimIng = false
         }
     }
 
@@ -53,18 +53,19 @@ abstract class LargerAct<T> : AppCompatActivity() {
     private val exitAnimListener = object : OnAnimatorListener {
         override fun onAnimatorStart() {
             setViewPagerEnable(false)
-            Log.i(TAG, "退出的动画 start")
-            ImageDragHelper.isAnimIng = true
+            imageDragHelper.isAnimIng = true
         }
 
         override fun onAnimatorEnd() {
-            Log.i(TAG, "退出的动画 end")
-            ImageDragHelper.isAnimIng = false
+            imageDragHelper.isAnimIng = false
             setViewPagerEnable(true)
             finish()
             overridePendingTransition(0, 0)
         }
     }
+
+    //存储 viewHolder
+    private val viewHolderMap = HashMap<Int, RecyclerView.ViewHolder>()
 
     //动画执行以后
     private val afterTransitionListener = object : OnAfterTransitionListener {
@@ -98,6 +99,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
                     holder: ViewPagerAdapter.PhotoViewHolder,
                     position: Int
                 ) {
+                    viewHolderMap[position] = holder
                     val itemView = holder.itemView
                     //通用方法
                     item(holder, position, data?.get(position))
@@ -211,7 +213,7 @@ abstract class LargerAct<T> : AppCompatActivity() {
         }
 
         //移动
-        ImageDragHelper.startDrag(image, holder, onDragListener)
+        imageDragHelper.startDrag(image, holder, onDragListener)
     }
 
 
@@ -222,14 +224,13 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
 
     //进入动画
-    private fun enterAnim(holder: ViewPagerAdapter.PhotoViewHolder) {
+    private fun enterAnim(holder: RecyclerView.ViewHolder) {
         //防止viewpager 滑动时候再次触发
         if (animFinish) {
             return
         }
         animFinish = true
         //小图片---->  大图的动画
-        Log.i(TAG, "小图片---->  大图的动画")
         val image = holder.itemView.findViewById<PhotoView>(getPhotoViewId())
         AnimEnterHelper.start(
             getPhotoViewId(),
@@ -245,9 +246,8 @@ abstract class LargerAct<T> : AppCompatActivity() {
     }
 
     //退出的动画
-    private fun exitAnim(start: Float, holder: ViewPagerAdapter.PhotoViewHolder) {
+    private fun exitAnim(start: Float, holder: RecyclerView.ViewHolder) {
         //大图片---->  小图的动画
-        Log.i(TAG, "大图片---->  小图的动画 $holder")
         val image = holder.itemView.findViewById<PhotoView>(getPhotoViewId())
         AnimExitHelper.start(
             getPhotoViewId(),
@@ -266,6 +266,20 @@ abstract class LargerAct<T> : AppCompatActivity() {
     //是否可以方法缩小 移动过程中不可以方法缩小
     private fun setZoomable(image: PhotoView, isZoomable: Boolean) {
         image.setCustomZoomable(isZoomable)
+    }
+
+
+    //点击返回
+    override fun onBackPressed() {
+        if (imageDragHelper.isAnimIng) {
+            return
+        }
+        val holder = viewHolderMap[mCurrentIndex] ?: return
+        exitAnim(1.0f, holder)
+    }
+
+    private fun log(info: String) {
+        Log.i(TAG, info)
     }
 
     //==============================================================================================

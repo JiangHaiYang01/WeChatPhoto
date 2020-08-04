@@ -58,7 +58,7 @@ class SampleAct : LargerAct<String>() {
 
     //设置持续时间
     override fun setDuration(): Long {
-        return 1000
+        return 3000
     }
 
     //默认拖动时候的阻尼系数   [0.0f----1.0f] 越小越难滑动
@@ -118,7 +118,6 @@ class SampleAct : LargerAct<String>() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    Log.i(TAG, "图片加载失败")
                     progressView.visibility = View.GONE
                     return false
                 }
@@ -130,7 +129,6 @@ class SampleAct : LargerAct<String>() {
                     dataSource: com.bumptech.glide.load.DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    Log.i(TAG, "图片加载成功")
                     progressView.visibility = View.GONE
                     return false
                 }
