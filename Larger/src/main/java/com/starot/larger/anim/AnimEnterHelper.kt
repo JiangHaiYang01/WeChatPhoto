@@ -1,5 +1,6 @@
 package com.starot.larger.anim
 
+import android.os.Build
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
 import android.transition.Transition
@@ -9,7 +10,6 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.starot.larger.activity.LargerAct
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 
@@ -50,7 +50,9 @@ object AnimEnterHelper : OnAnimatorIntercept {
     override fun transitionSet(durationTime: Long): Transition {
         return TransitionSet().apply {
             addTransition(ChangeBounds())
-            addTransition(ChangeImageTransform())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                addTransition(ChangeImageTransform())
+            }
             duration = durationTime
             interpolator = DecelerateInterpolator()
         }

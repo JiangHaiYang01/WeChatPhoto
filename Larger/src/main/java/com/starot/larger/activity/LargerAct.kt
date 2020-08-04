@@ -39,21 +39,20 @@ abstract class LargerAct<T> : AppCompatActivity() {
     //进入动画效果
     private val enterAnimListener = object : OnAnimatorListener {
         override fun onAnimatorStart() {
-            setViewPagerEnable(false)
-            imageDragHelper.isAnimIng = true
+            animStart()
         }
 
         override fun onAnimatorEnd() {
             setViewPagerEnable(true)
             imageDragHelper.isAnimIng = false
+            animEnd()
         }
     }
 
     //退出的动画效果
     private val exitAnimListener = object : OnAnimatorListener {
         override fun onAnimatorStart() {
-            setViewPagerEnable(false)
-            imageDragHelper.isAnimIng = true
+            animStart()
         }
 
         override fun onAnimatorEnd() {
@@ -63,6 +62,25 @@ abstract class LargerAct<T> : AppCompatActivity() {
             overridePendingTransition(0, 0)
         }
     }
+
+    //控制了进入动画开始以后  不在可以缩放，不可以滑动viewpager
+    private fun animStart() {
+        setViewPagerEnable(false)
+        val holder = viewHolderMap[mCurrentIndex]
+        val image = holder?.itemView?.findViewById<PhotoView>(getPhotoViewId())
+        if (image != null)
+            setZoomable(image, false)
+        imageDragHelper.isAnimIng = true
+    }
+
+    //控制了进入动画结束以后  可以缩放
+    private fun animEnd() {
+        val holder = viewHolderMap[mCurrentIndex]
+        val image = holder?.itemView?.findViewById<PhotoView>(getPhotoViewId())
+        if (image != null)
+            setZoomable(image, true)
+    }
+
 
     //存储 viewHolder
     private val viewHolderMap = HashMap<Int, RecyclerView.ViewHolder>()

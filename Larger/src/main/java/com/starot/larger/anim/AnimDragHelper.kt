@@ -1,5 +1,6 @@
 package com.starot.larger.anim
 
+import android.os.Build
 import android.transition.*
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
@@ -33,8 +34,11 @@ object AnimDragHelper : OnAnimatorIntercept {
 
         return TransitionSet().apply {
             addTransition(ChangeBounds())
-            addTransition(ChangeImageTransform())
-            addTransition(ChangeTransform())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                addTransition(ChangeImageTransform())
+                addTransition(ChangeTransform())
+            }
+
             duration = durationTime
             interpolator = DecelerateInterpolator()
         }

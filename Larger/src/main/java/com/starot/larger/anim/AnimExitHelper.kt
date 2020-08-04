@@ -1,5 +1,6 @@
 package com.starot.larger.anim
 
+import android.os.Build
 import android.transition.*
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
@@ -39,8 +40,10 @@ object AnimExitHelper : OnAnimatorIntercept {
     override fun transitionSet(durationTime: Long): Transition {
         return TransitionSet().apply {
             addTransition(ChangeBounds())
-            addTransition(ChangeImageTransform())
-            addTransition(ChangeTransform())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                addTransition(ChangeImageTransform())
+                addTransition(ChangeTransform())
+            }
             duration = durationTime
             interpolator = DecelerateInterpolator()
         }
