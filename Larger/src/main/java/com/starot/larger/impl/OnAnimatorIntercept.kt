@@ -45,7 +45,7 @@ interface OnAnimatorIntercept {
                     })
                 }
             )
-            startTransition(fullView, thumbnailView)
+            startTransition(photoId,fullView, thumbnailView)
         }, 50)
     }
 
@@ -57,6 +57,7 @@ interface OnAnimatorIntercept {
 
 
     fun startTransition(
+        photoId: Int,
         fullView: ImageView,
         thumbnailView: ImageView
     )

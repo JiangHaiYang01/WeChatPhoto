@@ -4,6 +4,8 @@ import android.transition.*
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
@@ -17,7 +19,11 @@ object AnimExitHelper : OnAnimatorIntercept {
 
     }
 
-    override fun startTransition(fullView: ImageView, thumbnailView: ImageView) {
+    override fun startTransition(
+        photoId: Int,
+        fullView: ImageView,
+        thumbnailView: ImageView
+    ) {
         fullView.scaleType = thumbnailView.scaleType
         fullView.translationX = 0f
         fullView.translationY = 0f
@@ -26,11 +32,7 @@ object AnimExitHelper : OnAnimatorIntercept {
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
             height = thumbnailView.height
-            val location = AnimEnterHelper.getLocationOnScreen(thumbnailView)
-            if (this is ViewGroup.MarginLayoutParams) {
-                marginStart = location[0]
-                topMargin = location[1]
-            }
+            AnimParentHelper.parentAnim(this, thumbnailView, fullView, photoId)
         }
     }
 

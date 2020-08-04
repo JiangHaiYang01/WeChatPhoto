@@ -18,7 +18,11 @@ object AnimDragHelper : OnAnimatorIntercept {
 
     }
 
-    override fun startTransition(fullView: ImageView, thumbnailView: ImageView) {
+    override fun startTransition(
+        photoId: Int,
+        fullView: ImageView,
+        thumbnailView: ImageView
+    ) {
         fullView.translationX = (0f)
         fullView.translationY = (0f)
         fullView.scaleX = (1f)

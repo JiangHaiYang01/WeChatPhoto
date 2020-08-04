@@ -31,11 +31,12 @@
 
 最终的项目效果如下图所示
 
+> 因为白嫖 gitee 作为图库 将 gif 进行了压缩，有点失真
 
 
 | 渐变放大缩小 | 拖动效果 | 放大缩小 |
 | ------ | ------ | ------ |
-| ![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/z2chz.gif) | ![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/0cb2n.gif) | ![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/3ewcf.gif) |
+| ![](https://gitee.com/_Allens/BlogImage/raw/master/image/z2chz.gif) | ![](https://gitee.com/_Allens/BlogImage/raw/master/image/0cb2n.gif) | ![](https://gitee.com/_Allens/BlogImage/raw/master/image/3ewcf.gif) |
 
 
 
@@ -44,12 +45,12 @@
 
 | fix_xy | fit_start | fix_center |
 | ------ | ------ | ------ |
-|![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/uecr0.gif)|![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/tlidq.gif)|![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/blr8f.gif)|
+|![](https://gitee.com/_Allens/BlogImage/raw/master/image/uecr0.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/tlidq.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/blr8f.gif)|
 
 
 | fix_end | center_crop | center_inside |
 | ------ | ------ | ------ |
-|![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/as5q9.gif)|![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/5iish.gif)|![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/6kvt7.gif)|
+|![](https://gitee.com/_Allens/BlogImage/raw/master/image/as5q9.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/5iish.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/6kvt7.gif)|
 
 
 
@@ -61,7 +62,7 @@
 一下子让拿到这个需求，其实还是比较懵逼的，不过饭要一口一口吃，既然这个是仿造微信的，他的最基本的需求就是 点击小图 然后显示一个大图，并且能够切换，分析可最基本的需求，一个activity + viewpager  搞定 打完收工，动画什么的都是浮云~~
 
 
-> 滑动  viewpager + activity  ,点击跳转到新的activity 中 
+> 滑动  viewpager + activity  ,点击跳转到新的activity 中
 
 完成了第一个基本的需求
 
@@ -77,7 +78,7 @@
 
 那么问题来了，如何在 activityB 上显示一个和activityA 上相同的imageview 呢
 
-我想到的办法是 将 activityA 的ImageView 记录下来，然后在 activityB 中 将 imageview 的 宽 高 和 图片的 scaleType 设置的和他相同 这样图片的大小 和样式就和  activityA 中一样了 
+我想到的办法是 将 activityA 的ImageView 记录下来，然后在 activityB 中 将 imageview 的 宽 高 和 图片的 scaleType 设置的和他相同 这样图片的大小 和样式就和  activityA 中一样了
 
 
 > 如何将 activityB 的图片位置确定下来
@@ -198,7 +199,7 @@
 
 ## 图片的放大，缩小
 
-这个图片的放大缩小，我用的是开源的框架  [PhotoView](https://github.com/chrisbanes/PhotoView)， 
+这个图片的放大缩小，我用的是开源的框架  [PhotoView](https://github.com/chrisbanes/PhotoView)，
 
 
 
@@ -209,12 +210,12 @@
 
 
 
-<!-- <video src='http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/gv1o4.mp4' type='video/mp4' controls='controls'  width='50%' height='50%'>
+<!-- <video src='https://gitee.com/_Allens/BlogImage/raw/master/image/gv1o4.mp4' type='video/mp4' controls='controls'  width='50%' height='50%'>
 </video> -->
 
 | 返回原来的状态 | 变成小图  |
 | ------ | ------  |
-| ![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/0cb2n.gif) | ![](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/y32a1.gif)  |
+| ![](https://gitee.com/_Allens/BlogImage/raw/master/image/0cb2n.gif) | ![](https://gitee.com/_Allens/BlogImage/raw/master/image/y32a1.gif)  |
 
 
 
@@ -351,12 +352,12 @@ object ImageDragHelper {
 
 这里原本想着放到框架内部，又想到 郭婶在 litepal 中说的 做减法，所以没有放在内部，而是作为demo 的形式放在了外部， 开发者可以更大程度的自定义样式
 
-demo 用到的是 glide , 
+demo 用到的是 glide ,
 
 
 ## 图片加载进度
 
-这个功能其实不属于框架本身的样式，所以我放在了demno 中 供大家参考，有兴趣的小伙伴可以参考 [Glide 图片加载进度](https://allens.icu/posts/9a2c02b8/#more) 
+这个功能其实不属于框架本身的样式，所以我放在了demno 中 供大家参考，有兴趣的小伙伴可以参考 [Glide 图片加载进度](https://allens.icu/posts/9a2c02b8/#more)
 
 
 
@@ -395,7 +396,7 @@ Step 2. Add the dependency
 ## step1 继承 ``LargerAct``
 
 
-继承 LargerAct 类型可自定义 sample 中方式的是string 
+继承 LargerAct 类型可自定义 sample 中方式的是string
 
 ```java
 
@@ -561,9 +562,9 @@ class SampleAct : LargerAct<String>() {
 
 # apk 下载体验
 
-[0.0.2版本](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/arjp8.apk)
+[0.0.2版本](https://gitee.com/_Allens/BlogImage/raw/master/image/arjp8.apk)
 
-[0.0.1版本](http://allens-blog.oss-cn-beijing.aliyuncs.com/allens-blog/v86p6.apk)
+[0.0.1版本](https://gitee.com/_Allens/BlogImage/raw/master/image/v86p6.apk)
 
 
 
