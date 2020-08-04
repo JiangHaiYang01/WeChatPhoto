@@ -25,11 +25,10 @@ object AnimEnterHelper : OnAnimatorIntercept {
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
             height = thumbnailView.height
-            AnimParentHelper.parentAnim(this,thumbnailView, fullView, photoId)
+            AnimParentHelper.parentAnim(this, thumbnailView, fullView, photoId)
         }
 
     }
-
 
 
     override fun startTransition(
@@ -61,7 +60,7 @@ object AnimEnterHelper : OnAnimatorIntercept {
         afterTransitionListener: OnAfterTransitionListener,
         holder: RecyclerView.ViewHolder
     ) {
-        afterTransitionListener.afterTransitionLoad(holder)
+        afterTransitionListener.afterTransitionLoad(true, holder)
     }
 
 

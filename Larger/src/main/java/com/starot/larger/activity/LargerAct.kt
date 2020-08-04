@@ -69,8 +69,13 @@ abstract class LargerAct<T> : AppCompatActivity() {
 
     //动画执行以后
     private val afterTransitionListener = object : OnAfterTransitionListener {
-        override fun afterTransitionLoad(holder: RecyclerView.ViewHolder) {
-            itemBindViewHolder(true, holder.itemView, mCurrentIndex, getData()?.get(mCurrentIndex))
+        override fun afterTransitionLoad(isLoadFull: Boolean, holder: RecyclerView.ViewHolder) {
+            itemBindViewHolder(
+                isLoadFull,
+                holder.itemView,
+                mCurrentIndex,
+                getData()?.get(mCurrentIndex)
+            )
         }
     }
 

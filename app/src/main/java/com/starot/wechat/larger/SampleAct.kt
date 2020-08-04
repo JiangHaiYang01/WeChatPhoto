@@ -108,6 +108,7 @@ class SampleAct : LargerAct<String>() {
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
 
 
+        Log.i(TAG,"load image isLoadFull $isLoadFull")
         Glide.with(this)
             .load(data)
             .apply(options)

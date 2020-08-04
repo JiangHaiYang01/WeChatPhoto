@@ -50,5 +50,6 @@ object AnimExitHelper : OnAnimatorIntercept {
         afterTransitionListener: OnAfterTransitionListener,
         holder: RecyclerView.ViewHolder
     ) {
+        afterTransitionListener.afterTransitionLoad(false,holder)
     }
 }
