@@ -22,12 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DefAct" />
-        <activity
-            android:name=".larger.SampleAct"
-            android:screenOrientation="portrait"
-            android:theme="@style/custom_larger" />
 
+        <activity android:name=".activity.ImageListAct"/>
     </application>
 
 </manifest>

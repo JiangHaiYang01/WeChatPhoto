@@ -1,34 +1,37 @@
 package com.starot.larger.anim
 
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import com.starot.larger.act.LargerAct
 
 object AnimParentHelper {
 
-     fun parentAnim(
-         parent: ViewGroup.LayoutParams,
-         thumbnailView: ImageView,
-         fullView: ImageView,
-         photoId: Int
-     ) {
+    fun parentAnim(
+        parent: ViewGroup.LayoutParams,
+        thumbnailView: ImageView,
+        fullView: ImageView
+    ) {
         val location = AnimEnterHelper.getLocationOnScreen(thumbnailView)
+        Log.i(LargerAct.TAG, "fullView.parent ${fullView.parent} ")
+        Log.i(LargerAct.TAG, "fullView.id ${fullView.id} ")
         when (fullView.parent) {
             is ConstraintLayout -> {
                 val constraintSet = ConstraintSet().apply {
                     clone(fullView.parent as ConstraintLayout)
-                    clear(photoId, ConstraintSet.START)
-                    clear(photoId, ConstraintSet.TOP)
-                    clear(photoId, ConstraintSet.BOTTOM)
-                    clear(photoId, ConstraintSet.RIGHT)
+                    clear(fullView.id, ConstraintSet.START)
+                    clear(fullView.id, ConstraintSet.TOP)
+                    clear(fullView.id, ConstraintSet.BOTTOM)
+                    clear(fullView.id, ConstraintSet.RIGHT)
                     //重新建立约束
                     connect(
-                        photoId, ConstraintSet.TOP, ConstraintSet.PARENT_ID,
+                        fullView.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID,
                         ConstraintSet.TOP, location[1]
                     )
                     connect(
-                        photoId, ConstraintSet.START, ConstraintSet.PARENT_ID,
+                        fullView.id, ConstraintSet.START, ConstraintSet.PARENT_ID,
                         ConstraintSet.START, location[0]
                     )
                 }

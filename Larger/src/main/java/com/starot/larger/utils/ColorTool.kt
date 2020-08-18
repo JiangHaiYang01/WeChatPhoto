@@ -1,6 +1,4 @@
-package com.starot.larger.tool
-
-import android.graphics.Color
+package com.starot.larger.utils
 
 object ColorTool {
 

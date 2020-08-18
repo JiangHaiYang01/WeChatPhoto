@@ -3,7 +3,7 @@ package com.starot.wechat
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.starot.larger.activity.LargerAct
+import com.starot.wechat.activity.ImageListAct
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -11,8 +11,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        def_btn.setOnClickListener {
-            startActivity(Intent(this, DefAct::class.java))
+        btn_1.setOnClickListener {
+            startActivity(Intent(this, ImageListAct::class.java))
         }
     }
 }

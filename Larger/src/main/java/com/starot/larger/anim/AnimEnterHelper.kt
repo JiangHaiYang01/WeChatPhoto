@@ -17,7 +17,6 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
 
     override fun beforeTransition(
-        photoId: Int,
         fullView: ImageView,
         thumbnailView: ImageView
     ) {
@@ -25,14 +24,13 @@ object AnimEnterHelper : OnAnimatorIntercept {
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
             height = thumbnailView.height
-            AnimParentHelper.parentAnim(this, thumbnailView, fullView, photoId)
+            AnimParentHelper.parentAnim(this, thumbnailView, fullView)
         }
 
     }
 
 
     override fun startTransition(
-        photoId: Int,
         fullView: ImageView,
         thumbnailView: ImageView
     ) {

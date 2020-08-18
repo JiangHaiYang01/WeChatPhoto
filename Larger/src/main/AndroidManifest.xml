@@ -3,6 +3,9 @@
 
     <application>
 
+        <activity android:name=".act.DefLargerAct"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/custom_larger"/>
     </application>
 
 </manifest>
