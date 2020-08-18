@@ -19,7 +19,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     PageChange.PageChangeListener {
 
 
-    companion object{
+    companion object {
         const val TAG = "allens_tag"
     }
 
@@ -30,7 +30,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     private var data: List<T>? = null
 
     //当前的index
-     var mCurrentIndex = 0
+    var mCurrentIndex = 0
 
     //动画时间
     private var duration: Long = 300
@@ -38,31 +38,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //缩略图
     private lateinit var thumbnailView: ImageView
 
-
-    //进入动画效果
-    private val enterAnimListener = object : OnAnimatorListener {
-        override fun onAnimatorStart() {
-//            animStart()
-        }
-
-        override fun onAnimatorEnd() {
-//            setViewPagerEnable(true)
-//            imageDragHelper.isAnimIng = false
-//            animEnd()
-        }
-    }
-
-    //动画执行以后
-    private val afterTransitionListener = object : OnAfterTransitionListener {
-        override fun afterTransitionLoad(isLoadFull: Boolean, holder: RecyclerView.ViewHolder) {
-            itemBindViewHolder(
-                isLoadFull,
-                holder.itemView,
-                mCurrentIndex,
-                getData()?.get(mCurrentIndex)
-            )
-        }
-    }
+    //进入的动画加载完成
+    private var isLoadEnter = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,7 +51,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         //开始之前
         beforeCreate()
         duration = getDuration()
-        thumbnailView = getThumbnailView()
+
 
         //数据源
         data = getData()
@@ -82,6 +59,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
         parentView = larger_parent
         //当前的下标
         mCurrentIndex = getIndex()
+        //获取当前列表的imageView
+        thumbnailView = getThumbnailView(mCurrentIndex)
         //设置适配器
         larger_viewpager.adapter = ViewPagerAdapter(data, getItemLayout(), this)
         //不需要平滑过渡了
@@ -91,26 +70,81 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
 
+    //设置viewpager 是否可以滑动
+    private fun setViewPagerEnable(isUserInputEnabled: Boolean) {
+        larger_viewpager.isUserInputEnabled = isUserInputEnabled //true:滑动，false：禁止滑动
+    }
+
+
     override fun onBindViewHolder(holder: ViewPagerAdapter.PhotoViewHolder, position: Int) {
+        //通用方法
+        itemCommand(holder, position, data?.get(position))
         //用户自己处理加载逻辑
         itemBindViewHolder(false, holder.itemView, position, data?.get(position))
-
+        //首次进入加载完成之后不再展示动画
+        if (isLoadEnter) {
+            return
+        }
         val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
         enterAnimStart(
             parentView,
             duration,
             fullImageView,
             thumbnailView,
-            holder,
-            enterAnimListener,
-            afterTransitionListener
+            holder
         )
+    }
+
+    private fun itemCommand(holder: ViewPagerAdapter.PhotoViewHolder, position: Int, get: T?) {
+        val image = holder.itemView.findViewById<ImageView>(getFullViewId())
+        //单点击退出
+        image.setOnClickListener {
+            val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
+            thumbnailView = getThumbnailView(mCurrentIndex)
+            exitAnimStart(
+                parentView,
+                duration,
+                fullImageView,
+                thumbnailView,
+                holder
+            )
+        }
+    }
+
+    //进入动画结束
+    override fun onEnterAnimEnd() {
+        setViewPagerEnable(true)
+    }
+
+    //进入动画开始
+    override fun onEnterAnimStart() {
+        isLoadEnter = true
+        setViewPagerEnable(false)
+    }
+
+
+    //退出动画结束
+    override fun onExitAnimEnd() {
+        finish()
+        overridePendingTransition(0, 0)
+    }
+
+    //退出动画开始
+    override fun onExitAnimStart() {
+        setViewPagerEnable(false)
     }
 
     //viewpager 滑动监听
     override fun onPageChange(pos: Int) {
         mCurrentIndex = pos
+        getThumbnailView(pos)
     }
+
+
+    //点击返回
+    override fun onBackPressed() {
+    }
+
 
 
     //onCreate 第一件时间
@@ -126,7 +160,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
     abstract fun getIndex(): Int
 
     //获取缩略图
-    abstract fun getThumbnailView(): ImageView
+    abstract fun getThumbnailView(position: Int): ImageView
+
 
     //数据源
     abstract fun getData(): List<T>?

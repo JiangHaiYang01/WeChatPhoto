@@ -54,8 +54,8 @@ class DefLargerAct : LargerAct<String>() {
         return R.id.image
     }
 
-    override fun getThumbnailView(): ImageView {
-        return largerConfig?.recyclerView?.getChildAt(largerConfig?.position ?: 0) as ImageView
+    override fun getThumbnailView(position: Int): ImageView {
+        return largerConfig?.recyclerView?.getChildAt(position) as ImageView
     }
 
 

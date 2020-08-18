@@ -43,7 +43,7 @@ class ImageListAdapter(
 
         holder.itemView.setOnClickListener {
             Larger.create()
-                .setDuration(3000)
+                .setDuration(300)
                 .setCurrentIndex(position)
                 .setFullData(data)
                 .setThumbnailData(data)
