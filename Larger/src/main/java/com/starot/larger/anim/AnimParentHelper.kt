@@ -15,8 +15,6 @@ object AnimParentHelper {
         fullView: ImageView
     ) {
         val location = AnimEnterHelper.getLocationOnScreen(thumbnailView)
-        Log.i(LargerAct.TAG, "fullView.parent ${fullView.parent} ")
-        Log.i(LargerAct.TAG, "fullView.id ${fullView.id} ")
         when (fullView.parent) {
             is ConstraintLayout -> {
                 val constraintSet = ConstraintSet().apply {

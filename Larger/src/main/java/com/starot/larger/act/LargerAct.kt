@@ -30,7 +30,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     private var data: List<T>? = null
 
     //当前的index
-    var mCurrentIndex = 0
+    private var mCurrentIndex = 0
 
     //动画时间
     private var duration: Long = 300

@@ -60,7 +60,7 @@ object Larger {
 
     data class LargerConfig(
         //持续时间
-        var duration: Long = 200,
+        var duration: Long = 300,
         //当前的下标
         var position: Int = 0,
         //缩略图列表
