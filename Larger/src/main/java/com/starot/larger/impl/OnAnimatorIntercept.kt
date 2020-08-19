@@ -12,7 +12,7 @@ interface OnAnimatorIntercept {
     fun start(
         duration: Long,
         fullView: ImageView,
-        thumbnailView: ImageView,
+        thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder,
         listener: OnAnimatorListener,
         afterTransitionListener: OnAfterTransitionListener
@@ -60,13 +60,13 @@ interface OnAnimatorIntercept {
 
     fun beforeTransition(
         fullView: ImageView,
-        thumbnailView: ImageView
+        thumbnailView: ImageView?
     )
 
 
     fun startTransition(
         fullView: ImageView,
-        thumbnailView: ImageView
+        thumbnailView: ImageView?
     )
 
     fun transitionSet(durationTime: Long): Transition

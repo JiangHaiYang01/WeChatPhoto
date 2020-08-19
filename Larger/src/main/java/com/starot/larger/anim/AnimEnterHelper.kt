@@ -18,8 +18,11 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
     override fun beforeTransition(
         fullView: ImageView,
-        thumbnailView: ImageView
+        thumbnailView: ImageView?
     ) {
+        if (thumbnailView == null) {
+            return
+        }
         fullView.scaleType = thumbnailView.scaleType
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
@@ -32,8 +35,11 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
     override fun startTransition(
         fullView: ImageView,
-        thumbnailView: ImageView
+        thumbnailView: ImageView?
     ) {
+        if (thumbnailView == null) {
+            return
+        }
         fullView.scaleType = ImageView.ScaleType.FIT_CENTER
         fullView.layoutParams = fullView.layoutParams.apply {
             width = ViewGroup.LayoutParams.MATCH_PARENT

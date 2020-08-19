@@ -25,7 +25,7 @@ interface AnimListener {
         parentView: View,
         duration: Long,
         fullView: ImageView,
-        thumbnailView: ImageView,
+        thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder
     ) {
         AnimEnterHelper.start(
@@ -59,7 +59,7 @@ interface AnimListener {
         parentView: View,
         duration: Long,
         fullView: ImageView,
-        thumbnailView: ImageView,
+        thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder
     ) {
         AnimExitHelper.start(

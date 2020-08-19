@@ -56,7 +56,7 @@ class DefLargerAct : LargerAct<String>() {
         return R.id.image
     }
 
-    override fun getThumbnailView(position: Int): ImageView {
+    override fun getThumbnailView(position: Int): ImageView? {
         val recyclerView = largerConfig?.recyclerView
 //        Log.i(LargerAct.TAG, "childCount------> ${recyclerView?.childCount}")
 //        Log.i(LargerAct.TAG, "position------> $position")
@@ -76,15 +76,16 @@ class DefLargerAct : LargerAct<String>() {
 //                pos = getRecyclerViewId(layoutManager, position, pos)
             }
         }
-
-        return recyclerView?.getChildAt(pos) as ImageView
+        val childAt = recyclerView?.getChildAt(pos) ?: return null
+        return childAt as ImageView
     }
+}
 
-    private fun getRecyclerViewId(
-        layoutManager: LinearLayoutManager,
-        pos: Int
-    ): Int {
-        var pos1 = pos
+private fun getRecyclerViewId(
+    layoutManager: LinearLayoutManager,
+    pos: Int
+): Int {
+    var pos1 = pos
 //        Log.i(
 //            TAG,
 //            "findFirstCompletelyVisibleItemPosition------> ${layoutManager.findFirstCompletelyVisibleItemPosition()}"
@@ -104,9 +105,7 @@ class DefLargerAct : LargerAct<String>() {
 //
 //
 //        Log.i(TAG, "pos------> $position - ${layoutManager.findFirstVisibleItemPosition()}")
-        pos1 -= layoutManager.findFirstVisibleItemPosition()
-        return pos1
-    }
-
-
+    pos1 -= layoutManager.findFirstVisibleItemPosition()
+    return pos1
 }
+

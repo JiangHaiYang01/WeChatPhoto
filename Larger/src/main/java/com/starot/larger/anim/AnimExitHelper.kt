@@ -3,6 +3,7 @@ package com.starot.larger.anim
 import android.os.Build
 import android.transition.*
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
@@ -11,17 +12,24 @@ import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 
 object AnimExitHelper : OnAnimatorIntercept {
+
+    private var thumbnailView: ImageView? = null
+
     override fun beforeTransition(
         fullView: ImageView,
-        thumbnailView: ImageView
+        thumbnailView: ImageView?
     ) {
-
+        this.thumbnailView = thumbnailView
     }
 
     override fun startTransition(
         fullView: ImageView,
-        thumbnailView: ImageView
+        thumbnailView: ImageView?
     ) {
+        if (thumbnailView == null) {
+            fullView.visibility = View.GONE
+            return
+        }
         fullView.scaleType = thumbnailView.scaleType
         fullView.translationX = 0f
         fullView.translationY = 0f
@@ -36,10 +44,14 @@ object AnimExitHelper : OnAnimatorIntercept {
 
     override fun transitionSet(durationTime: Long): Transition {
         return TransitionSet().apply {
-            addTransition(ChangeBounds())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                addTransition(ChangeImageTransform())
-                addTransition(ChangeTransform())
+            if (thumbnailView == null) {
+                addTransition(AutoTransition())
+            } else {
+                addTransition(ChangeBounds())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addTransition(ChangeImageTransform())
+                    addTransition(ChangeTransform())
+                }
             }
             duration = durationTime
             interpolator = DecelerateInterpolator()

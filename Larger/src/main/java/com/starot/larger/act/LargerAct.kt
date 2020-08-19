@@ -1,17 +1,19 @@
 package com.starot.larger.act
 
 import android.os.Bundle
+import android.transition.Fade
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.impl.AnimListener
-import com.starot.larger.impl.OnAfterTransitionListener
-import com.starot.larger.impl.OnAnimatorListener
 import com.starot.larger.utils.PageChange
 import kotlinx.android.synthetic.main.activity_larger_base.*
+
 
 abstract class LargerAct<T> : AppCompatActivity(),
     ViewPagerAdapter.OnBindViewHolderListener,
@@ -36,7 +38,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     private var duration: Long = 300
 
     //缩略图
-    private lateinit var thumbnailView: ImageView
+    private  var thumbnailView: ImageView? = null
 
     //进入的动画加载完成
     private var isLoadEnter = false
@@ -160,7 +162,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     abstract fun getIndex(): Int
 
     //获取缩略图
-    abstract fun getThumbnailView(position: Int): ImageView
+    abstract fun getThumbnailView(position: Int): ImageView?
 
 
     //数据源
