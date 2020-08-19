@@ -58,11 +58,7 @@ class DefLargerAct : LargerAct<String>() {
 
     override fun getThumbnailView(position: Int): ImageView? {
         val recyclerView = largerConfig?.recyclerView
-//        Log.i(LargerAct.TAG, "childCount------> ${recyclerView?.childCount}")
-//        Log.i(LargerAct.TAG, "position------> $position")
-//        Log.i(LargerAct.TAG, "getItemId------> ${ recyclerView?.adapter?.itemCount}")
         val layoutManager = recyclerView?.layoutManager
-//        Log.i(LargerAct.TAG, "is GridLayoutManager------> ${layoutManager is GridLayoutManager}")
 
         var pos = position
         when (layoutManager) {
@@ -73,39 +69,19 @@ class DefLargerAct : LargerAct<String>() {
                 pos = getRecyclerViewId(layoutManager, pos)
             }
             is StaggeredGridLayoutManager -> {
-//                pos = getRecyclerViewId(layoutManager, position, pos)
             }
         }
         val childAt = recyclerView?.getChildAt(pos) ?: return null
         return childAt as ImageView
     }
-}
 
-private fun getRecyclerViewId(
-    layoutManager: LinearLayoutManager,
-    pos: Int
-): Int {
-    var pos1 = pos
-//        Log.i(
-//            TAG,
-//            "findFirstCompletelyVisibleItemPosition------> ${layoutManager.findFirstCompletelyVisibleItemPosition()}"
-//        )
-//        Log.i(
-//            TAG,
-//            "findFirstVisibleItemPosition------> ${layoutManager.findFirstVisibleItemPosition()}"
-//        )
-//        Log.i(
-//            TAG,
-//            "findLastCompletelyVisibleItemPosition------> ${layoutManager.findLastCompletelyVisibleItemPosition()}"
-//        )
-//        Log.i(
-//            TAG,
-//            "findLastVisibleItemPosition------> ${layoutManager.findLastVisibleItemPosition()}"
-//        )
-//
-//
-//        Log.i(TAG, "pos------> $position - ${layoutManager.findFirstVisibleItemPosition()}")
-    pos1 -= layoutManager.findFirstVisibleItemPosition()
-    return pos1
+    private fun getRecyclerViewId(
+        layoutManager: LinearLayoutManager,
+        pos: Int
+    ): Int {
+        var pos1 = pos
+        pos1 -= layoutManager.findFirstVisibleItemPosition()
+        return pos1
+    }
 }
 
