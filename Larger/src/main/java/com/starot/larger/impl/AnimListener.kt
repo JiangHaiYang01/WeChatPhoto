@@ -47,7 +47,7 @@ interface AnimListener {
                     isLoadFull: Boolean,
                     holder: RecyclerView.ViewHolder
                 ) {
-
+                    onReLoadFullImage(holder)
                 }
             }
         )
@@ -90,6 +90,7 @@ interface AnimListener {
 
     }
 
+    fun onReLoadFullImage(holder: RecyclerView.ViewHolder)
 
     fun onEnterAnimStart()
 

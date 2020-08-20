@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.impl.AnimListener
@@ -19,7 +20,6 @@ abstract class LargerAct<T> : AppCompatActivity(),
     ViewPagerAdapter.OnBindViewHolderListener,
     AnimListener,
     PageChange.PageChangeListener {
-
 
 
     //根视图
@@ -35,7 +35,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     private var duration: Long = 300
 
     //缩略图
-    private  var thumbnailView: ImageView? = null
+    private var thumbnailView: ImageView? = null
 
     //进入的动画加载完成
     private var isLoadEnter = false
@@ -139,11 +139,13 @@ abstract class LargerAct<T> : AppCompatActivity(),
         getThumbnailView(pos)
     }
 
+    override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
+        itemBindViewHolder(true, holder.itemView, mCurrentIndex, data?.get(mCurrentIndex))
+    }
 
     //点击返回
 //    override fun onBackPressed() {
 //    }
-
 
 
     //onCreate 第一件时间
