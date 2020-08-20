@@ -33,4 +33,8 @@ class DefLargerAct : ListLargerAct<DefListData>() {
             imageLoad?.load(data.full, true, imageView)
     }
 
+    override fun onProgress(progress: Int) {
+        Log.i("allens","图片加载进度----------->$progress")
+    }
+
 }

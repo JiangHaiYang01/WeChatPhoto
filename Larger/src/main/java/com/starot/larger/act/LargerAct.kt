@@ -8,10 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
+import com.starot.larger.config.LargerConfig
 import com.starot.larger.impl.AnimListener
+import com.starot.larger.impl.OnItemViewListener
 import com.starot.larger.utils.PageChange
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
@@ -19,8 +24,10 @@ import kotlinx.android.synthetic.main.activity_larger_base.*
 abstract class LargerAct<T> : AppCompatActivity(),
     ViewPagerAdapter.OnBindViewHolderListener,
     AnimListener,
+    OnItemViewListener<T>,
     PageChange.PageChangeListener {
 
+    var largerConfig: LargerConfig? = null
 
     //根视图
     private lateinit var parentView: View
@@ -44,6 +51,10 @@ abstract class LargerAct<T> : AppCompatActivity(),
     private var isAnimIng = false
 
 
+    //使用liveData 记录 加载变化
+    private var progressLiveData: MutableLiveData<Int> = MutableLiveData()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
@@ -52,8 +63,17 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
         //开始之前
         beforeCreate()
+        //获取通用配置
+        largerConfig = Larger.config
+        //动画持续时间
         duration = getDuration()
 
+        //监听 加载大图进度变化
+        progressLiveData.observe(this, Observer {
+            onProgress(it)
+        })
+        //将监听变化的liveData 通过接口保存
+        largerConfig?.imageLoad?.onPrepare(progressLiveData)
 
         //数据源
         data = getData()
@@ -175,6 +195,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //获取缩略图
     abstract fun getThumbnailView(position: Int): ImageView?
 
+    //大图加载进度
+    abstract fun onProgress(progress: Int)
 
     //数据源
     abstract fun getData(): List<T>?

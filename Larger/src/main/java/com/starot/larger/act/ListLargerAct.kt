@@ -12,14 +12,12 @@ import com.starot.larger.config.LargerConfig
 import com.starot.larger.config.ListLargerConfig
 import com.starot.larger.impl.OnItemViewListener
 
-abstract class ListLargerAct<T> : LargerAct<T>(), OnItemViewListener<T> {
+abstract class ListLargerAct<T> : LargerAct<T>() {
 
 
-    private var largerConfig: LargerConfig? = null
     private var listConfig: ListLargerConfig? = null
 
     override fun beforeCreate() {
-        largerConfig = Larger.config
         listConfig = Larger.listConfig
     }
 
@@ -44,7 +42,7 @@ abstract class ListLargerAct<T> : LargerAct<T>(), OnItemViewListener<T> {
     ) {
         val imageView = itemView.findViewById<ImageView>(getFullViewId())
         if (isLoadFull) {
-            onItemLoadFull(largerConfig?.imageLoad,itemView, position, imageView, data)
+            onItemLoadFull(largerConfig?.imageLoad, itemView, position, imageView, data)
         } else {
             onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, imageView, data)
         }

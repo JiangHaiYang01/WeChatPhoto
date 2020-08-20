@@ -6,8 +6,4 @@ interface OnImageLoad : OnLoadProgress {
 
 
     fun load(url: String, isLoadFull: Boolean, imageView: ImageView)
-
-    fun onLoadFailed(throwable: Throwable)
-
-    fun onLoadSuccess()
 }

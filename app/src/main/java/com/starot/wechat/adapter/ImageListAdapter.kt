@@ -54,7 +54,7 @@ class ImageListAdapter(
                 defData.add(DefListData(info, info))
             }
             Larger.create()
-                .setDuration(3000)
+                .setDuration(300)
                 .setImageLoad(GlideImageLoader(context))  //添加加载器
                 .withListType()//这里展示的是列表类型的
                 .setCurrentIndex(position)//下标

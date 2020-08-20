@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomProgressView">
+        <!-- 未完成进度颜色 -->
+        <attr name="custom_progressNormalColor" format="color" />
+        <!-- 已完成进度颜色 -->
+        <attr name="custom_progressReachColor" format="color" />
+        <!--  进度的值字体颜色 -->
+        <attr name="custom_progressTextColor" format="color" />
+        <!-- 进度值字体大小 -->
+        <attr name="custom_progressTextSize" format="dimension" />
+        <!-- 未完成进度条大小 -->
+        <attr name="custom_progressNormalSize" format="dimension" />
+        <!--  未完成进度条大小 -->
+        <attr name="custom_progressReachSize" format="dimension" />
+        <!--  半径 -->
+        <attr name="custom_radius" format="dimension" />
+        <!-- 是否显示进度值 -->
+        <attr name="custom_progressTextVisible" format="boolean" />
+        <!-- 起始角度  -->
+        <attr name="custom_progressStartArc" format="integer" />
+        <!-- 进度值字体倾斜角度 -->
+        <attr name="custom_progressTextSkewX" format="dimension" />
+        <!--  进度值后缀 -->
+        <attr name="custom_progressTextPrefix" format="string" />
+        <!-- 进度值前缀 -->
+        <attr name="custom_progressTextSuffix" format="string" />
+        <!-- 内部背景填充颜色  -->
+        <attr name="custom_innerBackgroundColor" format="color" />
+        <!-- 进度风格 -->
+        <attr name="custom_progressStyle" format="enum">
+            <!-- 默认 -->
+            <enum name="Normal" value="0" />
+            <!-- 扇形 -->
+            <enum name="FillInner" value="1" />
+            <!-- 底部开始充满 -->
+            <enum name="FillInnerArc" value="2" />
+        </attr>
+        <!-- 内部圆与外部圆间距 -->
+        <attr name="custom_innerPadding" format="dimension" />
+        <!-- 外部圆环颜色 -->
+        <attr name="custom_outerColor" format="color" />
+        <!-- 外层圆环宽度 -->
+        <attr name="custom_outerSize" format="dimension" />
+        <!-- 画笔是否使用圆角边界，normalStyle下生效 -->
+        <attr name="custom_reachCapRound" format="boolean" />
+    </declare-styleable>
+</resources>

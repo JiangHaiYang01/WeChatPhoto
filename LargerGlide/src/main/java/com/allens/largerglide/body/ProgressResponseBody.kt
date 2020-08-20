@@ -2,6 +2,7 @@ package com.allens.largerglide.body
 
 
 import android.os.Handler
+import android.util.Log
 import com.allens.largerglide.impl.ProgressListener
 import com.allens.largerglide.interceptor.ProgressInterceptor
 import okhttp3.MediaType
