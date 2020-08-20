@@ -1,6 +1,7 @@
 package com.starot.wechat.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
+import com.starot.larger.act.DefLargerAct
+import com.starot.larger.bean.DefListData
 import com.starot.wechat.R
 
 
@@ -42,15 +45,22 @@ class ImageListAdapter(
 
 
 
+
         holder.itemView.setOnClickListener {
+
+            //创建默认的 数据源
+            val defData = arrayListOf<DefListData>()
+            for (info in data) {
+                defData.add(DefListData(info, info))
+            }
             Larger.create()
-                .setDuration(300)
-                .setImageLoad(GlideImageLoader(context))
-                .withListType()
-                .setCurrentIndex(position)
-                .setRecyclerView(recyclerView)
-                .setData(data)
-                .start(context)
+                .setDuration(3000)
+                .setImageLoad(GlideImageLoader(context))  //添加加载器
+                .withListType()//这里展示的是列表类型的
+                .setCurrentIndex(position)//下标
+                .setRecyclerView(recyclerView)//recyclerview
+                .setDefData(defData) //添加默认的数据源
+                .start(context) //启动默认的activity
         }
     }
 }

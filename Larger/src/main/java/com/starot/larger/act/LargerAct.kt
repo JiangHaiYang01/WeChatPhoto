@@ -40,6 +40,9 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //进入的动画加载完成
     private var isLoadEnter = false
 
+    //是否在播放动画
+    private var isAnimIng = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         overridePendingTransition(0, 0)
@@ -98,6 +101,10 @@ abstract class LargerAct<T> : AppCompatActivity(),
         val image = holder.itemView.findViewById<ImageView>(getFullViewId())
         //单点击退出
         image.setOnClickListener {
+            if (isAnimIng) {
+                //当前正在播放动画 不可点击
+                return@setOnClickListener
+            }
             val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
             thumbnailView = getThumbnailView(mCurrentIndex)
             exitAnimStart(
@@ -113,23 +120,27 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //进入动画结束
     override fun onEnterAnimEnd() {
         setViewPagerEnable(true)
+        isAnimIng = false
     }
 
     //进入动画开始
     override fun onEnterAnimStart() {
         isLoadEnter = true
+        isAnimIng = true
         setViewPagerEnable(false)
     }
 
 
     //退出动画结束
     override fun onExitAnimEnd() {
+        isAnimIng = false
         finish()
         overridePendingTransition(0, 0)
     }
 
     //退出动画开始
     override fun onExitAnimStart() {
+        isAnimIng = true
         setViewPagerEnable(false)
     }
 

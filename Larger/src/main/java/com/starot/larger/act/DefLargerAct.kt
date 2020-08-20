@@ -4,9 +4,10 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnImageLoad
 
-class CustomLargerAct : ListLargerAct<String>() {
+class DefLargerAct : ListLargerAct<DefListData>() {
 
 
     override fun onItemLoadThumbnails(
@@ -14,10 +15,10 @@ class CustomLargerAct : ListLargerAct<String>() {
         itemView: View,
         position: Int,
         imageView: ImageView,
-        data: String?
+        data: DefListData?
     ) {
         if (data != null)
-            imageLoad?.load(data, false, imageView)
+            imageLoad?.load(data.thumbnails, false, imageView)
     }
 
     @SuppressLint("CheckResult")
@@ -26,10 +27,10 @@ class CustomLargerAct : ListLargerAct<String>() {
         itemView: View,
         position: Int,
         imageView: ImageView,
-        data: String?
+        data: DefListData?
     ) {
         if (data != null)
-            imageLoad?.load(data, true, imageView)
+            imageLoad?.load(data.full, true, imageView)
     }
 
 }
