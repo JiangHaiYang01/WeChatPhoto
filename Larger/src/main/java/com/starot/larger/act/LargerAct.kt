@@ -21,9 +21,6 @@ abstract class LargerAct<T> : AppCompatActivity(),
     PageChange.PageChangeListener {
 
 
-    companion object {
-        const val TAG = "allens_tag"
-    }
 
     //根视图
     private lateinit var parentView: View
@@ -144,8 +141,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
 
     //点击返回
-    override fun onBackPressed() {
-    }
+//    override fun onBackPressed() {
+//    }
 
 
 

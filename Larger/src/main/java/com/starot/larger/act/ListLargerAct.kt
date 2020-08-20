@@ -9,43 +9,50 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.R
+import com.starot.larger.config.LargerConfig
+import com.starot.larger.config.ListLargerConfig
+import com.starot.larger.impl.OnItemViewListener
 
-class DefLargerAct : LargerAct<String>() {
+abstract class ListLargerAct<T> : LargerAct<T>(), OnItemViewListener<T> {
 
 
-    private var largerConfig: Larger.LargerConfig? = null
+    private var largerConfig: LargerConfig? = null
+    private var listConfig: ListLargerConfig? = null
 
     override fun beforeCreate() {
         largerConfig = Larger.config
+        listConfig = Larger.listConfig
     }
 
 
     override fun getIndex(): Int {
-        return largerConfig?.position ?: 0
+        return listConfig?.position ?: 0
     }
 
-    override fun getData(): List<String>? {
-        return largerConfig?.thumbnails
+    override fun getData(): List<T>? {
+        val data = listConfig?.data
+        if (data != null && data.isNotEmpty()) {
+            Log.i("allens", "data[0] is T ${data[0].javaClass}")
+        }
+        return listConfig?.data as List<T>?
     }
 
     override fun getItemLayout(): Int {
-        return R.layout.item_larger_image
+        return listConfig?.itemLayout ?: R.layout.item_larger_image
     }
 
     override fun itemBindViewHolder(
         isLoadFull: Boolean,
         itemView: View,
         position: Int,
-        data: String?
+        data: T?
     ) {
-
-        //todo 需要处理大图和小图 选用不同的加载器 这里需要用到策略
-
-        Glide.with(this)
-            .load(largerConfig?.thumbnails?.get(position))
-            .into(itemView.findViewById(R.id.image))
-
-
+        val imageView = itemView.findViewById<ImageView>(getFullViewId())
+        if (isLoadFull) {
+            onItemLoadFull(itemView, position, imageView, data)
+        } else {
+            onItemLoadThumbnails(itemView, position, imageView, data)
+        }
     }
 
     override fun getDuration(): Long {
@@ -53,11 +60,14 @@ class DefLargerAct : LargerAct<String>() {
     }
 
     override fun getFullViewId(): Int {
-        return R.id.image
+        if (listConfig?.itemLayout == null) {
+            return R.id.image
+        }
+        return listConfig?.fullViewId ?: R.id.image
     }
 
     override fun getThumbnailView(position: Int): ImageView? {
-        val recyclerView = largerConfig?.recyclerView
+        val recyclerView = listConfig?.recyclerView
         val layoutManager = recyclerView?.layoutManager
 
         var pos = position
