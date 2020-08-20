@@ -1,13 +1,20 @@
 package com.allens.largerglide.impl
 
 import android.graphics.drawable.Drawable
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.allens.largerglide.interceptor.ProgressInterceptor
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
-class CustomRequestListener(private val url: String) : RequestListener<Drawable> {
+class CustomRequestListener(
+    private val url: String,
+    private val progressViewLiveData: MutableLiveData<Boolean>?,
+    private val loadFull: Boolean
+) :
+    RequestListener<Drawable> {
     override fun onLoadFailed(
         e: GlideException?,
         model: Any?,
@@ -15,6 +22,11 @@ class CustomRequestListener(private val url: String) : RequestListener<Drawable>
         isFirstResource: Boolean
     ): Boolean {
         ProgressInterceptor.removeListener(url = url)
+
+        if (loadFull) {
+            Log.i("allens_tag", "onLoadFailed")
+            progressViewLiveData?.postValue(true)
+        }
         return false
     }
 
@@ -26,6 +38,11 @@ class CustomRequestListener(private val url: String) : RequestListener<Drawable>
         isFirstResource: Boolean
     ): Boolean {
         ProgressInterceptor.removeListener(url = url)
+
+        if (loadFull) {
+            progressViewLiveData?.postValue(true)
+            Log.i("allens_tag", "onResourceReady")
+        }
         return false
     }
 

@@ -3,6 +3,7 @@ package com.starot.larger.act
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -76,6 +77,16 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
         }
         val childAt = recyclerView?.getChildAt(pos) ?: return null
         return childAt as ImageView
+    }
+
+
+    override fun onProgressChange(isGone: Boolean) {
+        Log.i("allens_tag", "onProgressChange isGone $isGone")
+    }
+
+
+    override fun onLoadProgress(progress: Int) {
+        Log.i("allens_tag", "onLoadProgress $progress")
     }
 
     private fun getRecyclerViewId(

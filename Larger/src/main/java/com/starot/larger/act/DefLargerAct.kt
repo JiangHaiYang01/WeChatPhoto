@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnImageLoad
 
@@ -31,10 +32,6 @@ class DefLargerAct : ListLargerAct<DefListData>() {
     ) {
         if (data != null)
             imageLoad?.load(data.full, true, imageView)
-    }
-
-    override fun onProgress(progress: Int) {
-        Log.i("allens","图片加载进度----------->$progress")
     }
 
 }
