@@ -3,17 +3,18 @@ package com.starot.wechat.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.starot.wechat.R
 import com.starot.wechat.adapter.ImageListAdapter
 import kotlinx.android.synthetic.main.activity_image_list.*
 
 
-class ImageListAct :AppCompatActivity(){
+class ImageListAct : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_list)
-        title = "列表布局"
+        title = intent.getStringExtra("name")
 
         val lists = arrayListOf<String>()
         for (index in 0..10) {
@@ -28,7 +29,16 @@ class ImageListAct :AppCompatActivity(){
             lists.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3642306945,3051949181&fm=26&gp=0.jpg")
         }
 
-        act_list_ry.layoutManager = GridLayoutManager(this,2)
-        act_list_ry.adapter = ImageListAdapter(lists,act_list_ry)
+        when (intent.getIntExtra("type", 0)) {
+            0 -> {
+                act_list_ry.layoutManager = GridLayoutManager(this, 2)
+            }
+            1 -> {
+                act_list_ry.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+            }
+        }
+        act_list_ry.adapter = ImageListAdapter(lists, act_list_ry)
     }
 }
