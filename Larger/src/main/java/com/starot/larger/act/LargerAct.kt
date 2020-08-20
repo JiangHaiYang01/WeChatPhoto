@@ -144,8 +144,9 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
     //点击返回
-//    override fun onBackPressed() {
-//    }
+    override fun onBackPressed() {
+        //todo 点击返回暂时无效化 后续参考其他大厂 是否加入
+    }
 
 
     //onCreate 第一件时间

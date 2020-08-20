@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.allens.largerglide.GlideImageLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
-import com.starot.larger.impl.OnItemViewListener
 import com.starot.wechat.R
 
 
@@ -45,7 +45,8 @@ class ImageListAdapter(
         holder.itemView.setOnClickListener {
             Larger.create()
                 .setDuration(300)
-                .setListType()
+                .setImageLoad(GlideImageLoader(context))
+                .withListType()
                 .setCurrentIndex(position)
                 .setRecyclerView(recyclerView)
                 .setData(data)

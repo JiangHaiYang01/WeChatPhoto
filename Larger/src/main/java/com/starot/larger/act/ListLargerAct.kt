@@ -6,7 +6,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.config.LargerConfig
@@ -30,10 +29,6 @@ abstract class ListLargerAct<T> : LargerAct<T>(), OnItemViewListener<T> {
     }
 
     override fun getData(): List<T>? {
-        val data = listConfig?.data
-        if (data != null && data.isNotEmpty()) {
-            Log.i("allens", "data[0] is T ${data[0].javaClass}")
-        }
         return listConfig?.data as List<T>?
     }
 
@@ -49,9 +44,9 @@ abstract class ListLargerAct<T> : LargerAct<T>(), OnItemViewListener<T> {
     ) {
         val imageView = itemView.findViewById<ImageView>(getFullViewId())
         if (isLoadFull) {
-            onItemLoadFull(itemView, position, imageView, data)
+            onItemLoadFull(largerConfig?.imageLoad,itemView, position, imageView, data)
         } else {
-            onItemLoadThumbnails(itemView, position, imageView, data)
+            onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, imageView, data)
         }
     }
 

@@ -6,6 +6,7 @@ import android.widget.ImageView
 interface OnItemViewListener<T> {
 
     fun onItemLoadThumbnails(
+        imageLoad: OnImageLoad?,
         itemView: View,
         position: Int,
         imageView: ImageView,
@@ -13,6 +14,7 @@ interface OnItemViewListener<T> {
     )
 
     fun onItemLoadFull(
+        imageLoad: OnImageLoad?,
         itemView: View,
         position: Int,
         imageView: ImageView,

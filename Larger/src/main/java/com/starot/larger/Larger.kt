@@ -3,6 +3,7 @@ package com.starot.larger
 import com.starot.larger.builder.ListBuilder
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.config.ListLargerConfig
+import com.starot.larger.impl.OnImageLoad
 
 object Larger {
 
@@ -18,6 +19,9 @@ object Larger {
 
     class Builder(private val largerConfig: LargerConfig) {
 
+        init {
+            config = largerConfig
+        }
 
         //设置持续时间
         fun setDuration(duration: Long): Builder {
@@ -25,8 +29,14 @@ object Larger {
             return this
         }
 
+        //设置图片加载器
+        fun setImageLoad(imageLoad: OnImageLoad): Builder {
+            largerConfig.imageLoad = imageLoad
+            return this
+        }
+
         //列表类型
-        fun  setListType(): ListBuilder {
+        fun withListType(): ListBuilder {
             listConfig = ListLargerConfig()
             return ListBuilder(listConfig)
         }

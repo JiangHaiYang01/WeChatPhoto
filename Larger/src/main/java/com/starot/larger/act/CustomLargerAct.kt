@@ -1,42 +1,35 @@
 package com.starot.larger.act
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
+import com.starot.larger.impl.OnImageLoad
 
 class CustomLargerAct : ListLargerAct<String>() {
 
 
     override fun onItemLoadThumbnails(
+        imageLoad: OnImageLoad?,
         itemView: View,
         position: Int,
         imageView: ImageView,
         data: String?
     ) {
-        Glide.with(this)
-            .load(data)
-            .into(imageView)
+        if (data != null)
+            imageLoad?.load(data, false, imageView)
     }
 
     @SuppressLint("CheckResult")
     override fun onItemLoadFull(
+        imageLoad: OnImageLoad?,
         itemView: View,
         position: Int,
         imageView: ImageView,
         data: String?
     ) {
-        val options = RequestOptions()
-            .placeholder(imageView.drawable)
-            .override(imageView.width, imageView.height)
-            .skipMemoryCache(true)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-        Glide.with(this)
-            .load(data)
-            .apply(options)
-            .into(imageView)
+        if (data != null)
+            imageLoad?.load(data, true, imageView)
     }
 
 }
