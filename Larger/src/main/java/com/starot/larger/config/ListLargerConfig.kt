@@ -1,6 +1,7 @@
 package com.starot.larger.config
 
 import androidx.recyclerview.widget.RecyclerView
+import com.starot.larger.impl.OnCustomItemViewListener
 
 data class ListLargerConfig(
     //数据集合
@@ -12,5 +13,7 @@ data class ListLargerConfig(
     //列表的布局
     var itemLayout: Int? = null,
     //大图的ImageViewID
-    var fullViewId: Int? = null
+    var fullViewId: Int? = null,
+    //自定义的itemViewListener
+    var customItemViewListener: OnCustomItemViewListener? = null
 )

@@ -7,6 +7,7 @@ import com.starot.larger.act.DefLargerAct
 import com.starot.larger.bean.DefListData
 import com.starot.larger.config.ListLargerConfig
 import com.starot.larger.impl.OnBuilderStart
+import com.starot.larger.impl.OnCustomItemViewListener
 
 class ListBuilder(private val listConfig: ListLargerConfig?) : OnBuilderStart {
 
@@ -26,6 +27,12 @@ class ListBuilder(private val listConfig: ListLargerConfig?) : OnBuilderStart {
     //大图的ImageViewID  不设置的话有默认
     fun setFullViewId(fullViewId: Int): ListBuilder {
         listConfig?.fullViewId = fullViewId
+        return this
+    }
+
+    //自己处理viewHolder
+    fun registerCustomItemView(listener: OnCustomItemViewListener): ListBuilder {
+        listConfig?.customItemViewListener = listener
         return this
     }
 
@@ -57,8 +64,8 @@ class ListBuilder(private val listConfig: ListLargerConfig?) : OnBuilderStart {
     }
 
     //跳转到自定义的act
-    override fun start( context: Context,cls: Class<*>){
-        val intent = Intent(context,cls)
+    override fun start(context: Context, cls: Class<*>) {
+        val intent = Intent(context, cls)
         context.startActivity(intent)
     }
 

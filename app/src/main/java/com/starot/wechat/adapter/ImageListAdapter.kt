@@ -1,16 +1,20 @@
 package com.starot.wechat.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
 import com.allens.largerprogress.GlideProgressLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.DefListData
+import com.starot.larger.impl.OnCustomItemViewListener
+import com.starot.larger.impl.OnReLoadFullImage
 import com.starot.wechat.R
 import kotlin.collections.ArrayList
 
@@ -83,6 +87,20 @@ class ImageListAdapter(
                         .withListType()//这里展示的是列表类型的
                         .setCurrentIndex(position)//下标
                         .setItemLayout(R.layout.item_custom_image)
+                        .registerCustomItemView(object : OnCustomItemViewListener {//自定义处理item
+                            override fun itemBindViewHolder(
+                                listener: OnReLoadFullImage,
+                                itemView: View,
+                                position: Int,
+                                data: Any?
+                            ) {
+                                itemView.findViewById<TextView>(R.id.item_custom_tv)
+                                    .setOnClickListener {
+                                        Log.i("allens_tag", "点击查看原图")
+                                        listener.reLoadFullImage()
+                                    }
+                            }
+                        })
                         .setFullViewId(R.id.item_custom_image)
                         .setRecyclerView(recyclerView)//recyclerview
                         .setDefData(data) //添加默认的数据源

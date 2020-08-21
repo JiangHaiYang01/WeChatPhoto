@@ -33,6 +33,6 @@ class ViewPagerAdapter<T>(
     }
 
     interface OnBindViewHolderListener {
-        fun onBindViewHolder(holder: PhotoViewHolder, position: Int)
+        fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int)
     }
 }

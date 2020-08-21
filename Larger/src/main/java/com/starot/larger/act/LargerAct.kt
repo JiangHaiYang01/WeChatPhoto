@@ -13,10 +13,7 @@ import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.config.LargerConfig
-import com.starot.larger.impl.AnimListener
-import com.starot.larger.impl.OnItemViewListener
-import com.starot.larger.impl.OnLoadProgressListener
-import com.starot.larger.impl.OnLoadProgressPrepareListener
+import com.starot.larger.impl.*
 import com.starot.larger.utils.PageChange
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
@@ -27,6 +24,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     OnItemViewListener<T>,
     OnLoadProgressPrepareListener,
     OnLoadProgressListener,
+    OnReLoadFullImage,
     PageChange.PageChangeListener {
 
     var largerConfig: LargerConfig? = null
@@ -119,23 +117,29 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
 
-    override fun onBindViewHolder(holder: ViewPagerAdapter.PhotoViewHolder, position: Int) {
-        //通用方法
-        itemCommand(holder, position, data?.get(position))
-        //用户自己处理加载逻辑
-        itemBindViewHolder(false, holder.itemView, position, data?.get(position))
-        //首次进入加载完成之后不再展示动画
-        if (isLoadEnter) {
-            return
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        when (holder) {
+            is ViewPagerAdapter.PhotoViewHolder -> {
+                //通用方法
+                itemCommand(holder, position, data?.get(position))
+                //用户自己处理加载逻辑
+                itemBindViewHolder(false, holder.itemView, position, data?.get(position))
+                //首次进入加载完成之后不再展示动画
+                if (isLoadEnter) {
+                    return
+                }
+                val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
+                enterAnimStart(
+                    parentView,
+                    duration,
+                    fullImageView,
+                    thumbnailView,
+                    holder
+                )
+            }
         }
-        val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
-        enterAnimStart(
-            parentView,
-            duration,
-            fullImageView,
-            thumbnailView,
-            holder
-        )
+
     }
 
     private fun itemCommand(holder: ViewPagerAdapter.PhotoViewHolder, position: Int, get: T?) {
@@ -199,6 +203,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         }
     }
 
+
     //点击返回
     override fun onBackPressed() {
         //todo 点击返回暂时无效化 后续参考其他大厂 是否加入
@@ -249,5 +254,15 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     //加载图片 对外是可自定义处理
     abstract fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?)
+
+
+    //加载大图
+    override fun reLoadFullImage() {
+        val itemView = prepareLoadFullHolder?.itemView
+        if (itemView != null) {
+            itemBindViewHolder(true, itemView, mCurrentIndex, data?.get(mCurrentIndex))
+        }
+
+    }
 
 }

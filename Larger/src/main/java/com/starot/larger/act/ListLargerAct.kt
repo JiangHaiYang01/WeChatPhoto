@@ -41,6 +41,12 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
         position: Int,
         data: T?
     ) {
+        listConfig?.customItemViewListener?.itemBindViewHolder(
+            this,
+            itemView,
+            position,
+            data
+        )
         val imageView = itemView.findViewById<ImageView>(getFullViewId())
         if (isLoadFull) {
             onItemLoadFull(largerConfig?.imageLoad, itemView, position, imageView, data)
