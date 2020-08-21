@@ -40,7 +40,7 @@ class ProgressDialog(context: Context) : BaseDialog(context) {
                 progressView?.outerSize = 2
                 progressView?.innerPadding = 2
             }
-            else->{
+            else -> {
                 progressView?.progressStyle = CircleProgressView.ProgressStyle.FILL_IN_ARC
                 progressView?.outerColor = Color.parseColor("#ffffff")
                 progressView?.normalBarColor = Color.parseColor("#00000000")

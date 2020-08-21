@@ -29,6 +29,8 @@ class GlideProgressLoader(private val type: ProgressType) : OnLoadProgressListen
 
     private fun createDialog(context: Context, type: ProgressType): ProgressDialog {
         val progressDialog = ProgressDialog(context).create() as ProgressDialog
+        progressDialog.setCanceledOnTouchOutside(false)
+        progressDialog.setCancelable(false)
         progressDialog.setStyle(
             if (type == ProgressType.NONE) {
                 0
