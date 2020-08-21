@@ -80,14 +80,7 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
     }
 
 
-    override fun onProgressChange(isGone: Boolean) {
-        Log.i("allens_tag", "onProgressChange isGone $isGone")
-    }
 
-
-    override fun onLoadProgress(progress: Int) {
-        Log.i("allens_tag", "onLoadProgress $progress")
-    }
 
     private fun getRecyclerViewId(
         layoutManager: LinearLayoutManager,

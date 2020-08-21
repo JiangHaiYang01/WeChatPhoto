@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
+import com.allens.largerprogress.GlideProgressLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.DefListData
@@ -46,6 +47,7 @@ class ImageListAdapter(
             Larger.create()
                 .setDuration(300)
                 .setImageLoad(GlideImageLoader(context))  //添加加载器
+                .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
                 .withListType()//这里展示的是列表类型的
                 .setCurrentIndex(position)//下标
                 .setRecyclerView(recyclerView)//recyclerview

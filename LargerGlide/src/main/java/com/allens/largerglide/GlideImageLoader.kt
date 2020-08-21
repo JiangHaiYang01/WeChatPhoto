@@ -9,22 +9,23 @@ import com.allens.largerglide.impl.ProgressListener
 import com.allens.largerglide.interceptor.ProgressInterceptor
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.starot.larger.event.MyMutableLiveData
 import com.starot.larger.impl.OnImageLoad
+import com.starot.larger.impl.OnLoadProgressListener
+import com.starot.larger.impl.OnLoadProgressPrepareListener
 
 class GlideImageLoader(private val context: Context) : OnImageLoad {
 
 
     private val progress = object : ProgressListener {
         override fun onProgress(progress: Int) {
-            //进度
-            progressLiveData?.postValue(progress)
-
 
             val value = progressViewLiveData?.value
             if (value == null) {
                 progressViewLiveData?.postValue(false)
             }
+
+            //进度
+            progressLiveData?.postValue(progress)
         }
     }
 
@@ -60,13 +61,5 @@ class GlideImageLoader(private val context: Context) : OnImageLoad {
         this.progressViewLiveData = progressViewLiveData
     }
 
-
-    override fun onLoadProgress(progress: Int) {
-
-    }
-
-    override fun onProgressChange(isGone: Boolean) {
-
-    }
 
 }

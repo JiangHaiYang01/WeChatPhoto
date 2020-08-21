@@ -1,11 +1,9 @@
 package com.starot.larger.act
 
+import android.content.Context
 import android.os.Bundle
-import android.transition.Fade
-import android.transition.Transition
-import android.transition.TransitionManager
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
@@ -15,11 +13,10 @@ import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.config.LargerConfig
-import com.starot.larger.event.MyMutableLiveData
 import com.starot.larger.impl.AnimListener
 import com.starot.larger.impl.OnItemViewListener
-import com.starot.larger.impl.OnLoadProgress
-import com.starot.larger.impl.OnProgressStatusChangeListener
+import com.starot.larger.impl.OnLoadProgressListener
+import com.starot.larger.impl.OnLoadProgressPrepareListener
 import com.starot.larger.utils.PageChange
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
@@ -28,8 +25,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
     ViewPagerAdapter.OnBindViewHolderListener,
     AnimListener,
     OnItemViewListener<T>,
-    OnProgressStatusChangeListener,
-    OnLoadProgress,
+    OnLoadProgressPrepareListener,
+    OnLoadProgressListener,
     PageChange.PageChangeListener {
 
     var largerConfig: LargerConfig? = null
@@ -87,7 +84,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
         //对于加载进度条的逻辑判断
         progressViewLiveData.observe(this, Observer {
-            onProgressChange(it)
+            onProgressChange(this, it)
         })
         largerConfig?.imageLoad?.onPrepareProgressView(progressViewLiveData)
 
@@ -194,6 +191,24 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //点击返回
     override fun onBackPressed() {
         //todo 点击返回暂时无效化 后续参考其他大厂 是否加入
+    }
+
+
+    override fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>) {
+    }
+
+    override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>) {
+    }
+
+    //加载图片的变化
+    override fun onProgressChange(context: Context, isGone: Boolean) {
+        largerConfig?.imageProgress?.onProgressChange(this, isGone)
+    }
+
+
+    //加载图片的进度
+    override fun onLoadProgress(progress: Int) {
+        largerConfig?.imageProgress?.onLoadProgress(progress)
     }
 
 

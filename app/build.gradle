@@ -38,6 +38,8 @@ dependencies {
     implementation project(":Larger")
     //加载器
     implementation project(":LargerGlide")
+    //进度
+    implementation project(":LargerProgress")
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 

@@ -24,7 +24,6 @@ class CustomRequestListener(
         ProgressInterceptor.removeListener(url = url)
 
         if (loadFull) {
-            Log.i("allens_tag", "onLoadFailed")
             progressViewLiveData?.postValue(true)
         }
         return false
@@ -41,7 +40,6 @@ class CustomRequestListener(
 
         if (loadFull) {
             progressViewLiveData?.postValue(true)
-            Log.i("allens_tag", "onResourceReady")
         }
         return false
     }
