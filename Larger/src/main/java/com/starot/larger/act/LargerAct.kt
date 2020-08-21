@@ -53,14 +53,15 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //是否自动加载大图
     private var automatic = true
 
-    //准备加载大图的holder
-    private var prepareLoadFullHolder: RecyclerView.ViewHolder? = null
-
     //使用liveData 记录 加载进度变化
     private var progressLiveData: MutableLiveData<Int> = MutableLiveData()
 
     //使用liveData 记录 加载变化
     private var progressViewLiveData: MutableLiveData<Boolean> = MutableLiveData()
+
+    //保存变化的 holder
+    //todo 这个map 可以进行优化的
+    private val holderMap: HashMap<Int, RecyclerView.ViewHolder> = HashMap()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,7 +119,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
+        holderMap[position] = holder
         when (holder) {
             is ViewPagerAdapter.PhotoViewHolder -> {
                 //通用方法
@@ -207,8 +208,6 @@ abstract class LargerAct<T> : AppCompatActivity(),
                             mCurrentIndex,
                             data?.get(mCurrentIndex)
                         )
-                    } else {
-                        prepareLoadFullHolder = holder
                     }
                 }
 
@@ -282,7 +281,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     //加载大图
     override fun reLoadFullImage() {
-        val itemView = prepareLoadFullHolder?.itemView
+        val itemView = holderMap[mCurrentIndex]?.itemView
         if (itemView != null) {
             itemBindViewHolder(true, itemView, mCurrentIndex, data?.get(mCurrentIndex))
         }

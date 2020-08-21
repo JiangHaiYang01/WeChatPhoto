@@ -16,7 +16,7 @@ import com.starot.larger.impl.OnItemViewListener
 abstract class ListLargerAct<T> : LargerAct<T>() {
 
 
-    private var listConfig: ListLargerConfig? = null
+     var listConfig: ListLargerConfig? = null
 
     override fun beforeCreate() {
         listConfig = Larger.listConfig

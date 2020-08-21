@@ -39,7 +39,16 @@ class DefLargerAct : ListLargerAct<DefListData>() {
         if (data == null) {
             return
         }
-        largerConfig?.imageLoad?.checkCache(data.full, listener)
+        largerConfig?.imageLoad?.checkCache(data.full, object : OnCheckImageCacheListener {
+            override fun onNoCache() {
+                listener.onNoCache()
+            }
+
+            override fun onHasCache() {
+                listener.onHasCache()
+            }
+        })
+
     }
 
 }

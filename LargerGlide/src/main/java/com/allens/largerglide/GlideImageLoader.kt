@@ -24,7 +24,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoad {
         override fun onProgress(progress: Int) {
 
             val value = progressViewLiveData?.value
-            if (value == null) {
+            if (value == null || value) {
                 progressViewLiveData?.postValue(false)
             }
 

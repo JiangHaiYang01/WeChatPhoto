@@ -15,6 +15,7 @@ class GlideProgressLoader(private val type: ProgressType) : OnLoadProgressListen
         }
         if (isGone) {
             dialog?.dismiss()
+            dialog = null
         } else {
             dialog?.show()
         }
