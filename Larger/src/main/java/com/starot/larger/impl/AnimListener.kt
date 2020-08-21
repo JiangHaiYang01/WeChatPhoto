@@ -90,13 +90,18 @@ interface AnimListener {
 
     }
 
+    //重新加载大图
     fun onReLoadFullImage(holder: RecyclerView.ViewHolder)
 
+    //进入的动画开始
     fun onEnterAnimStart()
 
+    //进入动画结束
     fun onEnterAnimEnd()
 
+    //退出的动画开始
     fun onExitAnimStart()
 
+    //退出动画结束
     fun onExitAnimEnd()
 }

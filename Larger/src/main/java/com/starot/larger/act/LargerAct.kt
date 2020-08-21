@@ -196,11 +196,32 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
     override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
-        if (automatic) {
-            itemBindViewHolder(true, holder.itemView, mCurrentIndex, data?.get(mCurrentIndex))
-        } else {
-            prepareLoadFullHolder = holder
-        }
+        //判断是否有缓存 有缓存直接加载 没缓存 则变量生效
+        getImageHasCache(data?.get(mCurrentIndex),
+            object : OnCheckImageCacheListener {
+                override fun onNoCache() {
+                    if (automatic) {
+                        itemBindViewHolder(
+                            true,
+                            holder.itemView,
+                            mCurrentIndex,
+                            data?.get(mCurrentIndex)
+                        )
+                    } else {
+                        prepareLoadFullHolder = holder
+                    }
+                }
+
+                override fun onHasCache() {
+                    itemBindViewHolder(
+                        true,
+                        holder.itemView,
+                        mCurrentIndex,
+                        data?.get(mCurrentIndex)
+                    )
+                }
+            }
+        )
     }
 
 
@@ -251,6 +272,9 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     //默认的布局
     abstract fun getItemLayout(): Int
+
+    //判断图片是否有缓存
+    abstract fun getImageHasCache(data: T?, listener: OnCheckImageCacheListener)
 
     //加载图片 对外是可自定义处理
     abstract fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?)

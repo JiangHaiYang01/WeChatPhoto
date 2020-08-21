@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import com.starot.larger.bean.DefListData
+import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoad
 
 class DefLargerAct : ListLargerAct<DefListData>() {
@@ -32,6 +33,13 @@ class DefLargerAct : ListLargerAct<DefListData>() {
     ) {
         if (data != null)
             imageLoad?.load(data.full, true, imageView)
+    }
+
+    override fun getImageHasCache(data: DefListData?, listener: OnCheckImageCacheListener) {
+        if (data == null) {
+            return
+        }
+        largerConfig?.imageLoad?.checkCache(data.full, listener)
     }
 
 }

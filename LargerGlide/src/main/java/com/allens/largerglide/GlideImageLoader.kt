@@ -2,6 +2,8 @@ package com.allens.largerglide
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import com.allens.largerglide.impl.CustomRequestListener
@@ -9,9 +11,11 @@ import com.allens.largerglide.impl.ProgressListener
 import com.allens.largerglide.interceptor.ProgressInterceptor
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoad
 import com.starot.larger.impl.OnLoadProgressListener
 import com.starot.larger.impl.OnLoadProgressPrepareListener
+import java.io.File
 
 class GlideImageLoader(private val context: Context) : OnImageLoad {
 
@@ -28,6 +32,8 @@ class GlideImageLoader(private val context: Context) : OnImageLoad {
             progressLiveData?.postValue(progress)
         }
     }
+
+    private val handler: Handler = Handler(Looper.getMainLooper())
 
     private var progressLiveData: MutableLiveData<Int>? = null
     private var progressViewLiveData: MutableLiveData<Boolean>? = null
@@ -51,6 +57,35 @@ class GlideImageLoader(private val context: Context) : OnImageLoad {
             .apply(options)
             .listener(CustomRequestListener(url, progressViewLiveData, isLoadFull))
             .into(imageView)
+    }
+
+    override fun checkCache(url: String, listener: OnCheckImageCacheListener) {
+        Thread {
+            val file: File? = try {
+                Glide.with(context).downloadOnly()
+                    .load(url)
+                    .apply(
+                        RequestOptions().onlyRetrieveFromCache(true)
+                    ).submit()
+                    .get()
+            } catch (e: Exception) {
+                null
+            }
+            if (file == null) {
+                handler.post {
+                    listener.onNoCache()
+                }
+            } else {
+                handler.post {
+                    listener.onHasCache()
+                }
+            }
+        }.start()
+    }
+
+    override fun clearCache() {
+        Glide.get(context).clearMemory()
+        Thread { Glide.get(context).clearDiskCache() }.start()
     }
 
     override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>) {
