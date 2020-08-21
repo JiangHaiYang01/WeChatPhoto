@@ -27,17 +27,20 @@ class ImageListAct : AppCompatActivity() {
         }
 
 
-        when (intent.getIntExtra("type", 0)) {
-            0 -> {
+        val type = intent.getIntExtra("type", 0)
+        when (type) {
+            0-> {
                 act_list_ry.layoutManager = GridLayoutManager(this, 2)
             }
             1 -> {
                 act_list_ry.layoutManager =
                     LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
+            }
+            2->{
+                act_list_ry.layoutManager = GridLayoutManager(this, 2)
             }
         }
-        act_list_ry.adapter = ImageListAdapter(list, act_list_ry)
+        act_list_ry.adapter = ImageListAdapter(list, act_list_ry,type)
     }
 
 

@@ -79,7 +79,9 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
         return childAt as ImageView
     }
 
-
+    override fun getAutomaticLoadFullImage(): Boolean {
+        return largerConfig?.automaticLoadFullImage ?: true
+    }
 
 
     private fun getRecyclerViewId(

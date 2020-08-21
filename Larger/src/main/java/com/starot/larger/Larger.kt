@@ -42,6 +42,12 @@ object Larger {
             return this
         }
 
+        //是否自动加载大图
+        fun setAutomaticLoadFullImage(automatic: Boolean): Builder {
+            largerConfig.automaticLoadFullImage = automatic
+            return this
+        }
+
         //列表类型
         fun withListType(): ListBuilder {
             listConfig = ListLargerConfig()

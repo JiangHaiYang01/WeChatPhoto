@@ -52,6 +52,11 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //是否在播放动画
     private var isAnimIng = false
 
+    //是否自动加载大图
+    private var automatic = true
+
+    //准备加载大图的holder
+    private var prepareLoadFullHolder: RecyclerView.ViewHolder? = null
 
     //使用liveData 记录 加载进度变化
     private var progressLiveData: MutableLiveData<Int> = MutableLiveData()
@@ -72,6 +77,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
         largerConfig = Larger.config
         //动画持续时间
         duration = getDuration()
+        //是否自动加载大图
+        automatic = getAutomaticLoadFullImage()
 
         //监听 加载大图进度变化
         progressLiveData.observe(this, Observer {
@@ -185,7 +192,11 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
     override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
-        itemBindViewHolder(true, holder.itemView, mCurrentIndex, data?.get(mCurrentIndex))
+        if (automatic) {
+            itemBindViewHolder(true, holder.itemView, mCurrentIndex, data?.get(mCurrentIndex))
+        } else {
+            prepareLoadFullHolder = holder
+        }
     }
 
     //点击返回
@@ -214,6 +225,9 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     //onCreate 第一件时间
     abstract fun beforeCreate()
+
+    //是否自动加载大图
+    abstract fun getAutomaticLoadFullImage(): Boolean
 
     //动画时长
     abstract fun getDuration(): Long

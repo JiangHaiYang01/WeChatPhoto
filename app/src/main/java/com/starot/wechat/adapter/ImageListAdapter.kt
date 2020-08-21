@@ -17,7 +17,8 @@ import kotlin.collections.ArrayList
 
 class ImageListAdapter(
     private val data: ArrayList<DefListData>,
-    private val recyclerView: RecyclerView
+    private val recyclerView: RecyclerView,
+    private val type: Int
 ) :
     RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
 
@@ -43,16 +44,51 @@ class ImageListAdapter(
             .load(data[position].thumbnails)
             .into(holder.image)
 
-        holder.itemView.setOnClickListener {
-            Larger.create()
-                .setDuration(300)
-                .setImageLoad(GlideImageLoader(context))  //添加加载器
-                .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
-                .withListType()//这里展示的是列表类型的
-                .setCurrentIndex(position)//下标
-                .setRecyclerView(recyclerView)//recyclerview
-                .setDefData(data) //添加默认的数据源
-                .start(context) //启动默认的activity
+
+        when (type) {
+            0 -> {
+                holder.itemView.setOnClickListener {
+                    Larger.create()
+                        .setDuration(300)
+                        .setImageLoad(GlideImageLoader(context))  //添加加载器
+                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
+                        .withListType()//这里展示的是列表类型的
+                        .setCurrentIndex(position)//下标
+                        .setRecyclerView(recyclerView)//recyclerview
+                        .setDefData(data) //添加默认的数据源
+                        .start(context) //启动默认的activity
+                }
+            }
+
+            1 -> {
+                holder.itemView.setOnClickListener {
+                    Larger.create()
+                        .setDuration(300)
+                        .setImageLoad(GlideImageLoader(context))  //添加加载器
+                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
+                        .withListType()//这里展示的是列表类型的
+                        .setCurrentIndex(position)//下标
+                        .setRecyclerView(recyclerView)//recyclerview
+                        .setDefData(data) //添加默认的数据源
+                        .start(context) //启动默认的activity
+                }
+            }
+            2 -> {
+                holder.itemView.setOnClickListener {
+                    Larger.create()
+                        .setDuration(300)
+                        .setAutomaticLoadFullImage(false)//不自动加载大图
+                        .setImageLoad(GlideImageLoader(context))  //添加加载器
+                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
+                        .withListType()//这里展示的是列表类型的
+                        .setCurrentIndex(position)//下标
+                        .setItemLayout(R.layout.item_custom_image)
+                        .setFullViewId(R.id.item_custom_image)
+                        .setRecyclerView(recyclerView)//recyclerview
+                        .setDefData(data) //添加默认的数据源
+                        .start(context) //启动默认的activity
+                }
+            }
         }
     }
 
