@@ -1,8 +1,10 @@
 package com.starot.larger
 
 import com.starot.larger.builder.ListBuilder
+import com.starot.larger.builder.SingleBuilder
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.config.ListLargerConfig
+import com.starot.larger.config.SingleLargerConfig
 import com.starot.larger.impl.OnImageLoad
 import com.starot.larger.impl.OnLoadProgressListener
 
@@ -16,6 +18,7 @@ object Larger {
 
     var config: LargerConfig? = null
     var listConfig: ListLargerConfig? = null
+    var singleConfig: SingleLargerConfig? = null
 
 
     class Builder(private val largerConfig: LargerConfig) {
@@ -52,6 +55,12 @@ object Larger {
         fun withListType(): ListBuilder {
             listConfig = ListLargerConfig()
             return ListBuilder(listConfig)
+        }
+
+        //单独的view
+        fun withSingleType(): SingleBuilder {
+            singleConfig = SingleLargerConfig()
+            return SingleBuilder(singleConfig)
         }
     }
 }

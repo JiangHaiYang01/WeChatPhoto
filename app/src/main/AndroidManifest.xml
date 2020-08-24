@@ -24,6 +24,7 @@
         </activity>
 
         <activity android:name=".activity.ImageListAct"/>
+        <activity android:name=".activity.SingleAct"/>
     </application>
 
 </manifest>

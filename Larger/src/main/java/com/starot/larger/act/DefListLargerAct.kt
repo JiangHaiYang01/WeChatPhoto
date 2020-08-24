@@ -10,7 +10,7 @@ import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoad
 import com.starot.larger.utils.LogUtils
 
-class DefLargerAct : ListLargerAct<DefListData>() {
+class DefListLargerAct : ListLargerAct<DefListData>() {
 
 
     override fun onItemLoadThumbnails(
