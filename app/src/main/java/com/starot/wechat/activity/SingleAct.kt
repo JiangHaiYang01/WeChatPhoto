@@ -32,12 +32,12 @@ class SingleAct : AppCompatActivity() {
             .load(mImage1)
             .into(image_single_1)
 
-        Glide.with(this)
-            .load(mImage2)
-            .into(image_single_2)
+//        Glide.with(this)
+//            .load(mImage2)
+//            .into(image_single_2)
 
         click(0, image_single_1)
-        click(1, image_single_2)
+//        click(1, image_single_2)
     }
 
 
@@ -70,8 +70,8 @@ class SingleAct : AppCompatActivity() {
                 .setFullViewId(R.id.item_custom_image)
                 .setDefData(
                     arrayListOf(
-                        DefListData(mImage1, mImage1),
-                        DefListData(mImage2, mImage2)
+                        DefListData(mImage1, mImage1)
+//                        DefListData(mImage2, mImage2)
                     )
                 ) //添加默认的数据源
                 .start(this) //启动默认的activity

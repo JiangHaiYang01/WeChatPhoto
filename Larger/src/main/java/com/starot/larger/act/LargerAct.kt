@@ -197,7 +197,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         getThumbnailView(pos)
         //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
         val viewHolder = holderMap[mCurrentIndex]
-        if (viewHolder != null)
+        if (viewHolder != null && getIndex() != pos)
             onReLoadFullImage(viewHolder)
     }
 
