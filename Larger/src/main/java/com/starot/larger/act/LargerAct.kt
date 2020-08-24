@@ -14,6 +14,7 @@ import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.impl.*
+import com.starot.larger.utils.LogUtils
 import com.starot.larger.utils.PageChange
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
@@ -194,13 +195,19 @@ abstract class LargerAct<T> : AppCompatActivity(),
     override fun onPageChange(pos: Int) {
         mCurrentIndex = pos
         getThumbnailView(pos)
+        //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
+        val viewHolder = holderMap[mCurrentIndex]
+        if (viewHolder != null)
+            onReLoadFullImage(viewHolder)
     }
 
     override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
         //判断是否有缓存 有缓存直接加载 没缓存 则变量生效
+        LogUtils.i("判断是否有缓存 有缓存直接加载 没缓存 则变量生效")
         getImageHasCache(data?.get(mCurrentIndex),
             object : OnCheckImageCacheListener {
                 override fun onNoCache() {
+                    LogUtils.i("onNoCache")
                     if (automatic) {
                         itemBindViewHolder(
                             true,
@@ -212,6 +219,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
                 }
 
                 override fun onHasCache() {
+                    LogUtils.i("onHasCache")
                     itemBindViewHolder(
                         true,
                         holder.itemView,

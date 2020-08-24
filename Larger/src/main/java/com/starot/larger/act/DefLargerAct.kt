@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoad
+import com.starot.larger.utils.LogUtils
 
 class DefLargerAct : ListLargerAct<DefListData>() {
 
@@ -36,9 +37,12 @@ class DefLargerAct : ListLargerAct<DefListData>() {
     }
 
     override fun getImageHasCache(data: DefListData?, listener: OnCheckImageCacheListener) {
+        LogUtils.i("def larger act 判断是否图片有缓存")
         if (data == null) {
+            LogUtils.i("def larger act 判断是否图片有缓存 data is null")
             return
         }
+        LogUtils.i("def larger act 判断是否图片有缓存 data is ${data.full}")
         largerConfig?.imageLoad?.checkCache(data.full, object : OnCheckImageCacheListener {
             override fun onNoCache() {
                 listener.onNoCache()
