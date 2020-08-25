@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
+import com.starot.larger.anim.AnimBgHelper
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.impl.*
+import com.starot.larger.utils.Drag
 import com.starot.larger.utils.LogUtils
 import com.starot.larger.utils.PageChange
+import com.starot.larger.view.image.PhotoView
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
 
@@ -26,7 +29,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
     OnLoadProgressPrepareListener,
     OnLoadProgressListener,
     OnReLoadFullImage,
-    PageChange.PageChangeListener {
+    PageChange.PageChangeListener,
+    OnDragAnimListener {
 
     var largerConfig: LargerConfig? = null
 
@@ -49,7 +53,9 @@ abstract class LargerAct<T> : AppCompatActivity(),
     private var isLoadEnter = false
 
     //是否在播放动画
-    private var isAnimIng = false
+    private var isAnimIng = MutableLiveData<Boolean>().also {
+        it.value = false
+    }
 
     //是否自动加载大图
     private var automatic = true
@@ -79,6 +85,14 @@ abstract class LargerAct<T> : AppCompatActivity(),
         duration = getDuration()
         //是否自动加载大图
         automatic = getAutomaticLoadFullImage()
+
+        //是否正在动画
+        isAnimIng.observe(this, Observer {
+            //记录在Drag 中
+            Drag.isAnimIng = it
+            //viewpager 在动画过程中不能滑动
+            setViewPagerEnable(!it)
+        })
 
         //监听 加载大图进度变化
         progressLiveData.observe(this, Observer {
@@ -144,51 +158,70 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     }
 
+    //通用方法
     private fun itemCommand(holder: ViewPagerAdapter.PhotoViewHolder, position: Int, get: T?) {
-        val image = holder.itemView.findViewById<ImageView>(getFullViewId())
+        val image = holder.itemView.findViewById<View>(getFullViewId())
         //单点击退出
         image.setOnClickListener {
-            if (isAnimIng) {
+            if (isAnimIng.value!!) {
                 //当前正在播放动画 不可点击
                 return@setOnClickListener
             }
-            val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
-            thumbnailView = getThumbnailView(mCurrentIndex)
-            exitAnimStart(
-                parentView,
-                duration,
-                fullImageView,
-                thumbnailView,
-                holder
-            )
+            when (image) {
+                is ImageView -> {
+                    singleExitAnim(image, holder)
+                }
+                is PhotoView -> {
+                    singleExitAnim(image, holder)
+                }
+            }
         }
+
+        //拖动
+        when (image) {
+            is PhotoView -> {
+                Drag.startDrag(this, image, holder, this)
+            }
+        }
+    }
+
+    //单点击退出
+    private fun singleExitAnim(
+        image: ImageView,
+        holder: ViewPagerAdapter.PhotoViewHolder
+    ) {
+        thumbnailView = getThumbnailView(mCurrentIndex)
+        exitAnimStart(
+            parentView,
+            duration,
+            image,
+            thumbnailView,
+            holder
+        )
     }
 
     //进入动画结束
     override fun onEnterAnimEnd() {
-        setViewPagerEnable(true)
-        isAnimIng = false
+        isAnimIng.postValue(false)
     }
 
     //进入动画开始
     override fun onEnterAnimStart() {
         isLoadEnter = true
-        isAnimIng = true
-        setViewPagerEnable(false)
+        isAnimIng.postValue(true)
     }
 
 
     //退出动画结束
     override fun onExitAnimEnd() {
-        isAnimIng = false
+        isAnimIng.postValue(false)
         finish()
         overridePendingTransition(0, 0)
     }
 
     //退出动画开始
     override fun onExitAnimStart() {
-        isAnimIng = true
-        setViewPagerEnable(false)
+        isAnimIng.postValue(true)
     }
 
     //viewpager 滑动监听
@@ -293,6 +326,54 @@ abstract class LargerAct<T> : AppCompatActivity(),
         if (itemView != null) {
             itemBindViewHolder(true, itemView, mCurrentIndex, data?.get(mCurrentIndex))
         }
+
+    }
+
+    //背景颜色
+    override fun onDragBackgroundColor(color: Int) {
+        parentView.setBackgroundColor(color)
+    }
+
+    //开始移动
+    override fun onDragStart(image: PhotoView) {
+        //移动开始以后不能在滑动了
+        setViewPagerEnable(false)
+    }
+
+    //停止移动
+    override fun onDragStop(image: PhotoView) {
+        setViewPagerEnable(true)
+    }
+
+    //退出动画
+    override fun onDragExit(
+        currentScale: Float,
+        image: PhotoView,
+        holder: ViewPagerAdapter.PhotoViewHolder
+    ) {
+        dragExitAnimStart(
+            currentScale,
+            parentView,
+            4000,
+            image,
+            thumbnailView,
+            holder
+        )
+    }
+
+    //还原动画
+    override fun onDragResume(
+        currentScale: Float,
+        image: PhotoView,
+        holder: ViewPagerAdapter.PhotoViewHolder
+    ) {
+//        enterAnimStart(
+//            parentView,
+//            duration,
+//            image,
+//            thumbnailView,
+//            holder
+//        )
 
     }
 

@@ -60,6 +60,7 @@ class ImageListAct : AppCompatActivity() {
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1552629669,4197495188&fm=26&gp=0.jpg")
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1169404930,4142822803&fm=26&gp=0.jpg")
         list.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3642306945,3051949181&fm=26&gp=0.jpg")
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1598283468716&di=98b918a509a85109070ad0f93ec18de4&imgtype=0&src=http%3A%2F%2Fn.sinaimg.cn%2Ftranslate%2F537%2Fw1000h4337%2F20180727%2FpqGM-hfvkitx8894294.jpg")
         return list
     }
 
@@ -79,6 +80,7 @@ class ImageListAct : AppCompatActivity() {
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1552629669,4197495188&fm=26&gp=0.jpg")
         list.add("https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1169404930,4142822803&fm=26&gp=0.jpg")
         list.add("https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3642306945,3051949181&fm=26&gp=0.jpg")
+        list.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1598283468716&di=98b918a509a85109070ad0f93ec18de4&imgtype=0&src=http%3A%2F%2Fn.sinaimg.cn%2Ftranslate%2F537%2Fw1000h4337%2F20180727%2FpqGM-hfvkitx8894294.jpg")
         return list
     }
 }

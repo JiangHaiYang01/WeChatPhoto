@@ -17,6 +17,7 @@ import com.starot.larger.impl.OnLoadProgressListener
 import com.starot.larger.impl.OnLoadProgressPrepareListener
 import java.io.File
 
+//Glide 加载图片 这里记录了 加载的进度 和 加载状态 后续考虑 移植到其他地方 以便于拓展
 class GlideImageLoader(private val context: Context) : OnImageLoad {
 
 
