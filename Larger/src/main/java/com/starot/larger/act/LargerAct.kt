@@ -354,7 +354,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         dragExitAnimStart(
             currentScale,
             parentView,
-            4000,
+            duration,
             image,
             thumbnailView,
             holder
@@ -367,14 +367,14 @@ abstract class LargerAct<T> : AppCompatActivity(),
         image: PhotoView,
         holder: ViewPagerAdapter.PhotoViewHolder
     ) {
-//        enterAnimStart(
-//            parentView,
-//            duration,
-//            image,
-//            thumbnailView,
-//            holder
-//        )
-
+        dragResumeAnimStart(
+            currentScale,
+            parentView,
+            duration,
+            image,
+            thumbnailView,
+            holder
+        )
     }
 
 }

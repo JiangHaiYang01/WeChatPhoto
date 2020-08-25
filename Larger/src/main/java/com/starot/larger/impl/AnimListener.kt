@@ -149,37 +149,49 @@ interface AnimListener {
     }
 
 
-//    fun dragAnimStart(
-//        parentView: View,
-//        duration: Long,
-//        fullView: ImageView,
-//        thumbnailView: ImageView?,
-//        holder: RecyclerView.ViewHolder
-//    ) {
-//        AnimDragHelper.start(
-//            duration,
-//            fullView,
-//            thumbnailView,
-//            holder,
-//            object : OnAnimatorListener {
-//                override fun onAnimatorStart() {
-//                    onExitAnimStart()
-//                }
-//
-//                override fun onAnimatorEnd() {
-//                    onExitAnimEnd()
-//                }
-//            },
-//            object : OnAfterTransitionListener {
-//                override fun afterTransitionLoad(
-//                    isLoadFull: Boolean,
-//                    holder: RecyclerView.ViewHolder
-//                ) {
-//
-//                }
-//            }
-//        )
-//    }
+    /***
+     *
+     * 移动过程中 还原
+     *
+     * [start]                           开始状态
+     * [parentView]                      根视图
+     * [duration]                        间隔时间
+     * [fullView]                        大图id
+     * [thumbnailView]                   缩略图
+     * [holder]                          RecyclerView.ViewHolder
+     */
+    fun dragResumeAnimStart(
+        start:Float,
+        parentView: View,
+        duration: Long,
+        fullView: ImageView,
+        thumbnailView: ImageView?,
+        holder: RecyclerView.ViewHolder
+    ) {
+        AnimDragHelper.start(
+            duration,
+            fullView,
+            thumbnailView,
+            holder,
+            object : OnAnimatorListener {
+                override fun onAnimatorStart() {
+                }
+
+                override fun onAnimatorEnd() {
+                }
+            },
+            object : OnAfterTransitionListener {
+                override fun afterTransitionLoad(
+                    isLoadFull: Boolean,
+                    holder: RecyclerView.ViewHolder
+                ) {
+
+                }
+            }
+        )
+        //背景颜色变化
+        AnimBgHelper.enter(parentView, start, duration)
+    }
 
 
     //重新加载大图
