@@ -16,7 +16,8 @@ interface OnDragAnimListener {
 
     //开始移动
     fun startDrag(context: Context, image: PhotoView, x: Float, y: Float) {
-
+        //是否可以方法缩小 移动过程中不可以方法缩小
+        image.setCustomZoomable(false)
         onDragStart(image)
 
         //默认拖动时候的阻尼系数
@@ -53,6 +54,7 @@ interface OnDragAnimListener {
         image: PhotoView,
         holder: ViewPagerAdapter.PhotoViewHolder
     ) {
+        image.setCustomZoomable(false)
         onDragStop(image)
 
         var fraction = getFraction()
