@@ -11,13 +11,14 @@ import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 
 object AnimDragHelper : OnAnimatorIntercept {
+    private var thumbnailView: ImageView? = null
 
 
     override fun beforeTransition(
         fullView: ImageView,
         thumbnailView: ImageView?
     ) {
-
+        this.thumbnailView = thumbnailView
     }
 
 
@@ -36,10 +37,14 @@ object AnimDragHelper : OnAnimatorIntercept {
 
     override fun transitionSet(durationTime: Long): Transition {
         return TransitionSet().apply {
-            addTransition(ChangeBounds())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                addTransition(ChangeImageTransform())
-                addTransition(ChangeTransform())
+            if (thumbnailView == null) {
+                addTransition(AutoTransition())
+            } else {
+                addTransition(ChangeBounds())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addTransition(ChangeImageTransform())
+                    addTransition(ChangeTransform())
+                }
             }
             duration = durationTime
             interpolator = DecelerateInterpolator()

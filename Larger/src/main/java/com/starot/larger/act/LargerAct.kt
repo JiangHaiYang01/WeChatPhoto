@@ -227,7 +227,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //viewpager 滑动监听
     override fun onPageChange(pos: Int) {
         mCurrentIndex = pos
-        getThumbnailView(pos)
+        //获取当前列表的imageView
+        thumbnailView = getThumbnailView(mCurrentIndex)
         //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
         val viewHolder = holderMap[mCurrentIndex]
         if (viewHolder != null && getIndex() != pos)
