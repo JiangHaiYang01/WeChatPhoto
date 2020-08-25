@@ -14,9 +14,6 @@ import kotlin.math.min
 interface OnDragAnimListener {
 
 
-
-
-
     //开始移动
     fun startDrag(context: Context, image: PhotoView, x: Float, y: Float) {
 
@@ -37,7 +34,7 @@ interface OnDragAnimListener {
         image.scaleX = fakeScale
         image.scaleY = fakeScale
         image.translationY = fixedOffsetY * dampingData
-        image.translationX = x / 2 * dampingData
+        image.translationX = x * dampingData
 
 
         //已经向上了 就黑色背景 不需要改动了
