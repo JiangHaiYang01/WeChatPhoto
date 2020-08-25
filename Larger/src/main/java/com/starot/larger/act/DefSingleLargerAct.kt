@@ -1,10 +1,8 @@
 package com.starot.larger.act
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
 import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoad
@@ -36,7 +34,11 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
             imageLoad?.load(data.full, true, imageView)
     }
 
-    override fun getImageHasCache(data: DefListData?, listener: OnCheckImageCacheListener) {
+    override fun getImageHasCache(
+        itemView: View,
+        data: DefListData?,
+        listener: OnCheckImageCacheListener
+    ) {
         LogUtils.i("def larger act 判断是否图片有缓存")
         if (data == null) {
             LogUtils.i("def larger act 判断是否图片有缓存 data is null")
@@ -46,10 +48,12 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
         largerConfig?.imageLoad?.checkCache(data.full, object : OnCheckImageCacheListener {
             override fun onNoCache() {
                 listener.onNoCache()
+                singleConfig?.customItemViewListener?.itemImageHasCache(itemView, false)
             }
 
             override fun onHasCache() {
                 listener.onHasCache()
+                singleConfig?.customItemViewListener?.itemImageHasCache(itemView, true)
             }
         })
 

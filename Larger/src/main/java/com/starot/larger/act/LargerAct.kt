@@ -2,7 +2,6 @@ package com.starot.larger.act
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
-import com.starot.larger.anim.AnimBgHelper
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.impl.*
 import com.starot.larger.utils.Drag
@@ -238,7 +236,9 @@ abstract class LargerAct<T> : AppCompatActivity(),
     override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
         //判断是否有缓存 有缓存直接加载 没缓存 则变量生效
         LogUtils.i("判断是否有缓存 有缓存直接加载 没缓存 则变量生效")
-        getImageHasCache(data?.get(mCurrentIndex),
+        getImageHasCache(
+            holder.itemView,
+            data?.get(mCurrentIndex),
             object : OnCheckImageCacheListener {
                 override fun onNoCache() {
                     LogUtils.i("onNoCache")
@@ -315,7 +315,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     abstract fun getItemLayout(): Int
 
     //判断图片是否有缓存
-    abstract fun getImageHasCache(data: T?, listener: OnCheckImageCacheListener)
+    abstract fun getImageHasCache(itemView: View, data: T?, listener: OnCheckImageCacheListener)
 
     //加载图片 对外是可自定义处理
     abstract fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?)

@@ -15,6 +15,7 @@ import com.starot.larger.impl.OnReLoadFullImage
 import com.starot.wechat.R
 import kotlinx.android.synthetic.main.activity_single.*
 
+//单个view 展示效果
 class SingleAct : AppCompatActivity() {
 
     private var mImage1 =
@@ -48,7 +49,7 @@ class SingleAct : AppCompatActivity() {
                 .setAutomaticLoadFullImage(false)//不自动加载大图
                 .setImageLoad(GlideImageLoader(this))  //添加加载器
                 .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
-                .withSingleType()//这里展示的是列表类型的
+                .withSingleType()//这里展示的是单个或者不多的view
                 .setImageList(arrayListOf(image_single_1, image_single_2))
                 .setCurrentIndex(position)//下标
                 .setItemLayout(R.layout.item_custom_image)
@@ -64,6 +65,15 @@ class SingleAct : AppCompatActivity() {
                             .setOnClickListener {
                                 Log.i("allens_tag", "点击查看原图")
                                 listener.reLoadFullImage()
+                            }
+                    }
+
+                    override fun itemImageHasCache(itemView: View, hasCache: Boolean) {
+                        itemView.findViewById<TextView>(R.id.item_custom_tv).visibility =
+                            if (hasCache) {
+                                View.INVISIBLE
+                            } else {
+                                View.VISIBLE
                             }
                     }
                 })

@@ -86,8 +86,9 @@ class ImageListAdapter(
                         .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
                         .withListType()//这里展示的是列表类型的
                         .setCurrentIndex(position)//下标
-                        .setItemLayout(R.layout.item_custom_image)
-                        .registerCustomItemView(object : OnCustomItemViewListener {//自定义处理item
+                        .setItemLayout(R.layout.item_custom_image)//自定义的item
+                        .registerCustomItemView(object : OnCustomItemViewListener {
+                            //自定义处理item
                             override fun itemBindViewHolder(
                                 listener: OnReLoadFullImage,
                                 itemView: View,
@@ -100,6 +101,16 @@ class ImageListAdapter(
                                         listener.reLoadFullImage()
                                     }
                             }
+
+                            override fun itemImageHasCache(itemView: View, hasCache: Boolean) {
+                                itemView.findViewById<TextView>(R.id.item_custom_tv).visibility =
+                                    if (hasCache) {
+                                        View.INVISIBLE
+                                    } else {
+                                        View.VISIBLE
+                                    }
+                            }
+
                         })
                         .setFullViewId(R.id.item_custom_image)
                         .setRecyclerView(recyclerView)//recyclerview
