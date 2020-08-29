@@ -7,7 +7,7 @@ interface OnItemViewListener<T> {
 
     //加载缩略图
     fun onItemLoadThumbnails(
-        imageLoad: OnImageLoad?,
+        imageLoad: OnImageLoadListener?,
         itemView: View,
         position: Int,
         imageView: ImageView,
@@ -16,7 +16,7 @@ interface OnItemViewListener<T> {
 
     //加载大图
     fun onItemLoadFull(
-        imageLoad: OnImageLoad?,
+        imageLoad: OnImageLoadListener?,
         itemView: View,
         position: Int,
         imageView: ImageView,

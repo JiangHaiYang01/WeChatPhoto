@@ -5,14 +5,14 @@ import android.view.View
 import android.widget.ImageView
 import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnCheckImageCacheListener
-import com.starot.larger.impl.OnImageLoad
+import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.utils.LogUtils
 
 class DefListLargerAct : ListLargerAct<DefListData>() {
 
 
     override fun onItemLoadThumbnails(
-        imageLoad: OnImageLoad?,
+        imageLoad: OnImageLoadListener?,
         itemView: View,
         position: Int,
         imageView: ImageView,
@@ -24,7 +24,7 @@ class DefListLargerAct : ListLargerAct<DefListData>() {
 
     @SuppressLint("CheckResult")
     override fun onItemLoadFull(
-        imageLoad: OnImageLoad?,
+        imageLoad: OnImageLoadListener?,
         itemView: View,
         position: Int,
         imageView: ImageView,

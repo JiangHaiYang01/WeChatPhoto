@@ -3,7 +3,7 @@ package com.starot.larger.impl
 import android.widget.ImageView
 
 //加载图片接口
-interface OnImageLoad : OnLoadProgressPrepareListener {
+interface OnImageLoadListener : OnLoadProgressPrepareListener {
 
 
     //加载图片

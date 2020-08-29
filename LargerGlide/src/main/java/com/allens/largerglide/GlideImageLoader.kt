@@ -12,13 +12,11 @@ import com.allens.largerglide.interceptor.ProgressInterceptor
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.starot.larger.impl.OnCheckImageCacheListener
-import com.starot.larger.impl.OnImageLoad
-import com.starot.larger.impl.OnLoadProgressListener
-import com.starot.larger.impl.OnLoadProgressPrepareListener
+import com.starot.larger.impl.OnImageLoadListener
 import java.io.File
 
 //Glide 加载图片 这里记录了 加载的进度 和 加载状态 后续考虑 移植到其他地方 以便于拓展
-class GlideImageLoader(private val context: Context) : OnImageLoad {
+class GlideImageLoader(private val context: Context) : OnImageLoadListener {
 
 
     private val progress = object : ProgressListener {

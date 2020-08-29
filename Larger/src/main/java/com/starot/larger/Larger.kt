@@ -5,7 +5,7 @@ import com.starot.larger.builder.SingleBuilder
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.config.ListLargerConfig
 import com.starot.larger.config.SingleLargerConfig
-import com.starot.larger.impl.OnImageLoad
+import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLoadProgressListener
 
 object Larger {
@@ -34,7 +34,7 @@ object Larger {
         }
 
         //设置图片加载器
-        fun setImageLoad(imageLoad: OnImageLoad): Builder {
+        fun setImageLoad(imageLoad: OnImageLoadListener): Builder {
             largerConfig.imageLoad = imageLoad
             return this
         }
