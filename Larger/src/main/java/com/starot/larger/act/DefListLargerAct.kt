@@ -8,9 +8,15 @@ import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.utils.LogUtils
 
+/***
+ * 列表类型的 默认 示例
+ *
+ * 自定义的 可以参考下此种写法
+ */
 class DefListLargerAct : ListLargerAct<DefListData>() {
 
 
+    //加载缩略图
     override fun onItemLoadThumbnails(
         imageLoad: OnImageLoadListener?,
         itemView: View,
@@ -22,6 +28,7 @@ class DefListLargerAct : ListLargerAct<DefListData>() {
             imageLoad?.load(data.thumbnails, false, imageView)
     }
 
+    //加载大图
     @SuppressLint("CheckResult")
     override fun onItemLoadFull(
         imageLoad: OnImageLoadListener?,
@@ -34,6 +41,7 @@ class DefListLargerAct : ListLargerAct<DefListData>() {
             imageLoad?.load(data.full, true, imageView)
     }
 
+    //判断图片是否有缓存
     override fun getImageHasCache(
         itemView: View,
         position: Int,

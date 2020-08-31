@@ -8,6 +8,11 @@ import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.utils.LogUtils
 
+/***
+ * 单个或者非列表类型的 默认 示例
+ *
+ * 自定义的 可以参考下此种写法
+ */
 class DefSingleLargerAct : SingleLargerAct<DefListData>() {
 
 
