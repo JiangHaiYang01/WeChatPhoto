@@ -34,18 +34,18 @@ class SingleBuilder(private val singleConfig: SingleLargerConfig?) :
     }
 
 
+    override fun setCustomImageListener(layoutId: Int, fullViewId: Int): SingleBuilder {
+        setCustomImageListener(layoutId, fullViewId, null)
+        return this
+    }
 
-    override fun setItemLayout(layoutId: Int): SingleBuilder {
+    override fun setCustomImageListener(
+        layoutId: Int,
+        fullViewId: Int,
+        listener: OnCustomItemViewListener?
+    ): SingleBuilder {
         singleConfig?.itemLayout = layoutId
-        return this
-    }
-
-    override fun setFullViewId(fullViewId: Int): SingleBuilder {
         singleConfig?.fullViewId = fullViewId
-        return this
-    }
-
-    override fun registerCustomItemView(listener: OnCustomItemViewListener): SingleBuilder {
         singleConfig?.customItemViewListener = listener
         return this
     }

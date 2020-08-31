@@ -8,15 +8,28 @@ import com.starot.larger.impl.OnCustomItemViewListener
 interface BaseBuilder<T> {
 
 
-    //设置列表的布局 如果不设置有默认的样式
-    fun setItemLayout(layoutId: Int): T
+    /**
+     * link [setCustomImageListener] 3参数的方法
+     */
+    fun setCustomImageListener(
+        layoutId: Int,
+        fullViewId: Int
+    ): T
 
-    //大图的ImageViewID  不设置的话有默认
-    fun setFullViewId(fullViewId: Int): T
-
-    //自己处理viewHolder
-    fun registerCustomItemView(listener: OnCustomItemViewListener): T
-
+    /**
+     * [layoutId]   设置列表的布局
+     * [fullViewId] 大图的ImageViewID
+     * [listener]   自己处理viewHolder 回调
+     * 设置自定义图片的类型 不使用此接口则拥有默认设置
+     * 默认的 layoutId   R.layout.item_larger_image
+     * 默认的 fullViewId R.id.image
+     *
+     */
+    fun setCustomImageListener(
+        layoutId: Int,
+        fullViewId: Int,
+        listener: OnCustomItemViewListener?
+    ): T
 
     //设置当前是第几个
     fun setCurrentIndex(pos: Int): T

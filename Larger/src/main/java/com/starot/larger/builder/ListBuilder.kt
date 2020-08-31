@@ -33,18 +33,19 @@ class ListBuilder(private val listConfig: ListLargerConfig?) :
         context.startActivity(intent)
     }
 
+    override fun setCustomImageListener(layoutId: Int, fullViewId: Int): ListBuilder {
+        setCustomImageListener(layoutId, fullViewId, null)
+        return this
+    }
 
-    override fun setItemLayout(layoutId: Int): ListBuilder {
+    //自定义添加imageView 样式
+    override fun setCustomImageListener(
+        layoutId: Int,
+        fullViewId: Int,
+        listener: OnCustomItemViewListener?
+    ): ListBuilder {
         listConfig?.itemLayout = layoutId
-        return this
-    }
-
-    override fun setFullViewId(fullViewId: Int): ListBuilder {
         listConfig?.fullViewId = fullViewId
-        return this
-    }
-
-    override fun registerCustomItemView(listener: OnCustomItemViewListener): ListBuilder {
         listConfig?.customItemViewListener = listener
         return this
     }

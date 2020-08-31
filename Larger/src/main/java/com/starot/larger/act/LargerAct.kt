@@ -93,7 +93,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         })
 
         //监听 加载大图进度变化
-        progressLiveData.observe(this, Observer {
+        progressLiveData.observe(this, {
             //大图加载进度
             onLoadProgress(it)
         })
@@ -102,8 +102,20 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
 
         //对于加载进度条的逻辑判断
-        progressViewLiveData.observe(this, Observer {
+        progressViewLiveData.observe(this, {
             onProgressChange(this, it)
+
+
+            //同时状态还要通知到自定义的listener
+            //获取当前列表的imageView
+            //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
+            val viewHolder = holderMap[mCurrentIndex]
+            if (viewHolder != null)
+                Larger.listConfig?.customItemViewListener?.itemImageFullLoad(
+                    viewHolder?.itemView,
+                    mCurrentIndex
+                )
+
         })
         largerConfig?.imageLoad?.onPrepareProgressView(progressViewLiveData)
 
@@ -238,6 +250,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         LogUtils.i("判断是否有缓存 有缓存直接加载 没缓存 则变量生效")
         getImageHasCache(
             holder.itemView,
+            mCurrentIndex,
             data?.get(mCurrentIndex),
             object : OnCheckImageCacheListener {
                 override fun onNoCache() {
@@ -315,7 +328,12 @@ abstract class LargerAct<T> : AppCompatActivity(),
     abstract fun getItemLayout(): Int
 
     //判断图片是否有缓存
-    abstract fun getImageHasCache(itemView: View, data: T?, listener: OnCheckImageCacheListener)
+    abstract fun getImageHasCache(
+        itemView: View,
+        position: Int,
+        data: T?,
+        listener: OnCheckImageCacheListener
+    )
 
     //加载图片 对外是可自定义处理
     abstract fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?)

@@ -36,6 +36,7 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
 
     override fun getImageHasCache(
         itemView: View,
+        position: Int,
         data: DefListData?,
         listener: OnCheckImageCacheListener
     ) {
@@ -48,15 +49,14 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
         largerConfig?.imageLoad?.checkCache(data.full, object : OnCheckImageCacheListener {
             override fun onNoCache() {
                 listener.onNoCache()
-                singleConfig?.customItemViewListener?.itemImageHasCache(itemView, false)
+                singleConfig?.customItemViewListener?.itemImageHasCache(itemView, position, false)
             }
 
             override fun onHasCache() {
                 listener.onHasCache()
-                singleConfig?.customItemViewListener?.itemImageHasCache(itemView, true)
+                singleConfig?.customItemViewListener?.itemImageHasCache(itemView, position, false)
             }
         })
-
     }
 
 }

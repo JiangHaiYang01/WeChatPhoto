@@ -42,7 +42,7 @@ class SingleAct : AppCompatActivity() {
     }
 
 
-    fun click(position: Int, view: View) {
+    private fun click(position: Int, view: View) {
         view.setOnClickListener {
             Larger.create()
                 .setDuration(300)
@@ -52,38 +52,13 @@ class SingleAct : AppCompatActivity() {
                 .withSingleType()//这里展示的是单个或者不多的view
                 .setImageList(arrayListOf(image_single_1, image_single_2))
                 .setCurrentIndex(position)//下标
-                .setItemLayout(R.layout.item_custom_image)
-                .registerCustomItemView(object : OnCustomItemViewListener {
-                    //自定义处理item
-                    override fun itemBindViewHolder(
-                        listener: OnReLoadFullImage,
-                        itemView: View,
-                        position: Int,
-                        data: Any?
-                    ) {
-                        itemView.findViewById<TextView>(R.id.item_custom_tv)
-                            .setOnClickListener {
-                                Log.i("allens_tag", "点击查看原图")
-                                listener.reLoadFullImage()
-                            }
-                    }
-
-                    override fun itemImageHasCache(itemView: View, hasCache: Boolean) {
-                        itemView.findViewById<TextView>(R.id.item_custom_tv).visibility =
-                            if (hasCache) {
-                                View.INVISIBLE
-                            } else {
-                                View.VISIBLE
-                            }
-                    }
-                })
-                .setFullViewId(R.id.item_custom_image)
+                //添加默认的数据源
                 .setDefData(
                     arrayListOf(
                         DefListData(mImage1, mImage1)
 //                        DefListData(mImage2, mImage2)
                     )
-                ) //添加默认的数据源
+                )
                 .start(this) //启动默认的activity
         }
 

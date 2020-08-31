@@ -1,6 +1,5 @@
 package com.starot.larger.config
 
-import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.impl.OnCustomItemViewListener
 
 open class BaseLargerConfig(

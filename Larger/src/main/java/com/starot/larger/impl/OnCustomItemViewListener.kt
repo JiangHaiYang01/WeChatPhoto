@@ -14,5 +14,8 @@ interface OnCustomItemViewListener {
     )
 
     //是否有缓存
-    fun itemImageHasCache(itemView: View, hasCache: Boolean)
+    fun itemImageHasCache(itemView: View, position: Int, hasCache: Boolean)
+
+    //大图加载完成的回调
+    fun itemImageFullLoad(itemView: View, position: Int)
 }

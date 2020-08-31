@@ -26,10 +26,10 @@ class ImageListAdapter(
 ) :
     RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
 
-    lateinit var context: Context
+    private lateinit var context: Context
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView = itemView.findViewById<ImageView>(R.id.item_image)
+        var image: ImageView = itemView.findViewById(R.id.item_image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +41,36 @@ class ImageListAdapter(
 
     override fun getItemCount(): Int {
         return data.size
+    }
+
+
+    private var listener = object : OnCustomItemViewListener {
+        //自定义处理item
+        override fun itemBindViewHolder(
+            listener: OnReLoadFullImage,
+            itemView: View,
+            position: Int,
+            data: Any?
+        ) {
+            itemView.findViewById<TextView>(R.id.item_custom_tv)
+                .setOnClickListener {
+                    Log.i("allens_tag", "点击查看原图")
+                    listener.reLoadFullImage()
+                }
+        }
+
+        override fun itemImageHasCache(itemView: View, position: Int, hasCache: Boolean) {
+            itemView.findViewById<TextView>(R.id.item_custom_tv).visibility =
+                if (hasCache) {
+                    View.INVISIBLE
+                } else {
+                    View.VISIBLE
+                }
+        }
+
+        override fun itemImageFullLoad(itemView: View, position: Int) {
+            itemView.findViewById<TextView>(R.id.item_custom_tv).visibility = View.INVISIBLE
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -86,33 +116,11 @@ class ImageListAdapter(
                         .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
                         .withListType()//这里展示的是列表类型的
                         .setCurrentIndex(position)//下标
-                        .setItemLayout(R.layout.item_custom_image)//自定义的item
-                        .registerCustomItemView(object : OnCustomItemViewListener {
-                            //自定义处理item
-                            override fun itemBindViewHolder(
-                                listener: OnReLoadFullImage,
-                                itemView: View,
-                                position: Int,
-                                data: Any?
-                            ) {
-                                itemView.findViewById<TextView>(R.id.item_custom_tv)
-                                    .setOnClickListener {
-                                        Log.i("allens_tag", "点击查看原图")
-                                        listener.reLoadFullImage()
-                                    }
-                            }
-
-                            override fun itemImageHasCache(itemView: View, hasCache: Boolean) {
-                                itemView.findViewById<TextView>(R.id.item_custom_tv).visibility =
-                                    if (hasCache) {
-                                        View.INVISIBLE
-                                    } else {
-                                        View.VISIBLE
-                                    }
-                            }
-
-                        })
-                        .setFullViewId(R.id.item_custom_image)
+                        .setCustomImageListener(
+                            R.layout.item_custom_image,
+                            R.id.item_custom_image,
+                            listener
+                        )
                         .setRecyclerView(recyclerView)//recyclerview
                         .setDefData(data) //添加默认的数据源
                         .start(context) //启动默认的activity
