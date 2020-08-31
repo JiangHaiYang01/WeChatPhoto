@@ -85,7 +85,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
         automatic = getAutomaticLoadFullImage()
 
         //是否正在动画
-        isAnimIng.observe(this, Observer {
+        isAnimIng.observe(this, {
             //记录在Drag 中
             Drag.isAnimIng = it
             //viewpager 在动画过程中不能滑动
@@ -112,7 +112,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
             val viewHolder = holderMap[mCurrentIndex]
             if (viewHolder != null)
                 Larger.listConfig?.customItemViewListener?.itemImageFullLoad(
-                    viewHolder?.itemView,
+                    viewHolder.itemView,
                     mCurrentIndex
                 )
 
