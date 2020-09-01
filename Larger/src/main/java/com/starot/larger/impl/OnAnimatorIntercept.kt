@@ -18,10 +18,11 @@ interface OnAnimatorIntercept {
         thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder,
         listener: OnAnimatorListener,
+        beforeListener: OnBeforeTransitionListener?,
         afterTransitionListener: OnAfterTransitionListener
     ) {
 
-        beforeTransition(fullView, thumbnailView)
+        beforeTransition(fullView, thumbnailView, beforeListener)
 
         holder.itemView.postDelayed(
             {
@@ -35,6 +36,22 @@ interface OnAnimatorIntercept {
             } else {
                 1000
             }
+        )
+    }
+
+    fun start(
+        duration: Long,
+        fullView: View,
+        thumbnailView: ImageView?,
+        holder: RecyclerView.ViewHolder,
+        listener: OnAnimatorListener,
+        afterTransitionListener: OnAfterTransitionListener
+    ) {
+        start(
+            duration,
+            fullView,
+            thumbnailView,
+            holder, listener, null, afterTransitionListener
         )
     }
 
@@ -69,7 +86,8 @@ interface OnAnimatorIntercept {
 
     fun beforeTransition(
         fullView: View,
-        thumbnailView: ImageView?
+        thumbnailView: ImageView?,
+        beforeListener: OnBeforeTransitionListener?
     )
 
 

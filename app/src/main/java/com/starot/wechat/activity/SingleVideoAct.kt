@@ -19,10 +19,13 @@ import com.starot.wechat.R
 import kotlinx.android.synthetic.main.activity_single.*
 
 //单个view 展示效果
+//使用缩略图 + 视屏url 显示
+//尝试使用过 视屏的第一帧，获取太慢，放弃
 class SingleVideoAct : AppCompatActivity() {
 
 
     private var audio = "https://mp4.vjshi.com/2018-12-22/f4de0fcda0cf34707cf89d8d38825692.mp4"
+    private var image  = "https://gitee.com/_Allens/BlogImage/raw/master/image/20200901152310.png"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +33,7 @@ class SingleVideoAct : AppCompatActivity() {
         title = intent.getStringExtra("name")
 
         Glide.with(this)
-            .load(audio)
+            .load(image)
             .into(image_single_1)
         click(0, image_single_1)
     }
@@ -51,7 +54,7 @@ class SingleVideoAct : AppCompatActivity() {
                 //添加默认的数据源
                 .setDefData(
                     arrayListOf(
-                        DefListData(audio, audio)
+                        DefListData(image, audio)
                     )
                 )
                 .start(this) //启动默认的activity

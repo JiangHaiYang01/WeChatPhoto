@@ -179,24 +179,30 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     //通用方法
     private fun itemCommand(holder: ViewPagerAdapter.PhotoViewHolder, position: Int, get: T?) {
-        val image = holder.itemView.findViewById<View>(getFullViewId())
-        if (image == null) {
+        val view = if (Larger.type == FullType.Image) {
+            holder.itemView.findViewById<View>(getFullViewId())
+        } else {
+            holder.itemView.findViewById<View>(getVideoViewId())
+        }
+        if (view == null) {
             LogUtils.i("itemCommand fullId: ${getFullViewId()} get view is null")
             return
         }
         //单点击退出
-        image.setOnClickListener {
+        view.setOnClickListener {
+            LogUtils.i("单点击退出")
             if (isAnimIng.value!!) {
                 //当前正在播放动画 不可点击
+                LogUtils.i("当前正在播放动画 不可点击")
                 return@setOnClickListener
             }
-            singleExitAnim(image, holder)
+            singleExitAnim(view, holder)
         }
 
         //拖动
-        when (image) {
+        when (view) {
             is PhotoView -> {
-                Drag.startDrag(this, image, holder, this)
+                Drag.startDrag(this, view, holder, this)
             }
         }
     }
@@ -320,6 +326,11 @@ abstract class LargerAct<T> : AppCompatActivity(),
     //点击返回
     override fun onBackPressed() {
         //todo 点击返回暂时无效化 后续参考其他大厂 是否加入
+    }
+
+    //不在继续播放
+    override fun onStopVideo(view: VideoView) {
+        largerConfig?.videoLoad?.stop()
     }
 
 

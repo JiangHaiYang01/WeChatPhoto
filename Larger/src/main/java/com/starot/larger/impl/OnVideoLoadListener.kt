@@ -13,7 +13,7 @@ interface OnVideoLoadListener : OnLoadProgressPrepareListener {
     fun pause()
 
     //销毁资源
-    fun clear()
+    fun stop()
 
 
 }

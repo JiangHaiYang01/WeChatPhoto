@@ -5,7 +5,6 @@ import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
 import android.transition.Transition
 import android.transition.TransitionSet
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
@@ -16,6 +15,7 @@ import com.starot.larger.Larger
 import com.starot.larger.enums.FullType
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
+import com.starot.larger.impl.OnBeforeTransitionListener
 import com.starot.larger.utils.LogUtils
 
 object AnimEnterHelper : OnAnimatorIntercept {
@@ -23,7 +23,8 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
     override fun beforeTransition(
         fullView: View,
-        thumbnailView: ImageView?
+        thumbnailView: ImageView?,
+        beforeListener: OnBeforeTransitionListener?
     ) {
         if (thumbnailView == null) {
             return
@@ -86,7 +87,7 @@ object AnimEnterHelper : OnAnimatorIntercept {
         afterTransitionListener: OnAfterTransitionListener,
         holder: RecyclerView.ViewHolder
     ) {
-        afterTransitionListener.afterTransitionLoad(true, holder)
+        afterTransitionListener.onAfterTransitionLoad(true, holder)
     }
 
 

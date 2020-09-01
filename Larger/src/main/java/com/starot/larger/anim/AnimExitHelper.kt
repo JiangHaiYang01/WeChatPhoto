@@ -2,14 +2,13 @@ package com.starot.larger.anim
 
 import android.os.Build
 import android.transition.*
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
+import com.starot.larger.impl.OnBeforeTransitionListener
 
 object AnimExitHelper : OnAnimatorIntercept {
 
@@ -17,9 +16,11 @@ object AnimExitHelper : OnAnimatorIntercept {
 
     override fun beforeTransition(
         fullView: View,
-        thumbnailView: ImageView?
+        thumbnailView: ImageView?,
+        beforeListener: OnBeforeTransitionListener?
     ) {
         this.thumbnailView = thumbnailView
+        beforeListener?.onBeforeTransitionLoad(fullView, thumbnailView)
     }
 
     override fun startTransition(
@@ -63,6 +64,6 @@ object AnimExitHelper : OnAnimatorIntercept {
         afterTransitionListener: OnAfterTransitionListener,
         holder: RecyclerView.ViewHolder
     ) {
-        afterTransitionListener.afterTransitionLoad(false, holder)
+        afterTransitionListener.onAfterTransitionLoad(false, holder)
     }
 }

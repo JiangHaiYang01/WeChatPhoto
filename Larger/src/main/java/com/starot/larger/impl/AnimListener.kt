@@ -2,6 +2,7 @@ package com.starot.larger.impl
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.anim.AnimBgHelper
@@ -48,7 +49,7 @@ interface AnimListener {
                 }
             },
             object : OnAfterTransitionListener {
-                override fun afterTransitionLoad(
+                override fun onAfterTransitionLoad(
                     isLoadFull: Boolean,
                     holder: RecyclerView.ViewHolder
                 ) {
@@ -98,12 +99,22 @@ interface AnimListener {
                     onExitAnimEnd()
                 }
             },
+            //开始之前
+            object :OnBeforeTransitionListener{
+                override fun onBeforeTransitionLoad(fullView: View, thumbnailView: ImageView?) {
+                    // 视屏模式
+                    if(fullView is VideoView && Larger.type == FullType.Audio){
+                        onStopVideo(fullView)
+                    }
+                }
+            },
+
+            //结束以后
             object : OnAfterTransitionListener {
-                override fun afterTransitionLoad(
+                override fun onAfterTransitionLoad(
                     isLoadFull: Boolean,
                     holder: RecyclerView.ViewHolder
                 ) {
-
                 }
             }
         )
@@ -146,7 +157,7 @@ interface AnimListener {
                 }
             },
             object : OnAfterTransitionListener {
-                override fun afterTransitionLoad(
+                override fun onAfterTransitionLoad(
                     isLoadFull: Boolean,
                     holder: RecyclerView.ViewHolder
                 ) {
@@ -191,7 +202,7 @@ interface AnimListener {
                 }
             },
             object : OnAfterTransitionListener {
-                override fun afterTransitionLoad(
+                override fun onAfterTransitionLoad(
                     isLoadFull: Boolean,
                     holder: RecyclerView.ViewHolder
                 ) {
@@ -203,6 +214,8 @@ interface AnimListener {
         AnimBgHelper.enter(parentView, start, duration)
     }
 
+
+    fun onStopVideo(view: VideoView)
 
     //重新加载大图
     fun onReLoadFullImage(holder: RecyclerView.ViewHolder)

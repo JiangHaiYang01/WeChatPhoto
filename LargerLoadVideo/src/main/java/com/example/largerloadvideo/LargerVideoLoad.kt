@@ -1,6 +1,7 @@
 package com.example.largerloadvideo
 
 import android.content.Context
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Handler
@@ -15,7 +16,7 @@ import com.starot.larger.utils.LogUtils
 
 //视屏加载器
 class LargerVideoLoad(private val context: Context) : OnVideoLoadListener,
-    MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener {
+    MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnInfoListener {
 
 
     private var progressLiveData: MutableLiveData<Int>? = null
@@ -39,16 +40,19 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener,
         videoView.setVideoPath(Uri.parse(url).toString())
         videoView.setOnPreparedListener(this)
         videoView.setOnErrorListener(this)
+        videoView.setOnInfoListener(this)
         progressViewLiveData?.postValue(false)
         getProgress(videoView)
 
     }
 
     override fun pause() {
+        LogUtils.i("LargerVideoLoad pause")
         videoView.pause()
     }
 
-    override fun clear() {
+    override fun stop() {
+        LogUtils.i("LargerVideoLoad stop")
         videoView.stopPlayback()
     }
 
@@ -74,8 +78,6 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener,
 
     override fun onPrepared(mediaPlayer: MediaPlayer?) {
         LogUtils.i("视屏装载完成")
-        //取消设置背景图
-        videoView.background = null
         progressLiveData?.postValue(100)
         progressViewLiveData?.postValue(true)
         handler.removeCallbacksAndMessages(null)
@@ -88,5 +90,12 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener,
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
         LogUtils.i("视屏异常 extra:${extra} what:$what")
         return false
+    }
+
+    override fun onInfo(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
+        LogUtils.i("onInfo extra:${extra} what:$what")
+        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START)
+            videoView.setBackgroundColor(Color.TRANSPARENT)
+        return true
     }
 }

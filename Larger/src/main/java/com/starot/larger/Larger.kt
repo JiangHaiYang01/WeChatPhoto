@@ -55,7 +55,7 @@ object Larger {
             return this
         }
 
-        //是否自动加载大图
+        //是否自动加载大图 在 audio 模式下无效
         fun setAutomaticLoadFullImage(automatic: Boolean): Builder {
             largerConfig.automaticLoadFullImage = automatic
             return this

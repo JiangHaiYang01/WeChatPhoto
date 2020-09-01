@@ -10,6 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
+import com.starot.larger.impl.OnBeforeTransitionListener
 
 object AnimDragHelper : OnAnimatorIntercept {
     private var thumbnailView: ImageView? = null
@@ -17,7 +18,8 @@ object AnimDragHelper : OnAnimatorIntercept {
 
     override fun beforeTransition(
         fullView: View,
-        thumbnailView: ImageView?
+        thumbnailView: ImageView?,
+        beforeListener: OnBeforeTransitionListener?
     ) {
         this.thumbnailView = thumbnailView
     }
