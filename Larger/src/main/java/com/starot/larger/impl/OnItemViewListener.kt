@@ -29,7 +29,6 @@ interface OnItemViewListener<T> {
         videoLoad: OnVideoLoadListener?,
         itemView: View,
         position: Int,
-        video: VideoView,
         data: T?
     )
 

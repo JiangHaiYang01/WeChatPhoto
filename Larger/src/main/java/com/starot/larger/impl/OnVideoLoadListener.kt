@@ -7,7 +7,7 @@ import android.widget.VideoView
 interface OnVideoLoadListener : OnLoadProgressPrepareListener, OnVideoViewIdListener {
 
     //加载视屏
-    fun load(url: String, videoView: VideoView)
+    fun load(url: String, view: View)
 
     //暂停
     fun pause()

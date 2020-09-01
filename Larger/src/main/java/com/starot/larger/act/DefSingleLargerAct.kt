@@ -71,12 +71,11 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
         videoLoad: OnVideoLoadListener?,
         itemView: View,
         position: Int,
-        video: VideoView,
         data: DefListData?
     ) {
         LogUtils.i("def single larger act 加载 video")
         if (data != null) {
-            videoLoad?.load(data.full, videoView = video)
+            videoLoad?.load(data.full, view = itemView)
         }
     }
 

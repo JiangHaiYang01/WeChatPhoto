@@ -272,22 +272,13 @@ abstract class LargerAct<T> : AppCompatActivity(),
         videoView.visibility = View.VISIBLE
         val image = holder.itemView.findViewById<View>(getFullViewId())
         image.visibility = View.GONE
-        if (videoView is VideoView) {
-            //将VideoView 背景设置成 小图的缩略图
-            if (image is ImageView) {
-                videoView.background = image.drawable
-            }
 
-            onItemLoadAudio(
-                largerConfig?.videoLoad,
-                holder.itemView,
-                mCurrentIndex,
-                videoView,
-                data = data?.get(mCurrentIndex)
-            )
-        } else {
-            LogUtils.i("加载视屏 但是呢 这个 fullViewId 获取的不是 videoView")
-        }
+        onItemLoadAudio(
+            largerConfig?.videoLoad,
+            holder.itemView,
+            mCurrentIndex,
+            data = data?.get(mCurrentIndex)
+        )
     }
 
     override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
