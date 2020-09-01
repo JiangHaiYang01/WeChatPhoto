@@ -63,39 +63,24 @@ abstract class SingleLargerAct<T> : LargerAct<T>() {
 
     }
 
-    override fun getDuration(): Long {
-        return largerConfig?.duration ?: 300
-    }
 
     override fun getFullViewId(): Int {
         if (singleConfig?.itemLayout == null) {
-            return if (Larger.type == FullType.Audio) {
-                R.id.videoView
-            } else {
-                R.id.image
-            }
+            return R.id.image
         }
-        return singleConfig?.fullViewId ?: if (Larger.type == FullType.Audio) {
-            R.id.videoView
-        } else {
-            R.id.image
-        }
+        return singleConfig?.fullViewId ?: R.id.image
     }
 
-//    override fun getVideoViewId(): Int {
-//        if (singleConfig?.itemLayout == null) {
-//            return R.id.videoView
-//        }
-//        return singleConfig?.videoViewId ?: R.id.videoView
-//    }
+    override fun getVideoViewId(): Int {
+        if (singleConfig?.itemLayout == null) {
+            return R.id.videoView
+        }
+        return singleConfig?.videoViewId ?: R.id.videoView
+    }
 
     override fun getThumbnailView(position: Int): ImageView? {
         val images = singleConfig?.images
         return images?.get(position)
-    }
-
-    override fun getAutomaticLoadFullImage(): Boolean {
-        return largerConfig?.automaticLoadFullImage ?: true
     }
 
 

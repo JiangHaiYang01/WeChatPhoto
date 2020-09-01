@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.starot.wechat.activity.AudioListAct
 import com.starot.wechat.activity.ImageListAct
 import com.starot.wechat.activity.SingleAct
 import com.starot.wechat.activity.SingleVideoAct
@@ -17,11 +18,12 @@ class MainActivity : AppCompatActivity() {
 
 
         val arrayListOf = arrayListOf(
-            "Grid 布局",
-            "Linear 布局",
-            "自定义item",
+            "Grid Image 布局",
+            "Linear Image 布局",
+            "自定义item Image",
             "单独的ImageView",
             "单独的Audio",
+            "Grid Audio 布局",
             "清理缓存"
         )
 
@@ -47,6 +49,12 @@ class MainActivity : AppCompatActivity() {
                     }
                     4 -> {
                         val intent = Intent(this, SingleVideoAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", index)
+                        startActivity(intent)
+                    }
+                    5 -> {
+                        val intent = Intent(this, AudioListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", index)
                         startActivity(intent)

@@ -21,8 +21,6 @@ import kotlinx.android.synthetic.main.activity_single.*
 //单个view 展示效果
 class SingleVideoAct : AppCompatActivity() {
 
-    private var mImage1 =
-        "https://img2.woyaogexing.com/2019/05/26/165b72ea3617484e8d116c7f6761a369!400x400.jpeg"
 
     private var audio = "https://mp4.vjshi.com/2018-12-22/f4de0fcda0cf34707cf89d8d38825692.mp4"
 
@@ -32,7 +30,7 @@ class SingleVideoAct : AppCompatActivity() {
         title = intent.getStringExtra("name")
 
         Glide.with(this)
-            .load(mImage1)
+            .load(audio)
             .into(image_single_1)
         click(0, image_single_1)
     }
@@ -53,7 +51,7 @@ class SingleVideoAct : AppCompatActivity() {
                 //添加默认的数据源
                 .setDefData(
                     arrayListOf(
-                        DefListData(mImage1, audio)
+                        DefListData(audio, audio)
                     )
                 )
                 .start(this) //启动默认的activity

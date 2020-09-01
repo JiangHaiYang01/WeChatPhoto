@@ -2,17 +2,20 @@ package com.starot.larger.act
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.VideoView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.config.ListLargerConfig
+import com.starot.larger.enums.FullType
+import com.starot.larger.utils.LogUtils
 
 abstract class ListLargerAct<T> : LargerAct<T>() {
 
 
-     var listConfig: ListLargerConfig? = null
+    var listConfig: ListLargerConfig? = null
 
     override fun beforeCreate() {
         listConfig = Larger.listConfig
@@ -28,7 +31,11 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
     }
 
     override fun getItemLayout(): Int {
-        return listConfig?.itemLayout ?: R.layout.item_larger_image
+        return listConfig?.itemLayout ?: if (Larger.type == FullType.Image) {
+            R.layout.item_larger_image
+        } else {
+            R.layout.item_larger_video
+        }
     }
 
     override fun itemBindViewHolder(
@@ -43,23 +50,33 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
             position,
             data
         )
-        val imageView = itemView.findViewById<ImageView>(getFullViewId())
-        if (isLoadFull) {
-            onItemLoadFull(largerConfig?.imageLoad, itemView, position, imageView, data)
-        } else {
-            onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, imageView, data)
+        when (val view = itemView.findViewById<View>(getFullViewId())) {
+            is ImageView -> {
+                if (isLoadFull) {
+                    onItemLoadFull(largerConfig?.imageLoad, itemView, position, view, data)
+                } else {
+                    onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, view, data)
+                }
+            }
+            is VideoView -> {
+                LogUtils.i("itemBindViewHolder is VideoView")
+            }
         }
     }
 
-    override fun getDuration(): Long {
-        return largerConfig?.duration ?: 300
-    }
 
     override fun getFullViewId(): Int {
         if (listConfig?.itemLayout == null) {
             return R.id.image
         }
         return listConfig?.fullViewId ?: R.id.image
+    }
+
+    override fun getVideoViewId(): Int {
+        if (listConfig?.itemLayout == null) {
+            return R.id.videoView
+        }
+        return listConfig?.videoViewId ?: R.id.videoView
     }
 
     override fun getThumbnailView(position: Int): ImageView? {
@@ -81,9 +98,6 @@ abstract class ListLargerAct<T> : LargerAct<T>() {
         return childAt as ImageView
     }
 
-    override fun getAutomaticLoadFullImage(): Boolean {
-        return largerConfig?.automaticLoadFullImage ?: true
-    }
 
 
     private fun getRecyclerViewId(

@@ -55,4 +55,9 @@ class ProgressDialog(context: Context) : BaseDialog(context) {
     override fun getInflateWidthContent(): Boolean {
         return true
     }
+
+    //不需要背景变暗
+    override fun getDialogStyle(): Int {
+        return R.style.ProgressDialogStyle
+    }
 }

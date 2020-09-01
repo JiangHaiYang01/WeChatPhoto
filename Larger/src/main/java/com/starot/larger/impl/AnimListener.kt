@@ -32,6 +32,7 @@ interface AnimListener {
         thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder
     ) {
+        LogUtils.i("小图到大图的动画 start")
         AnimEnterHelper.start(
             duration,
             fullView,

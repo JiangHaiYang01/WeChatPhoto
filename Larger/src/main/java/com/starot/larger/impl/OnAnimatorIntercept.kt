@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.starot.larger.Larger
+import com.starot.larger.enums.FullType
 
 interface OnAnimatorIntercept {
 
@@ -21,13 +23,19 @@ interface OnAnimatorIntercept {
 
         beforeTransition(fullView, thumbnailView)
 
-        holder.itemView.postDelayed({
-            TransitionManager.beginDelayedTransition(
-                holder.itemView as ViewGroup,
-                getTransition(duration, listener, afterTransitionListener, holder)
-            )
-            startTransition(fullView, thumbnailView)
-        }, 50)
+        holder.itemView.postDelayed(
+            {
+                TransitionManager.beginDelayedTransition(
+                    holder.itemView as ViewGroup,
+                    getTransition(duration, listener, afterTransitionListener, holder)
+                )
+                startTransition(fullView, thumbnailView)
+            }, if (Larger.type == FullType.Image) {
+                50
+            } else {
+                1000
+            }
+        )
     }
 
     fun getTransition(

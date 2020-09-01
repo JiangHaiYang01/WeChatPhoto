@@ -251,14 +251,26 @@ abstract class LargerAct<T> : AppCompatActivity(),
             if (Larger.type == FullType.Image) {
                 LogUtils.i("view  pager 滑动 当前是图片模式 触发加载大图的逻辑")
                 onReLoadFullImage(viewHolder)
+            } else if (Larger.type == FullType.Audio) {
+                LogUtils.i("view  pager 滑动 当前是audio模式 ")
+                onLoadAudio(viewHolder)
             }
 
         }
     }
 
     override fun onLoadAudio(holder: RecyclerView.ViewHolder) {
-        val videoView = holder.itemView.findViewById<View>(getFullViewId())
+        //将audioView 显示出来
+        val videoView = holder.itemView.findViewById<View>(getVideoViewId())
+        videoView.visibility = View.VISIBLE
+        val image = holder.itemView.findViewById<View>(getFullViewId())
+        image.visibility = View.GONE
         if (videoView is VideoView) {
+            //将VideoView 背景设置成 小图的缩略图
+            if (image is ImageView) {
+                videoView.background = image.drawable
+            }
+
             onItemLoadAudio(
                 largerConfig?.videoLoad,
                 holder.itemView,
@@ -266,7 +278,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
                 videoView,
                 data = data?.get(mCurrentIndex)
             )
-        }else{
+        } else {
             LogUtils.i("加载视屏 但是呢 这个 fullViewId 获取的不是 videoView")
         }
     }
@@ -333,13 +345,20 @@ abstract class LargerAct<T> : AppCompatActivity(),
     abstract fun beforeCreate()
 
     //是否自动加载大图
-    abstract fun getAutomaticLoadFullImage(): Boolean
+    open fun getAutomaticLoadFullImage(): Boolean {
+        return largerConfig?.automaticLoadFullImage ?: true
+    }
 
     //动画时长
-    abstract fun getDuration(): Long
+    open fun getDuration(): Long {
+        return largerConfig?.duration ?: 300
+    }
 
     //大图的id
     abstract fun getFullViewId(): Int
+
+    //视屏加载id
+    abstract fun getVideoViewId(): Int
 
     //当前的图片index
     abstract fun getIndex(): Int

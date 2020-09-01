@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
 import com.allens.largerprogress.GlideProgressLoader
 import com.bumptech.glide.Glide
+import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger
 import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnCustomItemViewListener
@@ -121,6 +122,22 @@ class ImageListAdapter(
                             R.id.item_custom_image,
                             listener
                         )
+                        .setRecyclerView(recyclerView)//recyclerview
+                        .setDefData(data) //添加默认的数据源
+                        .start(context) //启动默认的activity
+                }
+            }
+            5->{
+                holder.itemView.setOnClickListener {
+                    Larger.create()
+                        .setDuration(3000)
+                        .setAutomaticLoadFullImage(false)//不自动加载大图
+                        .setImageLoad(GlideImageLoader(context))  //添加加载器
+                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
+                        .setVideoLoad(LargerVideoLoad(context))
+                        .asAudio()
+                        .withListType()//这里展示的是列表类型的
+                        .setCurrentIndex(position)//下标
                         .setRecyclerView(recyclerView)//recyclerview
                         .setDefData(data) //添加默认的数据源
                         .start(context) //启动默认的activity

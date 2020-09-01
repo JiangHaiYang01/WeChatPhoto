@@ -12,6 +12,8 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
+import com.starot.larger.Larger
+import com.starot.larger.enums.FullType
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
 import com.starot.larger.utils.LogUtils
@@ -27,6 +29,7 @@ object AnimEnterHelper : OnAnimatorIntercept {
             return
         }
         if (fullView is ImageView) {
+            LogUtils.i("将大图的 image scale type 设置成 和小图一样的 ${thumbnailView.scaleType}")
             fullView.scaleType = thumbnailView.scaleType
         }
         if (fullView is VideoView) {
@@ -49,8 +52,15 @@ object AnimEnterHelper : OnAnimatorIntercept {
         if (thumbnailView == null) {
             return
         }
-        if (fullView is ImageView)
-            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
+        if (fullView is ImageView) {
+            if (Larger.type == FullType.Image) {
+                LogUtils.i("开始变化 将大图的fullView type FIT_CENTER")
+                fullView.scaleType = ImageView.ScaleType.FIT_CENTER
+            } else if (Larger.type == FullType.Audio) {
+                LogUtils.i("开始变化 将大图的fullView type FIT_XY")
+                fullView.scaleType = ImageView.ScaleType.FIT_XY
+            }
+        }
         fullView.layoutParams = fullView.layoutParams.apply {
             width = ViewGroup.LayoutParams.MATCH_PARENT
             height = ViewGroup.LayoutParams.MATCH_PARENT

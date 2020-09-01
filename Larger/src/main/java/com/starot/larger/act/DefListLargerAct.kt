@@ -70,13 +70,16 @@ class DefListLargerAct : ListLargerAct<DefListData>() {
     }
 
     override fun onItemLoadAudio(
-        imageLoad: OnVideoLoadListener?,
+        videoLoad: OnVideoLoadListener?,
         itemView: View,
         position: Int,
         video: VideoView,
         data: DefListData?
     ) {
-
+        LogUtils.i("def list larger act 加载 video")
+        if (data != null) {
+            videoLoad?.load(data.full, videoView = video)
+        }
     }
 
 }
