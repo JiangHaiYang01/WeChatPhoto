@@ -3,10 +3,13 @@ package com.starot.larger.impl
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.starot.larger.Larger
 import com.starot.larger.anim.AnimBgHelper
 import com.starot.larger.anim.AnimDragHelper
 import com.starot.larger.anim.AnimEnterHelper
 import com.starot.larger.anim.AnimExitHelper
+import com.starot.larger.enums.FullType
+import com.starot.larger.utils.LogUtils
 
 //动画的逻辑
 interface AnimListener {
@@ -25,7 +28,7 @@ interface AnimListener {
     fun enterAnimStart(
         parentView: View,
         duration: Long,
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder
     ) {
@@ -48,7 +51,14 @@ interface AnimListener {
                     isLoadFull: Boolean,
                     holder: RecyclerView.ViewHolder
                 ) {
-                    onReLoadFullImage(holder)
+                    if (Larger.type == FullType.Image) {
+                        LogUtils.i("图片模式 进场动画结束以后 加载大图")
+                        onReLoadFullImage(holder)
+                    } else if (Larger.type == FullType.Audio) {
+                        LogUtils.i("视屏模式 进场动画结束以后 加载视频")
+                        onLoadAudio(holder)
+                    }
+
                 }
             }
         )
@@ -69,7 +79,7 @@ interface AnimListener {
     fun exitAnimStart(
         parentView: View,
         duration: Long,
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder
     ) {
@@ -101,7 +111,6 @@ interface AnimListener {
     }
 
 
-
     /***
      *
      * 移动过程中 退出
@@ -114,7 +123,7 @@ interface AnimListener {
      * [holder]                          RecyclerView.ViewHolder
      */
     fun dragExitAnimStart(
-        start:Float,
+        start: Float,
         parentView: View,
         duration: Long,
         fullView: ImageView,
@@ -161,7 +170,7 @@ interface AnimListener {
      * [holder]                          RecyclerView.ViewHolder
      */
     fun dragResumeAnimStart(
-        start:Float,
+        start: Float,
         parentView: View,
         duration: Long,
         fullView: ImageView,
@@ -196,6 +205,9 @@ interface AnimListener {
 
     //重新加载大图
     fun onReLoadFullImage(holder: RecyclerView.ViewHolder)
+
+    //加载视屏
+    fun onLoadAudio(holder: RecyclerView.ViewHolder)
 
     //进入的动画开始
     fun onEnterAnimStart()

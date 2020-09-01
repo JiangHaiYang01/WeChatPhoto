@@ -3,9 +3,11 @@ package com.starot.larger.act
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
+import android.widget.VideoView
 import com.starot.larger.bean.DefListData
 import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
+import com.starot.larger.impl.OnVideoLoadListener
 import com.starot.larger.utils.LogUtils
 
 /***
@@ -48,7 +50,6 @@ class DefListLargerAct : ListLargerAct<DefListData>() {
         data: DefListData?,
         listener: OnCheckImageCacheListener
     ) {
-        LogUtils.i("def larger act 判断是否图片有缓存")
         if (data == null) {
             LogUtils.i("def larger act 判断是否图片有缓存 data is null")
             return
@@ -65,6 +66,16 @@ class DefListLargerAct : ListLargerAct<DefListData>() {
                 listConfig?.customItemViewListener?.itemImageHasCache(itemView, position, false)
             }
         })
+
+    }
+
+    override fun onItemLoadAudio(
+        imageLoad: OnVideoLoadListener?,
+        itemView: View,
+        position: Int,
+        video: VideoView,
+        data: DefListData?
+    ) {
 
     }
 

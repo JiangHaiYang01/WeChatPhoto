@@ -16,21 +16,22 @@ object AnimExitHelper : OnAnimatorIntercept {
     private var thumbnailView: ImageView? = null
 
     override fun beforeTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     ) {
         this.thumbnailView = thumbnailView
     }
 
     override fun startTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     ) {
         if (thumbnailView == null) {
             fullView.visibility = View.GONE
             return
         }
-        fullView.scaleType = thumbnailView.scaleType
+        if (fullView is ImageView)
+            fullView.scaleType = thumbnailView.scaleType
         fullView.translationX = 0f
         fullView.translationY = 0f
         fullView.scaleX = 1f

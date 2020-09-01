@@ -2,12 +2,12 @@ package com.starot.larger.act
 
 import android.view.View
 import android.widget.ImageView
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import android.widget.VideoView
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.config.SingleLargerConfig
+import com.starot.larger.enums.FullType
+import com.starot.larger.utils.LogUtils
 
 abstract class SingleLargerAct<T> : LargerAct<T>() {
 
@@ -28,7 +28,12 @@ abstract class SingleLargerAct<T> : LargerAct<T>() {
     }
 
     override fun getItemLayout(): Int {
-        return singleConfig?.itemLayout ?: R.layout.item_larger_image
+        LogUtils.i("Larger.type ${Larger.type}")
+        return singleConfig?.itemLayout ?: if (Larger.type == FullType.Image) {
+            R.layout.item_larger_image
+        } else {
+            R.layout.item_larger_video
+        }
     }
 
     override fun itemBindViewHolder(
@@ -43,12 +48,19 @@ abstract class SingleLargerAct<T> : LargerAct<T>() {
             position,
             data
         )
-        val imageView = itemView.findViewById<ImageView>(getFullViewId())
-        if (isLoadFull) {
-            onItemLoadFull(largerConfig?.imageLoad, itemView, position, imageView, data)
-        } else {
-            onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, imageView, data)
+        when (val view = itemView.findViewById<View>(getFullViewId())) {
+            is ImageView -> {
+                if (isLoadFull) {
+                    onItemLoadFull(largerConfig?.imageLoad, itemView, position, view, data)
+                } else {
+                    onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, view, data)
+                }
+            }
+            is VideoView -> {
+                LogUtils.i("itemBindViewHolder is VideoView")
+            }
         }
+
     }
 
     override fun getDuration(): Long {
@@ -57,10 +69,25 @@ abstract class SingleLargerAct<T> : LargerAct<T>() {
 
     override fun getFullViewId(): Int {
         if (singleConfig?.itemLayout == null) {
-            return R.id.image
+            return if (Larger.type == FullType.Audio) {
+                R.id.videoView
+            } else {
+                R.id.image
+            }
         }
-        return singleConfig?.fullViewId ?: R.id.image
+        return singleConfig?.fullViewId ?: if (Larger.type == FullType.Audio) {
+            R.id.videoView
+        } else {
+            R.id.image
+        }
     }
+
+//    override fun getVideoViewId(): Int {
+//        if (singleConfig?.itemLayout == null) {
+//            return R.id.videoView
+//        }
+//        return singleConfig?.videoViewId ?: R.id.videoView
+//    }
 
     override fun getThumbnailView(position: Int): ImageView? {
         val images = singleConfig?.images

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.starot.wechat.activity.ImageListAct
 import com.starot.wechat.activity.SingleAct
+import com.starot.wechat.activity.SingleVideoAct
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
             "Linear 布局",
             "自定义item",
             "单独的ImageView",
+            "单独的Audio",
             "清理缓存"
         )
 
@@ -37,13 +39,18 @@ class MainActivity : AppCompatActivity() {
                         return@setOnClickListener
                     }
 
-                    3->{
+                    3 -> {
                         val intent = Intent(this, SingleAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", index)
                         startActivity(intent)
                     }
-
+                    4 -> {
+                        val intent = Intent(this, SingleVideoAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", index)
+                        startActivity(intent)
+                    }
                     else -> {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])

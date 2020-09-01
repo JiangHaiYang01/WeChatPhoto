@@ -8,6 +8,6 @@ object LogUtils {
     private const val TAG = "allens_tag"
 
     fun i(info: String) {
-        Log.i(TAG,info)
+        Log.e(TAG,info)
     }
 }

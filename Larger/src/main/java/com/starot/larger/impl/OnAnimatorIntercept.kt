@@ -2,6 +2,7 @@ package com.starot.larger.impl
 
 import android.transition.Transition
 import android.transition.TransitionManager
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +12,7 @@ interface OnAnimatorIntercept {
 
     fun start(
         duration: Long,
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?,
         holder: RecyclerView.ViewHolder,
         listener: OnAnimatorListener,
@@ -59,13 +60,13 @@ interface OnAnimatorIntercept {
     }
 
     fun beforeTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     )
 
 
     fun startTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     )
 

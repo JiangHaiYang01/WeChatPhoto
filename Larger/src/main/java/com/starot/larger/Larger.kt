@@ -5,8 +5,11 @@ import com.starot.larger.builder.SingleBuilder
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.config.ListLargerConfig
 import com.starot.larger.config.SingleLargerConfig
+import com.starot.larger.enums.FullType
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLoadProgressListener
+import com.starot.larger.impl.OnVideoLoadListener
+import com.starot.larger.utils.LogUtils
 
 object Larger {
 
@@ -19,6 +22,7 @@ object Larger {
     var config: LargerConfig? = null
     var listConfig: ListLargerConfig? = null
     var singleConfig: SingleLargerConfig? = null
+    var type = FullType.Image
 
 
     class Builder(private val largerConfig: LargerConfig) {
@@ -39,6 +43,12 @@ object Larger {
             return this
         }
 
+        //设置视屏加载器
+        fun setVideoLoad(videoLoad: OnVideoLoadListener): Builder {
+            largerConfig.videoLoad = videoLoad
+            return this
+        }
+
         //设置加载的进度
         fun setProgress(imageProgress: OnLoadProgressListener): Builder {
             largerConfig.imageProgress = imageProgress
@@ -48,6 +58,12 @@ object Larger {
         //是否自动加载大图
         fun setAutomaticLoadFullImage(automatic: Boolean): Builder {
             largerConfig.automaticLoadFullImage = automatic
+            return this
+        }
+
+        //兼容视屏模式
+        fun asAudio(): Builder {
+            type = FullType.Audio
             return this
         }
 

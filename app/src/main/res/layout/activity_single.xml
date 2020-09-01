@@ -6,15 +6,9 @@
 
 
     <ImageView
+        android:scaleType="fitXY"
         android:id="@+id/image_single_1"
         android:layout_width="200dp"
-        android:layout_height="200dp"/>
-
-
-
-    <ImageView
-        android:id="@+id/image_single_2"
-        android:layout_width="200dp"
-        android:layout_height="200dp"/>
+        android:layout_height="350dp"/>
 
 </LinearLayout>

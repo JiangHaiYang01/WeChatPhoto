@@ -3,6 +3,7 @@ package com.starot.larger.anim
 import android.os.Build
 import android.transition.*
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
@@ -15,7 +16,7 @@ object AnimDragHelper : OnAnimatorIntercept {
 
 
     override fun beforeTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     ) {
         this.thumbnailView = thumbnailView
@@ -23,7 +24,7 @@ object AnimDragHelper : OnAnimatorIntercept {
 
 
     override fun startTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     ) {
         if (thumbnailView == null) {

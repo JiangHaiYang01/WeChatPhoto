@@ -4,14 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
+import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
 import com.starot.larger.config.LargerConfig
+import com.starot.larger.enums.FullType
 import com.starot.larger.impl.*
 import com.starot.larger.utils.Drag
 import com.starot.larger.utils.LogUtils
@@ -92,33 +93,8 @@ abstract class LargerAct<T> : AppCompatActivity(),
             setViewPagerEnable(!it)
         })
 
-        //监听 加载大图进度变化
-        progressLiveData.observe(this, {
-            //大图加载进度
-            onLoadProgress(it)
-        })
-        //将监听变化的liveData 通过接口保存
-        largerConfig?.imageLoad?.onPrepareLoadProgress(progressLiveData)
-
-
-        //对于加载进度条的逻辑判断
-        progressViewLiveData.observe(this, {
-            onProgressChange(this, it)
-
-
-            //同时状态还要通知到自定义的listener
-            //获取当前列表的imageView
-            //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
-            val viewHolder = holderMap[mCurrentIndex]
-            if (viewHolder != null)
-                Larger.listConfig?.customItemViewListener?.itemImageFullLoad(
-                    viewHolder.itemView,
-                    mCurrentIndex
-                )
-
-        })
-        largerConfig?.imageLoad?.onPrepareProgressView(progressViewLiveData)
-
+        //注册监听liveData
+        registerLiveData()
 
         //数据源
         data = getData()
@@ -134,6 +110,36 @@ abstract class LargerAct<T> : AppCompatActivity(),
         larger_viewpager.setCurrentItem(mCurrentIndex, false)
         //viewpager 滑动 index 更改
         PageChange().register(viewPager2 = larger_viewpager, listener = this)
+    }
+
+    private fun registerLiveData() {
+        //将监听变化的liveData 通过接口保存
+        largerConfig?.imageLoad?.onPrepareLoadProgress(progressLiveData)
+        largerConfig?.videoLoad?.onPrepareLoadProgress(progressLiveData)
+        //将监听变化的liveData
+        largerConfig?.imageLoad?.onPrepareProgressView(progressViewLiveData)
+        largerConfig?.videoLoad?.onPrepareProgressView(progressViewLiveData)
+
+        //对于加载进度条的逻辑判断
+        progressViewLiveData.observe(this, {
+            onProgressChange(this, it)
+            //同时状态还要通知到自定义的listener
+            //获取当前列表的imageView
+            //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
+            val viewHolder = holderMap[mCurrentIndex]
+            if (viewHolder != null)
+                Larger.listConfig?.customItemViewListener?.itemImageFullLoad(
+                    viewHolder.itemView,
+                    mCurrentIndex
+                )
+
+        })
+
+        //监听 加载大图进度变化
+        progressLiveData.observe(this, {
+            //大图加载进度
+            onLoadProgress(it)
+        })
     }
 
 
@@ -155,7 +161,11 @@ abstract class LargerAct<T> : AppCompatActivity(),
                 if (isLoadEnter) {
                     return
                 }
-                val fullImageView = holder.itemView.findViewById<ImageView>(getFullViewId())
+                val fullImageView = holder.itemView.findViewById<View>(getFullViewId())
+                if (fullImageView == null) {
+                    LogUtils.i("prepare enterAnimStart  fullId ${getFullViewId()} get view is null")
+                    return
+                }
                 enterAnimStart(
                     parentView,
                     duration,
@@ -165,26 +175,22 @@ abstract class LargerAct<T> : AppCompatActivity(),
                 )
             }
         }
-
     }
 
     //通用方法
     private fun itemCommand(holder: ViewPagerAdapter.PhotoViewHolder, position: Int, get: T?) {
         val image = holder.itemView.findViewById<View>(getFullViewId())
+        if (image == null) {
+            LogUtils.i("itemCommand fullId: ${getFullViewId()} get view is null")
+            return
+        }
         //单点击退出
         image.setOnClickListener {
             if (isAnimIng.value!!) {
                 //当前正在播放动画 不可点击
                 return@setOnClickListener
             }
-            when (image) {
-                is ImageView -> {
-                    singleExitAnim(image, holder)
-                }
-                is PhotoView -> {
-                    singleExitAnim(image, holder)
-                }
-            }
+            singleExitAnim(image, holder)
         }
 
         //拖动
@@ -197,7 +203,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
 
     //单点击退出
     private fun singleExitAnim(
-        image: ImageView,
+        image: View,
         holder: ViewPagerAdapter.PhotoViewHolder
     ) {
         thumbnailView = getThumbnailView(mCurrentIndex)
@@ -241,8 +247,28 @@ abstract class LargerAct<T> : AppCompatActivity(),
         thumbnailView = getThumbnailView(mCurrentIndex)
         //滑动的时候 判断是否已经有缓存了 有缓冲 就加载高清图
         val viewHolder = holderMap[mCurrentIndex]
-        if (viewHolder != null && getIndex() != pos)
-            onReLoadFullImage(viewHolder)
+        if (viewHolder != null && getIndex() != pos) {
+            if (Larger.type == FullType.Image) {
+                LogUtils.i("view  pager 滑动 当前是图片模式 触发加载大图的逻辑")
+                onReLoadFullImage(viewHolder)
+            }
+
+        }
+    }
+
+    override fun onLoadAudio(holder: RecyclerView.ViewHolder) {
+        val videoView = holder.itemView.findViewById<View>(getFullViewId())
+        if (videoView is VideoView) {
+            onItemLoadAudio(
+                largerConfig?.videoLoad,
+                holder.itemView,
+                mCurrentIndex,
+                videoView,
+                data = data?.get(mCurrentIndex)
+            )
+        }else{
+            LogUtils.i("加载视屏 但是呢 这个 fullViewId 获取的不是 videoView")
+        }
     }
 
     override fun onReLoadFullImage(holder: RecyclerView.ViewHolder) {
@@ -394,6 +420,12 @@ abstract class LargerAct<T> : AppCompatActivity(),
             thumbnailView,
             holder
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LogUtils.i("界面销毁 将状态改成 image")
+        Larger.type = FullType.Image
     }
 
 }

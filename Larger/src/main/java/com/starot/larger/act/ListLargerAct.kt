@@ -1,17 +1,13 @@
 package com.starot.larger.act
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.starot.larger.Larger
 import com.starot.larger.R
-import com.starot.larger.config.LargerConfig
 import com.starot.larger.config.ListLargerConfig
-import com.starot.larger.impl.OnItemViewListener
 
 abstract class ListLargerAct<T> : LargerAct<T>() {
 

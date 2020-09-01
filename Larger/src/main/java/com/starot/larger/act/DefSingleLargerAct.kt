@@ -3,9 +3,13 @@ package com.starot.larger.act
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
+import android.widget.VideoView
+import com.starot.larger.Larger
 import com.starot.larger.bean.DefListData
+import com.starot.larger.enums.FullType
 import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
+import com.starot.larger.impl.OnVideoLoadListener
 import com.starot.larger.utils.LogUtils
 
 /***
@@ -45,12 +49,11 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
         data: DefListData?,
         listener: OnCheckImageCacheListener
     ) {
-        LogUtils.i("def larger act 判断是否图片有缓存")
         if (data == null) {
-            LogUtils.i("def larger act 判断是否图片有缓存 data is null")
+            LogUtils.i("def single  larger act 判断是否图片有缓存 data is null")
             return
         }
-        LogUtils.i("def larger act 判断是否图片有缓存 data is ${data.full}")
+        LogUtils.i("def single  larger act 判断是否图片有缓存 data is ${data.full}")
         largerConfig?.imageLoad?.checkCache(data.full, object : OnCheckImageCacheListener {
             override fun onNoCache() {
                 listener.onNoCache()
@@ -63,5 +66,19 @@ class DefSingleLargerAct : SingleLargerAct<DefListData>() {
             }
         })
     }
+
+    override fun onItemLoadAudio(
+        videoLoad: OnVideoLoadListener?,
+        itemView: View,
+        position: Int,
+        video: VideoView,
+        data: DefListData?
+    ) {
+        LogUtils.i("def single larger act 加载 video")
+        if (data != null) {
+            videoLoad?.load(data.full, videoView = video)
+        }
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.starot.larger.impl
 
 import android.view.View
 import android.widget.ImageView
+import android.widget.VideoView
 
 interface OnItemViewListener<T> {
 
@@ -20,6 +21,15 @@ interface OnItemViewListener<T> {
         itemView: View,
         position: Int,
         imageView: ImageView,
+        data: T?
+    )
+
+    //加载视屏
+    fun onItemLoadAudio(
+        videoLoad: OnVideoLoadListener?,
+        itemView: View,
+        position: Int,
+        video: VideoView,
         data: T?
     )
 

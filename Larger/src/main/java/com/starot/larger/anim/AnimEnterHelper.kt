@@ -6,24 +6,33 @@ import android.transition.ChangeImageTransform
 import android.transition.Transition
 import android.transition.TransitionSet
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
+import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.impl.OnAfterTransitionListener
 import com.starot.larger.impl.OnAnimatorIntercept
+import com.starot.larger.utils.LogUtils
 
 object AnimEnterHelper : OnAnimatorIntercept {
 
 
     override fun beforeTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     ) {
         if (thumbnailView == null) {
             return
         }
-        fullView.scaleType = thumbnailView.scaleType
+        if (fullView is ImageView) {
+            fullView.scaleType = thumbnailView.scaleType
+        }
+        if (fullView is VideoView) {
+            LogUtils.i("当前是视屏模式 将背景设置成 预览图")
+            fullView.background = thumbnailView.drawable
+        }
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
             height = thumbnailView.height
@@ -34,13 +43,14 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
 
     override fun startTransition(
-        fullView: ImageView,
+        fullView: View,
         thumbnailView: ImageView?
     ) {
         if (thumbnailView == null) {
             return
         }
-        fullView.scaleType = ImageView.ScaleType.FIT_CENTER
+        if (fullView is ImageView)
+            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
         fullView.layoutParams = fullView.layoutParams.apply {
             width = ViewGroup.LayoutParams.MATCH_PARENT
             height = ViewGroup.LayoutParams.MATCH_PARENT

@@ -11,6 +11,8 @@ open class BaseLargerConfig(
     var itemLayout: Int? = null,
     //大图的ImageViewID
     var fullViewId: Int? = null,
+    //VideoView id
+    var videoViewId: Int? = null,
     //自定义的itemViewListener
     var customItemViewListener: OnCustomItemViewListener? = null
 )

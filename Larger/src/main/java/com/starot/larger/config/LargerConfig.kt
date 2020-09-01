@@ -2,6 +2,7 @@ package com.starot.larger.config
 
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLoadProgressListener
+import com.starot.larger.impl.OnVideoLoadListener
 
 
 data class LargerConfig(
@@ -13,6 +14,9 @@ data class LargerConfig(
 
     //图片加载器
     var imageLoad: OnImageLoadListener? = null,
+
+    //视屏加载器
+    var videoLoad: OnVideoLoadListener? = null,
 
     //加载的进度
     var imageProgress: OnLoadProgressListener? = null

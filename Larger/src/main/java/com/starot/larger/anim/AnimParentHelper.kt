@@ -1,18 +1,17 @@
 package com.starot.larger.anim
 
-import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import com.starot.larger.act.LargerAct
 
 object AnimParentHelper {
 
     fun parentAnim(
         parent: ViewGroup.LayoutParams,
         thumbnailView: ImageView,
-        fullView: ImageView
+        fullView: View
     ) {
         val location = AnimEnterHelper.getLocationOnScreen(thumbnailView)
         when (fullView.parent) {

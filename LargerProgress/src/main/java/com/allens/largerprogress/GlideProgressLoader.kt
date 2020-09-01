@@ -3,13 +3,14 @@ package com.allens.largerprogress
 import android.content.Context
 import android.util.Log
 import com.starot.larger.impl.OnLoadProgressListener
+import com.starot.larger.utils.LogUtils
 
 class GlideProgressLoader(private val type: ProgressType) : OnLoadProgressListener {
 
     private var dialog: ProgressDialog? = null
 
     override fun onProgressChange(context: Context, isGone: Boolean) {
-        Log.i("allens_tag", "GlideProgressLoader onProgressChange  isGone $isGone")
+        LogUtils.i( "GlideProgressLoader onProgressChange  isGone $isGone")
         if (dialog == null) {
             dialog = createDialog(context, type)
         }
@@ -22,7 +23,7 @@ class GlideProgressLoader(private val type: ProgressType) : OnLoadProgressListen
     }
 
     override fun onLoadProgress(progress: Int) {
-        Log.i("allens_tag", "GlideProgressLoader onLoadProgress  progress $progress")
+        LogUtils.i( "GlideProgressLoader onLoadProgress  progress $progress")
         if (dialog != null) {
             dialog?.setProgress(progress)
         }

@@ -3,7 +3,6 @@ package com.starot.larger.builder
 import android.content.Context
 import android.content.Intent
 import android.widget.ImageView
-import com.starot.larger.act.DefListLargerAct
 import com.starot.larger.act.DefSingleLargerAct
 import com.starot.larger.bean.DefListData
 import com.starot.larger.config.SingleLargerConfig
