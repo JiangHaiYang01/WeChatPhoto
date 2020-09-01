@@ -22,6 +22,7 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
 
     override fun beforeTransition(
+        itemView: View,
         fullView: View,
         thumbnailView: ImageView?,
         beforeListener: OnBeforeTransitionListener?
@@ -33,10 +34,7 @@ object AnimEnterHelper : OnAnimatorIntercept {
             LogUtils.i("将大图的 image scale type 设置成 和小图一样的 ${thumbnailView.scaleType}")
             fullView.scaleType = thumbnailView.scaleType
         }
-        if (fullView is VideoView) {
-            LogUtils.i("当前是视屏模式 将背景设置成 预览图")
-            fullView.background = thumbnailView.drawable
-        }
+        beforeListener?.onBeforeTransitionLoad(itemView, fullView, thumbnailView)
         fullView.layoutParams = fullView.layoutParams.apply {
             width = thumbnailView.width
             height = thumbnailView.height

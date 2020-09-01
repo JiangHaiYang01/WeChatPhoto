@@ -130,7 +130,7 @@ class ImageListAdapter(
             5->{
                 holder.itemView.setOnClickListener {
                     Larger.create()
-                        .setDuration(3000)
+                        .setDuration(300)
                         .setAutomaticLoadFullImage(false)//不自动加载大图
                         .setImageLoad(GlideImageLoader(context))  //添加加载器
                         .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示

@@ -1,21 +1,20 @@
 package com.example.largerloadvideo
 
 import android.content.Context
-import android.graphics.Color
-import android.media.MediaPlayer
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.MediaController
 import androidx.lifecycle.MutableLiveData
 import com.starot.larger.impl.OnVideoLoadListener
 import com.starot.larger.utils.LogUtils
+import org.salient.artplayer.conduction.PlayerState
 import org.salient.artplayer.player.SystemMediaPlayer
 import org.salient.artplayer.ui.VideoView
 
 //视屏加载器
-class LargerVideoLoad(private val context: Context) : OnVideoLoadListener{
+class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
 
     private var progressLiveData: MutableLiveData<Int>? = null
@@ -23,22 +22,46 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener{
 
 
     private lateinit var videoView: VideoView
-    private var handler = Handler(Looper.getMainLooper())
+
+
+    override fun onAudioThumbnail(itemView: View, drawable: Drawable) {
+        LogUtils.i("LargerVideoLoad start onAudioThumbnail")
+        val videoView = itemView.findViewById<VideoView>(getVideoViewId())
+        videoView.cover.setImageDrawable(drawable)
+    }
 
     override fun load(url: String, view: View) {
         LogUtils.i("start play audio")
 
+        //显示加载等待框
+        progressViewLiveData?.postValue(false)
+
         this.videoView = view.findViewById(getVideoViewId())
-
-
-        videoView.mediaPlayer = SystemMediaPlayer().apply{
+        videoView.mediaPlayer = SystemMediaPlayer().apply {
             setDataSource(context, Uri.parse(url))
         }
         videoView.prepare()
 
-//        progressViewLiveData?.postValue(false)
-//        getProgress(videoView)
 
+        //缓冲状态发生改变
+        videoView.mediaPlayer?.bufferingProgressLD?.observeForever {
+            LogUtils.i("audio bufferPercentage:$it")
+            if (it != progressLiveData?.value) {
+                progressLiveData?.postValue(it)
+            }
+        }
+
+        //播放器的状态
+        videoView.mediaPlayer?.playerStateLD?.observeForever {
+            LogUtils.i("播放器的状态 :${it.code}")
+            if (it.code == PlayerState.STARTED.code) {
+                LogUtils.i("播放器的状态 STARTED")
+                //取消加载框
+                progressViewLiveData?.postValue(true)
+            } else if (it.code == PlayerState.ERROR.code || it.code == PlayerState.COMPLETED.code) {
+                progressViewLiveData?.postValue(true)
+            }
+        }
     }
 
     override fun pause() {
@@ -48,20 +71,10 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener{
 
     override fun stop() {
         LogUtils.i("LargerVideoLoad stop")
-//        videoView.stopPlayback()
+        videoView.stop()
+        videoView.release()
     }
 
-    private fun getProgress(videoView: VideoView) {
-//        handler.postDelayed({
-//            val bufferPercentage = videoView.bufferPercentage
-//            LogUtils.i("audio bufferPercentage:$bufferPercentage")
-//            if (bufferPercentage != progressLiveData?.value) {
-//                progressLiveData?.postValue(bufferPercentage)
-//            }
-//            getProgress(videoView)
-//
-//        }, 100)
-    }
 
     override fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>) {
         this.progressViewLiveData = progressViewLiveData
@@ -82,27 +95,4 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener{
     override fun getVideoLayoutId(): Int {
         return R.layout.item_larger_video
     }
-
-//    override fun onPrepared(mediaPlayer: MediaPlayer?) {
-//        LogUtils.i("视屏装载完成")
-//        progressLiveData?.postValue(100)
-//        progressViewLiveData?.postValue(true)
-//        handler.removeCallbacksAndMessages(null)
-//        //开始
-//        mediaPlayer?.start()
-//        //循环播放
-//        mediaPlayer?.isLooping = true
-//    }
-//
-//    override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
-//        LogUtils.i("视屏异常 extra:${extra} what:$what")
-//        return false
-//    }
-//
-//    override fun onInfo(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
-//        LogUtils.i("onInfo extra:${extra} what:$what")
-//        if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START)
-//            videoView.setBackgroundColor(Color.TRANSPARENT)
-//        return true
-//    }
 }

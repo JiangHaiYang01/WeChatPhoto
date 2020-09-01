@@ -42,7 +42,7 @@ class SingleVideoAct : AppCompatActivity() {
     private fun click(position: Int, view: View) {
         view.setOnClickListener {
             Larger.create()
-                .setDuration(3000)
+                .setDuration(300)
                 .setAutomaticLoadFullImage(true)//自动加载大图
                 .setImageLoad(GlideImageLoader(this))  //添加加载器
                 .setVideoLoad(LargerVideoLoad(this))

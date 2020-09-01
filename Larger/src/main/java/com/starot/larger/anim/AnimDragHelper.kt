@@ -17,6 +17,7 @@ object AnimDragHelper : OnAnimatorIntercept {
 
 
     override fun beforeTransition(
+        itemView: View,
         fullView: View,
         thumbnailView: ImageView?,
         beforeListener: OnBeforeTransitionListener?

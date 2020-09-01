@@ -1,8 +1,8 @@
 package com.starot.larger.impl
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-import android.widget.VideoView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.anim.AnimBgHelper
@@ -46,6 +46,24 @@ interface AnimListener {
 
                 override fun onAnimatorEnd() {
                     onEnterAnimEnd()
+                }
+            },
+            //开始之前
+            object : OnBeforeTransitionListener {
+                override fun onBeforeTransitionLoad(
+                    itemView: View,
+                    fullView: View,
+                    thumbnailView: ImageView?
+                ) {
+                    // 视屏模式
+                    if (Larger.type == FullType.Audio) {
+                        if (thumbnailView?.drawable != null) {
+                            onAudioThumbnail(itemView,thumbnailView.drawable)
+                        } else {
+                            LogUtils.i("视屏模式 没有设置预览图")
+                        }
+
+                    }
                 }
             },
             object : OnAfterTransitionListener {
@@ -100,11 +118,15 @@ interface AnimListener {
                 }
             },
             //开始之前
-            object :OnBeforeTransitionListener{
-                override fun onBeforeTransitionLoad(fullView: View, thumbnailView: ImageView?) {
+            object : OnBeforeTransitionListener {
+                override fun onBeforeTransitionLoad(
+                    itemView: View,
+                    fullView: View,
+                    thumbnailView: ImageView?
+                ) {
                     // 视屏模式
-                    if(fullView is VideoView && Larger.type == FullType.Audio){
-                        onStopVideo(fullView)
+                    if (Larger.type == FullType.Audio) {
+                        onStopVideo()
                     }
                 }
             },
@@ -214,14 +236,17 @@ interface AnimListener {
         AnimBgHelper.enter(parentView, start, duration)
     }
 
+    //加载视屏
+    fun onLoadAudio(holder: RecyclerView.ViewHolder)
 
-    fun onStopVideo(view: VideoView)
+    //设置视屏预览图
+    fun onAudioThumbnail(itemView: View, drawable: Drawable)
+
+    //停止播放视屏
+    fun onStopVideo()
 
     //重新加载大图
     fun onReLoadFullImage(holder: RecyclerView.ViewHolder)
-
-    //加载视屏
-    fun onLoadAudio(holder: RecyclerView.ViewHolder)
 
     //进入的动画开始
     fun onEnterAnimStart()

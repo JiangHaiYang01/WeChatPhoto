@@ -22,7 +22,7 @@ interface OnAnimatorIntercept {
         afterTransitionListener: OnAfterTransitionListener
     ) {
 
-        beforeTransition(fullView, thumbnailView, beforeListener)
+        beforeTransition(holder.itemView, fullView, thumbnailView, beforeListener)
 
         holder.itemView.postDelayed(
             {
@@ -85,6 +85,7 @@ interface OnAnimatorIntercept {
     }
 
     fun beforeTransition(
+        itemView: View,
         fullView: View,
         thumbnailView: ImageView?,
         beforeListener: OnBeforeTransitionListener?

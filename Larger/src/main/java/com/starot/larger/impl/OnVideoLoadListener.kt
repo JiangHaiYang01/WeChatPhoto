@@ -1,10 +1,12 @@
 package com.starot.larger.impl
 
+import android.graphics.drawable.Drawable
 import android.view.View
-import android.widget.ImageView
-import android.widget.VideoView
 
 interface OnVideoLoadListener : OnLoadProgressPrepareListener, OnVideoViewIdListener {
+
+    //设置预览图
+    fun onAudioThumbnail(itemView: View, drawable: Drawable)
 
     //加载视屏
     fun load(url: String, view: View)

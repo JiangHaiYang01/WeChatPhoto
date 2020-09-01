@@ -15,12 +15,13 @@ object AnimExitHelper : OnAnimatorIntercept {
     private var thumbnailView: ImageView? = null
 
     override fun beforeTransition(
+        itemView: View,
         fullView: View,
         thumbnailView: ImageView?,
         beforeListener: OnBeforeTransitionListener?
     ) {
         this.thumbnailView = thumbnailView
-        beforeListener?.onBeforeTransitionLoad(fullView, thumbnailView)
+        beforeListener?.onBeforeTransitionLoad(itemView,fullView, thumbnailView)
     }
 
     override fun startTransition(

@@ -1,6 +1,7 @@
 package com.starot.larger.act
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -266,6 +267,10 @@ abstract class LargerAct<T> : AppCompatActivity(),
         }
     }
 
+    override fun onAudioThumbnail(itemView: View, drawable: Drawable) {
+        largerConfig?.videoLoad?.onAudioThumbnail(itemView, drawable)
+    }
+
     override fun onLoadAudio(holder: RecyclerView.ViewHolder) {
         //将audioView 显示出来
         val videoView = holder.itemView.findViewById<View>(getVideoViewId())
@@ -321,7 +326,7 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
     //不在继续播放
-    override fun onStopVideo(view: VideoView) {
+    override fun onStopVideo() {
         largerConfig?.videoLoad?.stop()
     }
 

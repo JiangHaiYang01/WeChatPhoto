@@ -7,8 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 interface OnBeforeTransitionListener {
 
-    fun onBeforeTransitionLoad(fullView: View,
-                               thumbnailView: ImageView?)
+    fun onBeforeTransitionLoad(
+        itemView: View,
+        fullView: View,
+        thumbnailView: ImageView?
+    )
 }
 
 
