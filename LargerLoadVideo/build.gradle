@@ -3,11 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -35,4 +35,9 @@ dependencies {
 
 
     implementation project(":Larger")
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'org.salient.artvideoplayer:artplayer-core:1.1.0'
+    implementation 'org.salient.artvideoplayer:artplayer-ijk:1.1.0'
+    implementation "org.salient.artvideoplayer:artplayer-armv7a:1.1.0"
 }

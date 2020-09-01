@@ -10,3 +10,10 @@ interface OnBeforeTransitionListener {
     fun onBeforeTransitionLoad(fullView: View,
                                thumbnailView: ImageView?)
 }
+
+
+interface OnAfterTransitionListener {
+
+    //加载图片
+    fun onAfterTransitionLoad(isLoadFull: Boolean, holder: RecyclerView.ViewHolder)
+}

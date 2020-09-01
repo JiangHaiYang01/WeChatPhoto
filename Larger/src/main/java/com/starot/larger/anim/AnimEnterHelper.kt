@@ -54,13 +54,7 @@ object AnimEnterHelper : OnAnimatorIntercept {
             return
         }
         if (fullView is ImageView) {
-            if (Larger.type == FullType.Image) {
-                LogUtils.i("开始变化 将大图的fullView type FIT_CENTER")
-                fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-            } else if (Larger.type == FullType.Audio) {
-                LogUtils.i("开始变化 将大图的fullView type FIT_XY")
-                fullView.scaleType = ImageView.ScaleType.FIT_XY
-            }
+            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
         }
         fullView.layoutParams = fullView.layoutParams.apply {
             width = ViewGroup.LayoutParams.MATCH_PARENT

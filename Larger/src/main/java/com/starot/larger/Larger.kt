@@ -18,6 +18,12 @@ object Larger {
         return Builder(LargerConfig())
     }
 
+    fun clear(){
+        config = null
+        listConfig = null
+        singleConfig = null
+        type = FullType.Image
+    }
 
     var config: LargerConfig? = null
     var listConfig: ListLargerConfig? = null

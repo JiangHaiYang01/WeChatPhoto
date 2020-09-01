@@ -19,65 +19,6 @@ abstract class SingleLargerAct<T> : LargerAct<T>() {
     }
 
 
-    override fun getIndex(): Int {
-        return singleConfig?.position ?: 0
-    }
-
-    override fun getData(): List<T>? {
-        return singleConfig?.data as List<T>?
-    }
-
-    override fun getItemLayout(): Int {
-        LogUtils.i("Larger.type ${Larger.type}")
-        return singleConfig?.itemLayout ?: if (Larger.type == FullType.Image) {
-            R.layout.item_larger_image
-        } else {
-            R.layout.item_larger_video
-        }
-    }
-
-    override fun itemBindViewHolder(
-        isLoadFull: Boolean,
-        itemView: View,
-        position: Int,
-        data: T?
-    ) {
-        singleConfig?.customItemViewListener?.itemBindViewHolder(
-            this,
-            itemView,
-            position,
-            data
-        )
-        when (val view = itemView.findViewById<View>(getFullViewId())) {
-            is ImageView -> {
-                if (isLoadFull) {
-                    onItemLoadFull(largerConfig?.imageLoad, itemView, position, view, data)
-                } else {
-                    onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, view, data)
-                }
-            }
-            is VideoView -> {
-                LogUtils.i("itemBindViewHolder is VideoView")
-            }
-        }
-
-    }
-
-
-    override fun getFullViewId(): Int {
-        if (singleConfig?.itemLayout == null) {
-            return R.id.image
-        }
-        return singleConfig?.fullViewId ?: R.id.image
-    }
-
-    override fun getVideoViewId(): Int {
-        if (singleConfig?.itemLayout == null) {
-            return R.id.videoView
-        }
-        return singleConfig?.videoViewId ?: R.id.videoView
-    }
-
     override fun getThumbnailView(position: Int): ImageView? {
         val images = singleConfig?.images
         return images?.get(position)

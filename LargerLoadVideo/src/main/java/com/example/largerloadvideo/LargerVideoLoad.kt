@@ -76,6 +76,18 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener,
         this.progressLiveData = progressLiveData
     }
 
+    override fun getVideoViewId(): Int {
+        return R.id.audio_videoView
+    }
+
+    override fun getVideoFullId(): Int {
+        return R.id.audio_image
+    }
+
+    override fun getVideoLayoutId(): Int {
+        return R.layout.item_larger_video
+    }
+
     override fun onPrepared(mediaPlayer: MediaPlayer?) {
         LogUtils.i("视屏装载完成")
         progressLiveData?.postValue(100)

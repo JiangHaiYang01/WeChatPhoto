@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.ViewPagerAdapter
+import com.starot.larger.config.BaseLargerConfig
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.enums.FullType
 import com.starot.larger.impl.*
@@ -366,22 +367,52 @@ abstract class LargerAct<T> : AppCompatActivity(),
     }
 
     //大图的id
-    abstract fun getFullViewId(): Int
+    private fun getFullViewId(): Int {
+        if (getBaseConfig()?.itemLayout == null) {
+            if (!isAudio()) {
+                return R.id.image
+            } else {
+                return largerConfig?.videoLoad?.getVideoFullId() ?: return -1
+            }
+
+        }
+        return getBaseConfig()?.fullViewId ?: if (!isAudio()) {
+            return R.id.image
+        } else {
+            return largerConfig?.videoLoad?.getVideoFullId() ?: return -1
+        }
+    }
 
     //视屏加载id
-    abstract fun getVideoViewId(): Int
+    private fun getVideoViewId(): Int {
+        val videoViewId = largerConfig?.videoLoad?.getVideoViewId() ?: return -1
+        if (getBaseConfig()?.itemLayout == null) {
+            return videoViewId
+        }
+        return getBaseConfig()?.videoViewId ?: videoViewId
+    }
 
     //当前的图片index
-    abstract fun getIndex(): Int
+    private fun getIndex(): Int {
+        return getBaseConfig()?.position ?: 0
+    }
 
     //获取缩略图
     abstract fun getThumbnailView(position: Int): ImageView?
 
     //数据源
-    abstract fun getData(): List<T>?
+    private fun getData(): List<T>? {
+        return getBaseConfig()?.data as List<T>?
+    }
 
     //默认的布局
-    abstract fun getItemLayout(): Int
+    private fun getItemLayout(): Int {
+        return getBaseConfig()?.itemLayout ?: if (!isAudio()) {
+            R.layout.item_larger_image
+        } else {
+            largerConfig?.videoLoad?.getVideoLayoutId() ?: -1
+        }
+    }
 
     //判断图片是否有缓存
     abstract fun getImageHasCache(
@@ -392,7 +423,26 @@ abstract class LargerAct<T> : AppCompatActivity(),
     )
 
     //加载图片 对外是可自定义处理
-    abstract fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?)
+    private fun itemBindViewHolder(isLoadFull: Boolean, itemView: View, position: Int, data: T?) {
+        getBaseConfig()?.customItemViewListener?.itemBindViewHolder(
+            this,
+            itemView,
+            position,
+            data
+        )
+        when (val view = itemView.findViewById<View>(getFullViewId())) {
+            is ImageView -> {
+                if (isLoadFull) {
+                    onItemLoadFull(largerConfig?.imageLoad, itemView, position, view, data)
+                } else {
+                    onItemLoadThumbnails(largerConfig?.imageLoad, itemView, position, view, data)
+                }
+            }
+            is VideoView -> {
+                LogUtils.i("itemBindViewHolder is VideoView")
+            }
+        }
+    }
 
 
     //加载大图
@@ -452,10 +502,27 @@ abstract class LargerAct<T> : AppCompatActivity(),
         )
     }
 
+
+    //获取base config
+    private fun getBaseConfig(): BaseLargerConfig? {
+        if (Larger.listConfig != null) {
+            return Larger.listConfig
+        } else if (Larger.singleConfig != null) {
+            return Larger.singleConfig
+        }
+        return null
+    }
+
+    //是否是视屏模式
+    private fun isAudio(): Boolean {
+        return Larger.type == FullType.Audio
+    }
+
+    //清理资源
     override fun onDestroy() {
         super.onDestroy()
         LogUtils.i("界面销毁 将状态改成 image")
-        Larger.type = FullType.Image
+        Larger.clear()
     }
 
 }
