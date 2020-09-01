@@ -31,12 +31,7 @@ interface OnAnimatorIntercept {
                     getTransition(duration, listener, afterTransitionListener, holder)
                 )
                 startTransition(fullView, thumbnailView)
-            }, if (Larger.type == FullType.Image) {
-                50
-            } else {
-                1000
-            }
-        )
+            }, 50)
     }
 
     fun start(
