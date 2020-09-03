@@ -8,7 +8,7 @@ android {
     buildToolsVersion "30.0.1"
 
     defaultConfig {
-        applicationId "com.starot.wechat"
+        applicationId "com.starot.wechat_debug"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -39,9 +39,9 @@ dependencies {
     //加载器
     implementation project(":LargerGlide")
     //进度
-    implementation project(":LargerProgress")
+//    implementation project(":LargerProgress")
     //加载视屏模式
-    implementation project(":LargerLoadVideo")
+//    implementation project(":LargerLoadVideo")
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 

@@ -11,7 +11,6 @@ import com.allens.largerglide.impl.ProgressListener
 import com.allens.largerglide.interceptor.ProgressInterceptor
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.starot.larger.impl.OnCheckImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
 import java.io.File
 
@@ -58,29 +57,32 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
             .into(imageView)
     }
 
-    override fun checkCache(url: String, listener: OnCheckImageCacheListener) {
-        Thread {
-            val file: File? = try {
-                Glide.with(context).downloadOnly()
-                    .load(url)
-                    .apply(
-                        RequestOptions().onlyRetrieveFromCache(true)
-                    ).submit()
-                    .get()
-            } catch (e: Exception) {
-                null
-            }
-            if (file == null) {
-                handler.post {
-                    listener.onNoCache()
-                }
-            } else {
-                handler.post {
-                    listener.onHasCache()
-                }
-            }
-        }.start()
+    override fun checkCache(url: String, cacheLiveData: MutableLiveData<Boolean>) {
     }
+
+//    override fun checkCache(url: String, listener: OnCheckImageCacheListener) {
+//        Thread {
+//            val file: File? = try {
+//                Glide.with(context).downloadOnly()
+//                    .load(url)
+//                    .apply(
+//                        RequestOptions().onlyRetrieveFromCache(true)
+//                    ).submit()
+//                    .get()
+//            } catch (e: Exception) {
+//                null
+//            }
+//            if (file == null) {
+//                handler.post {
+//                    listener.onNoCache()
+//                }
+//            } else {
+//                handler.post {
+//                    listener.onHasCache()
+//                }
+//            }
+//        }.start()
+//    }
 
     override fun clearCache() {
         Glide.get(context).clearMemory()

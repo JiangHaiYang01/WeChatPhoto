@@ -10,7 +10,7 @@ object AnimParentHelper {
 
     fun parentAnim(
         parent: ViewGroup.LayoutParams,
-        thumbnailView: ImageView,
+        thumbnailView: View,
         fullView: View
     ) {
         val location = AnimEnterHelper.getLocationOnScreen(thumbnailView)

@@ -4,11 +4,7 @@
     <application>
 
         <activity
-            android:name=".act.DefListLargerAct"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:theme="@style/custom_larger" />
-        <activity
-            android:name=".act.DefSingleLargerAct"
+            android:name=".act.ImageLargerAct"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/custom_larger" />
     </application>

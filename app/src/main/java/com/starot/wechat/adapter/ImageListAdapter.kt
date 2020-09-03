@@ -9,21 +9,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
-import com.allens.largerprogress.GlideProgressLoader
 import com.bumptech.glide.Glide
-import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger
-import com.starot.larger.bean.DefListData
-import com.starot.larger.impl.OnCustomItemViewListener
-import com.starot.larger.impl.OnReLoadFullImage
+import com.starot.larger.bean.ImageBean
 import com.starot.wechat.R
 import kotlin.collections.ArrayList
 
 
 class ImageListAdapter(
-    private val data: ArrayList<DefListData>,
+    private val data: ArrayList<ImageBean>,
     private val recyclerView: RecyclerView,
-    private val type: Int
 ) :
     RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
 
@@ -45,105 +40,24 @@ class ImageListAdapter(
     }
 
 
-    private var listener = object : OnCustomItemViewListener {
-        //自定义处理item
-        override fun itemBindViewHolder(
-            listener: OnReLoadFullImage,
-            itemView: View,
-            position: Int,
-            data: Any?
-        ) {
-            itemView.findViewById<TextView>(R.id.item_custom_tv)
-                .setOnClickListener {
-                    Log.i("allens_tag", "点击查看原图")
-                    listener.reLoadFullImage()
-                }
-        }
-
-        override fun itemImageHasCache(itemView: View, position: Int, hasCache: Boolean) {
-            itemView.findViewById<TextView>(R.id.item_custom_tv).visibility =
-                if (hasCache) {
-                    View.INVISIBLE
-                } else {
-                    View.VISIBLE
-                }
-        }
-
-        override fun itemImageFullLoad(itemView: View, position: Int) {
-            itemView.findViewById<TextView>(R.id.item_custom_tv).visibility = View.INVISIBLE
-        }
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context)
-            .load(data[position].thumbnails)
+            .load(data[position].thumbnailsUrl)
             .into(holder.image)
 
 
-        when (type) {
-            0 -> {
-                holder.itemView.setOnClickListener {
-                    Larger.create()
-                        .setDuration(300)
-                        .setImageLoad(GlideImageLoader(context))  //添加加载器
-                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
-                        .withListType()//这里展示的是列表类型的
-                        .setCurrentIndex(position)//下标
-                        .setRecyclerView(recyclerView)//recyclerview
-                        .setDefData(data) //添加默认的数据源
-                        .start(context) //启动默认的activity
-                }
-            }
-
-            1 -> {
-                holder.itemView.setOnClickListener {
-                    Larger.create()
-                        .setDuration(300)
-                        .setImageLoad(GlideImageLoader(context))  //添加加载器
-                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
-                        .withListType()//这里展示的是列表类型的
-                        .setCurrentIndex(position)//下标
-                        .setRecyclerView(recyclerView)//recyclerview
-                        .setDefData(data) //添加默认的数据源
-                        .start(context) //启动默认的activity
-                }
-            }
-            2 -> {
-                holder.itemView.setOnClickListener {
-                    Larger.create()
-                        .setDuration(300)
-                        .setAutomaticLoadFullImage(false)//不自动加载大图
-                        .setImageLoad(GlideImageLoader(context))  //添加加载器
-                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
-                        .withListType()//这里展示的是列表类型的
-                        .setCurrentIndex(position)//下标
-                        .setCustomImageListener(
-                            R.layout.item_custom_image,
-                            R.id.item_custom_image,
-                            listener
-                        )
-                        .setRecyclerView(recyclerView)//recyclerview
-                        .setDefData(data) //添加默认的数据源
-                        .start(context) //启动默认的activity
-                }
-            }
-            5->{
-                holder.itemView.setOnClickListener {
-                    Larger.create()
-                        .setDuration(300)
-                        .setAutomaticLoadFullImage(false)//不自动加载大图
-                        .setImageLoad(GlideImageLoader(context))  //添加加载器
-                        .setProgress(GlideProgressLoader(GlideProgressLoader.ProgressType.FULL)) //添加进度显示
-                        .setVideoLoad(LargerVideoLoad(context))
-                        .asAudio()
-                        .withListType()//这里展示的是列表类型的
-                        .setCurrentIndex(position)//下标
-                        .setRecyclerView(recyclerView)//recyclerview
-                        .setDefData(data) //添加默认的数据源
-                        .start(context) //启动默认的activity
-                }
-            }
+        holder.itemView.setOnClickListener {
+            Larger.create()
+                .withListType()//这里展示的是列表类型的
+                .setImageLoad(GlideImageLoader(context))
+                .setIndex(position)//下标
+                .setDuration(5000)
+                .setRecyclerView(recyclerView)//recyclerview
+                .setData(data) //添加默认的数据源
+                .start(context) //启动默认的activity
         }
+
     }
 
 
