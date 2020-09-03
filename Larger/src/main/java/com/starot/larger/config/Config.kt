@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.enums.LargerEnum
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLargerType
+import com.starot.larger.impl.OnVideoLoadListener
 
 
 data class LargerConfig(
@@ -35,5 +36,8 @@ data class LargerConfig(
     var fullViewId: Int? = null,
 
     //图片加载器
-    var imageLoad: OnImageLoadListener? = null
+    var imageLoad: OnImageLoadListener? = null,
+
+    //视屏加载器
+    var videoLoad: OnVideoLoadListener? = null
 )

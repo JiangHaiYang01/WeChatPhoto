@@ -10,44 +10,33 @@ import com.starot.larger.utils.LogUtils
 
 class VideoFg : BaseLargerFragment<LargerBean>() {
     override fun getLayoutId(): Int {
-        return Larger.largerConfig?.layoutId ?: R.layout.fg_image
+        return Larger.largerConfig?.layoutId ?: Larger.largerConfig?.videoLoad?.getVideoLayoutId()
+        ?: -1
     }
 
     override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
-        if (fullView is ImageView && thumbnailView is ImageView && type == AnimType.ENTER) {
-            LogUtils.i("将大图的 image scale type 设置成 和小图一样的 ${thumbnailView.scaleType}")
-            val data = getData() ?: return
-            LogUtils.i("加载缩略图")
-            //加载缩略图
-            val thumbnailsUrl = data.thumbnailsUrl
-            if (thumbnailsUrl.isNullOrEmpty()) {
-                return
-            }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
-            fullView.scaleType = thumbnailView.scaleType
-        }
+
+
     }
 
     override fun onTranslatorStart(type: AnimType, fullView: View, thumbnailView: View) {
-        if (fullView is ImageView && type == AnimType.ENTER) {
-            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-        } else if (fullView is ImageView && thumbnailView is ImageView && (type == AnimType.EXIT || type == AnimType.DRAG_EXIT)) {
-            fullView.scaleType = thumbnailView.scaleType
-        }
+
     }
 
     override fun getFullViewId(): Int {
-        return Larger.largerConfig?.fullViewId ?: R.id.image
+        return Larger.largerConfig?.fullViewId ?: Larger.largerConfig?.videoLoad?.getVideoViewId()
+        ?: -1
     }
 
-    override fun onLoad(data: LargerBean?, fullView: View?, position: Int) {
-        if (fullView is ImageView && data != null) {
-            val thumbnailsUrl = data.thumbnailsUrl
-            if (thumbnailsUrl.isNullOrEmpty()) {
-                return
-            }
-            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
+    override fun onDoBefore(data: LargerBean?, fullView: View?, position: Int, view: View) {
+
+    }
+
+    override fun onDoAfter(data: LargerBean?, fullView: View?, position: Int, view: View) {
+        if (data != null) {
+            val fullUrl = data.fullUrl
+            if (fullUrl != null)
+                Larger.largerConfig?.videoLoad?.load(fullUrl, view)
         }
     }
 

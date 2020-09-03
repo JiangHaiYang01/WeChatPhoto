@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
 import com.bumptech.glide.Glide
+import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
 import com.starot.wechat.R
@@ -50,6 +51,7 @@ class VideoListAdapter(
             Larger.create()
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))
+                .setVideoLoad(LargerVideoLoad(context))
                 .setIndex(position)//下标
                 .setDuration(300)
                 .setRecyclerView(recyclerView)//recyclerview

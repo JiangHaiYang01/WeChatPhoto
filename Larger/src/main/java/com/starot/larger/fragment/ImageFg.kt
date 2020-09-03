@@ -40,7 +40,7 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
         return Larger.largerConfig?.fullViewId ?: R.id.image
     }
 
-    override fun onLoad(data: LargerBean?, fullView: View?, position: Int) {
+    override fun onDoBefore(data: LargerBean?, fullView: View?, position: Int, view: View) {
         if (fullView is ImageView && data != null) {
             val thumbnailsUrl = data.thumbnailsUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
@@ -48,6 +48,17 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
             }
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
+        }
+    }
+
+    override fun onDoAfter(data: LargerBean?, fullView: View?, position: Int, view: View) {
+        if (fullView is ImageView && data != null) {
+            val thumbnailsUrl = data.fullUrl
+            if (thumbnailsUrl.isNullOrEmpty()) {
+                return
+            }
+            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
+            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, true, fullView)
         }
     }
 

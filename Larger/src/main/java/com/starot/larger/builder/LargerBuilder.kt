@@ -3,10 +3,12 @@ package com.starot.larger.builder
 import android.content.Context
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
+import com.starot.larger.Larger
 import com.starot.larger.act.CustomLargerAct
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLargerType
+import com.starot.larger.impl.OnVideoLoadListener
 
 class LargerBuilder(private val listConfig: LargerConfig?) {
 
@@ -54,5 +56,12 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         listConfig?.imageLoad = imageLoad
         return this
     }
+
+    //设置视屏加载器
+    fun setVideoLoad(videoLoad: OnVideoLoadListener): LargerBuilder {
+        listConfig?.videoLoad = videoLoad
+        return this
+    }
+
 
 }

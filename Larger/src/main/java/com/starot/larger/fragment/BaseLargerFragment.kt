@@ -58,7 +58,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         fullView = view.findViewById(getFullViewId())
         if (LargerStatus.isLoad) {
             LogUtils.i("判断已经执行过了不在触发")
-            onLoad(data, fullView, position)
+            onDoBefore(data, fullView, position, view)
             return
         }
         LargerStatus.isLoad = true
@@ -72,8 +72,11 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //==============================================================================================
 
 
-    //处理原本应该干的事情
-    abstract fun onLoad(data: T?, fullView: View?, position: Int)
+    //动画开始以前做啥事情
+    abstract fun onDoBefore(data: T?, fullView: View?, position: Int, view: View)
+
+    //动画结束以后做啥事情
+    abstract fun onDoAfter(data: T?, fullView: View?, position: Int, view: View)
 
     //数据
     fun getData(): T? {
@@ -188,9 +191,13 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //动画结束
     override fun onAnimatorEnd(type: AnimType) {
         when (type) {
-            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> {
+                LargerStatus.status.postValue(AnimStatus.ENTER_END)
+                onDoAfter(data, fullView, position, fragmentView)
+            }
             AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
         }
+
     }
 
     //动画取消
