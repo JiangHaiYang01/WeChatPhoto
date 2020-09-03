@@ -3,13 +3,18 @@ package com.starot.larger.anim.impl
 import android.content.Context
 import android.graphics.Color
 import android.view.View
-import com.starot.larger.Larger
+import com.starot.larger.anim.AnimBgHelper
+import com.starot.larger.anim.AnimDragHelper
+import com.starot.larger.anim.AnimExitHelper
+import com.starot.larger.enums.AnimType
 import com.starot.larger.utils.ColorTool
+import com.starot.larger.utils.LogUtils
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
 interface OnDragAnimListener {
+
     //开始移动
     fun startDrag(parent: View, view: View?, x: Float, y: Float) {
         if (view == null) {
@@ -30,11 +35,29 @@ interface OnDragAnimListener {
         if (y > 0) {
             //背景的颜色 变化
             val scale: Float = abs(y) / getWindowHeight(view.context)
+            AnimDragHelper.currentScale = 1 - scale
             parent.setBackgroundColor(
                 ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
             )
         }
     }
+
+    fun endDrag(view: View?) {
+        if (view == null) {
+            LogUtils.i("endDrag view is null")
+            return
+        }
+        if (abs(view.translationY) < view.height * 0.4f) {
+            onDragResume(AnimDragHelper.currentScale, view)
+        } else {
+            onDragExit(AnimDragHelper.currentScale, view)
+
+        }
+    }
+
+    fun onDragExit(scale: Float, fullView: View)
+
+    fun onDragResume(scale: Float, fullView: View)
 
 
     //手机屏幕 高度

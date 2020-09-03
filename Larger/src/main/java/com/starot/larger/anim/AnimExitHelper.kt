@@ -17,6 +17,7 @@ object AnimExitHelper : OnAnimatorIntercept {
     private var thumbnailView: View? = null
 
     override fun beforeTransition(
+        type: AnimType,
         itemView: View,
         fullView: View,
         thumbnailView: View?,
@@ -27,12 +28,13 @@ object AnimExitHelper : OnAnimatorIntercept {
             LogUtils.i("beforeTransition thumbnailView is null")
             return
         }
-        listener.onTranslatorBefore(AnimType.EXIT, fullView, thumbnailView)
+        listener.onTranslatorBefore(type, fullView, thumbnailView)
 
     }
 
 
     override fun startTransition(
+        type: AnimType,
         fullView: View,
         thumbnailView: View?,
         listener: OnAnimatorListener
@@ -41,7 +43,7 @@ object AnimExitHelper : OnAnimatorIntercept {
             LogUtils.i("startTransition thumbnailView is null")
             return
         }
-        listener.onTranslatorStart(AnimType.EXIT, fullView, thumbnailView)
+        listener.onTranslatorStart(type, fullView, thumbnailView)
         fullView.translationX = 0f
         fullView.translationY = 0f
         fullView.scaleX = 1f

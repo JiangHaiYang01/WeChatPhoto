@@ -32,7 +32,7 @@ class ImageFg : BaseLargerFragment<ImageBean>() {
     override fun onTranslatorStart(type: AnimType, fullView: View, thumbnailView: View) {
         if (fullView is ImageView && type == AnimType.ENTER) {
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-        } else if (fullView is ImageView && thumbnailView is ImageView && type == AnimType.EXIT) {
+        } else if (fullView is ImageView && thumbnailView is ImageView && (type == AnimType.EXIT || type == AnimType.DRAG_EXIT)) {
             fullView.scaleType = thumbnailView.scaleType
         }
     }

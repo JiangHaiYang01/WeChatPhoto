@@ -49,7 +49,7 @@ interface OnAnimatorIntercept {
         listener: OnAnimatorListener
     ) {
 
-        beforeTransition(fullView, fullView, thumbnailView, listener)
+        beforeTransition(type, fullView, fullView, thumbnailView, listener)
 
         fullView.postDelayed(
             {
@@ -57,7 +57,7 @@ interface OnAnimatorIntercept {
                     fullView.parent as ViewGroup,
                     getTransition(type, duration, listener)
                 )
-                startTransition(fullView, thumbnailView, listener)
+                startTransition(type, fullView, thumbnailView, listener)
             }, 50
         )
     }
@@ -92,6 +92,7 @@ interface OnAnimatorIntercept {
     }
 
     fun beforeTransition(
+        type: AnimType,
         itemView: View,
         fullView: View,
         thumbnailView: View?,
@@ -100,6 +101,7 @@ interface OnAnimatorIntercept {
 
 
     fun startTransition(
+        type: AnimType,
         fullView: View,
         thumbnailView: View?,
         listener: OnAnimatorListener

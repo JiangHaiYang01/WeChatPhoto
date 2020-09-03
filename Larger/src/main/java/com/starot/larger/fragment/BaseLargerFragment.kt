@@ -1,6 +1,5 @@
 package com.starot.larger.fragment
 
-import android.graphics.Matrix
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -114,7 +113,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
     //拖动
     override fun onDrag(x: Float, y: Float) {
-        LogUtils.i("拖动 X $x y $y")
+//        LogUtils.i("拖动 X $x y $y")
         if (isAnimIng()) {
             LogUtils.i("正在执行动画 点击无效")
             return
@@ -128,6 +127,45 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
     override fun onDragEnd() {
         LogUtils.i("onDragEnd")
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
+        endDrag(fullView)
+    }
+
+
+    //drag 以后推出
+    override fun onDragExit(scale: Float, fullView: View) {
+        LogUtils.i("drag 以后推出")
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
+        exitAnimStart(
+            AnimType.DRAG_EXIT,
+            scale,
+            fragmentView,
+            getDuration(),
+            fullView,
+            getThumbnailView(position)
+        )
+    }
+
+    //drag 以后恢复
+    override fun onDragResume(scale: Float, fullView: View) {
+        LogUtils.i("drag 以后恢复")
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
+        dragResumeAnimStart(
+            scale,
+            fragmentView,
+            getDuration(),
+            fullView,
+            getThumbnailView(position)
+        )
     }
 
     //双击手势
@@ -142,24 +180,24 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //动画开始
     override fun onAnimatorStart(type: AnimType) {
         when (type) {
-            AnimType.ENTER -> LargerStatus.status.postValue(AnimStatus.ENTER_START)
-            AnimType.EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_START)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.postValue(AnimStatus.ENTER_START)
+            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_START)
         }
     }
 
     //动画结束
     override fun onAnimatorEnd(type: AnimType) {
         when (type) {
-            AnimType.ENTER -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
-            AnimType.EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
+            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
         }
     }
 
     //动画取消
     override fun onAnimatorCancel(type: AnimType) {
         when (type) {
-            AnimType.ENTER -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
-            AnimType.EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
+            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
         }
     }
 
