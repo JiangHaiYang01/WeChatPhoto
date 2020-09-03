@@ -115,13 +115,19 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //拖动
     override fun onDrag(x: Float, y: Float) {
         LogUtils.i("拖动 X $x y $y")
-        fullView?.parent?.requestDisallowInterceptTouchEvent(true)
         if (isAnimIng()) {
             LogUtils.i("正在执行动画 点击无效")
             return
         }
         startDrag(fragmentView, fullView, x, y)
+    }
 
+    override fun onDragStart() {
+        LogUtils.i("onDragStart")
+    }
+
+    override fun onDragEnd() {
+        LogUtils.i("onDragEnd")
     }
 
     //双击手势
