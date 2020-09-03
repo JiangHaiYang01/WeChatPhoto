@@ -1,11 +1,12 @@
 package com.starot.larger.fragment
 
+import android.graphics.Matrix
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.starot.larger.Larger
 import com.starot.larger.anim.impl.AnimListener
-import com.starot.larger.config.LargerConfig
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
 import com.starot.larger.guest.GuestAgent
@@ -98,6 +99,29 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
             return
         }
         exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+    }
+
+    //缩放手势
+    override fun onScale(scaleFactor: Float, focusX: Float, focusY: Float) {
+        LogUtils.i("缩放手势 fullView scaleFactor $scaleFactor focusX $focusX focusY $focusY")
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
+//        fullView?.scaleY = scaleFactor
+//        fullView?.scaleX = scaleFactor
+    }
+
+    //拖动
+    override fun onDrag(x: Float, y: Float) {
+        LogUtils.i("拖动 X $x y $y")
+        fullView?.parent?.requestDisallowInterceptTouchEvent(true)
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
+        startDrag(fragmentView, fullView, x, y)
+
     }
 
     //双击手势

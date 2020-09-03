@@ -12,7 +12,7 @@ import com.starot.larger.enums.AnimType
 import com.starot.larger.utils.LogUtils
 
 //动画的逻辑
-interface AnimListener : OnAnimatorListener {
+interface AnimListener : OnAnimatorListener, OnDragAnimListener {
 
 
     fun enterAnimStart(
@@ -22,7 +22,7 @@ interface AnimListener : OnAnimatorListener {
         thumbnailView: View?
     ) {
         LogUtils.i("入场动画 start")
-        if(fullView == null){
+        if (fullView == null) {
             return
         }
         AnimEnterHelper.start(
@@ -43,7 +43,7 @@ interface AnimListener : OnAnimatorListener {
         thumbnailView: View?,
     ) {
         LogUtils.i("退场动画 start")
-        if(fullView == null){
+        if (fullView == null) {
             return
         }
         AnimExitHelper.start(

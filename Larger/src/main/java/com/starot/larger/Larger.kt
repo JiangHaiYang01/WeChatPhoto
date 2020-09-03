@@ -1,6 +1,6 @@
 package com.starot.larger
 
-import com.starot.larger.builder.Builder
+import com.starot.larger.builder.LargerBuilder
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.enums.LargerEnum
 
@@ -15,9 +15,9 @@ object Larger {
     class Builder() {
 
         //列表类型
-        fun withListType(): com.starot.larger.builder.Builder {
+        fun withListType(): LargerBuilder {
             largerConfig = LargerConfig()
-            return Builder(largerConfig?.apply {
+            return LargerBuilder(largerConfig?.apply {
                 largerType = LargerEnum.LISTS
             })
         }

@@ -8,8 +8,7 @@ import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLargerType
 
 
-
-data class LargerConfig (
+data class LargerConfig(
 
     //单个或者多个图片
     var images: List<View>? = null,

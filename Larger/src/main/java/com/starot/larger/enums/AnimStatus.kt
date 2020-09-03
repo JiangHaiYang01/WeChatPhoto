@@ -6,5 +6,5 @@ enum class AnimStatus {
     ENTER_START,
     ENTER_END,
     EXIT_START,
-    EXIT_END
+    EXIT_END,
 }

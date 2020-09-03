@@ -35,6 +35,12 @@ class LargerGestureDetector(imageView: View, private val listener: OnGuestListen
         distanceX: Float,//在 X 轴上划过的距离
         distanceY: Float//在 Y 轴上划过的距离
     ): Boolean {
+        if (e2 != null && e1 != null) {
+            listener.onDrag(
+                e2.rawX - e1.rawX,
+                e2.rawY - e1.rawY
+            )
+        }
         return true
     }
 
