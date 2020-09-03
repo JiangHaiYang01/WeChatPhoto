@@ -5,8 +5,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
 import com.starot.larger.guest.impl.OnGuestListener
-import com.starot.larger.utils.LogUtils
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 open class GuestAgent : View.OnTouchListener {
@@ -32,7 +32,7 @@ open class GuestAgent : View.OnTouchListener {
     @SuppressLint("ClickableViewAccessibility")
     fun setGuestView(view: View, listener: OnGuestListener) {
         this.listener = listener
-        largerGestureDetector = LargerGestureDetector(view, listener)
+        largerGestureDetector = LargerGestureDetector(view,this, listener)
         largerScanGestureDetector = LargerScanGestureDetector(view, listener)
         view.setOnTouchListener(this)
         initView(view)
@@ -69,11 +69,17 @@ open class GuestAgent : View.OnTouchListener {
                 val dy = y - mLastTouchY
 
                 if (!mIsDragging.get()) {
-                    // Use Pythagoras to see if drag length is larger than
-                    // touch slop
-                    mIsDragging.set(sqrt(dx * dx + (dy * dy).toDouble()) >= mTouchSlop)
-                    if (mIsDragging.get()) {
-                        listener.onDragStart()
+                    //角度满足
+                    if (abs(dx) > 30 && abs(dy) > 60) {
+                        // 一开始向上滑动无效的
+                        if (dy > 0) {
+                            // Use Pythagoras to see if drag length is larger than
+                            // touch slop
+                            mIsDragging.set(sqrt(dx * dx + (dy * dy).toDouble()) >= mTouchSlop)
+                            if (mIsDragging.get()) {
+                                listener.onDragStart()
+                            }
+                        }
                     }
                 }
 
@@ -111,6 +117,11 @@ open class GuestAgent : View.OnTouchListener {
         } catch (e: Exception) {
             ev.x
         }
+    }
+
+    //是否正在Drag
+     fun isDragging(): Boolean {
+        return mIsDragging.get()
     }
 
     private fun getActiveY(ev: MotionEvent): Float {

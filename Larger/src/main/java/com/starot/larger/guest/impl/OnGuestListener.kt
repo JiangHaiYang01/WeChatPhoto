@@ -12,8 +12,10 @@ interface OnGuestDragListener {
     //移动
     fun onDrag(x: Float, y: Float)
 
+    //开始移动
     fun onDragStart()
 
+    //结束移动
     fun onDragEnd()
 }
 

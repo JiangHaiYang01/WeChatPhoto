@@ -113,7 +113,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
     //拖动
     override fun onDrag(x: Float, y: Float) {
-//        LogUtils.i("拖动 X $x y $y")
+        LogUtils.i("拖动 X $x y $y")
         if (isAnimIng()) {
             LogUtils.i("正在执行动画 点击无效")
             return
