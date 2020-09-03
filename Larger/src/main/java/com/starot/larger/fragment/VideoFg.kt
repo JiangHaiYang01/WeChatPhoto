@@ -8,7 +8,7 @@ import com.starot.larger.bean.LargerBean
 import com.starot.larger.enums.AnimType
 import com.starot.larger.utils.LogUtils
 
-class ImageFg : BaseLargerFragment<LargerBean>() {
+class VideoFg : BaseLargerFragment<LargerBean>() {
     override fun getLayoutId(): Int {
         return Larger.largerConfig?.layoutId ?: R.layout.fg_image
     }

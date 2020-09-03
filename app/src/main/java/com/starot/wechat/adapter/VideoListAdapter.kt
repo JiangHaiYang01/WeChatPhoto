@@ -11,15 +11,15 @@ import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
 import com.starot.wechat.R
-import com.starot.wechat.bean.ImageBean
+import com.starot.wechat.bean.VideoBean
 import kotlin.collections.ArrayList
 
 
-class ImageListAdapter(
-    private val data: ArrayList<ImageBean>,
+class VideoListAdapter(
+    private val data: ArrayList<VideoBean>,
     private val recyclerView: RecyclerView,
 ) :
-    RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
+    RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
 
     private lateinit var context: Context
 

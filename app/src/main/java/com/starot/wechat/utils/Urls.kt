@@ -22,4 +22,23 @@ open class Urls {
 
         return list
     }
+
+    fun getAudioImage(): List<String> {
+        val list: MutableList<String> =
+            ArrayList()
+        list.add("https://gitee.com/_Allens/BlogImage/raw/master/image/20200901152310.png")
+        list.add("https://gitee.com/_Allens/BlogImage/raw/master/image/20200901152900.png")
+        list.add("https://gitee.com/_Allens/BlogImage/raw/master/image/20200901153024.png")
+        return list
+    }
+
+
+    fun getAudio(): List<String> {
+        val list: MutableList<String> =
+            ArrayList()
+        list.add("https://mp4.vjshi.com/2018-12-22/f4de0fcda0cf34707cf89d8d38825692.mp4")
+        list.add("https://mp4.vjshi.com/2020-08-28/f17ccf7a47b0d96d8a033397f6eac7f5.mp4")
+        list.add("https://mp4.vjshi.com/2020-03-17/6cf7d4f0ad7a573bf6d684515c4ee4e7.mp4")
+        return list
+    }
 }

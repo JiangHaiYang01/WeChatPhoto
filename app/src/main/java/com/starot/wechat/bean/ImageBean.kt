@@ -1,15 +1,13 @@
-package com.starot.larger.bean
+package com.starot.wechat.bean
 
+import com.starot.larger.bean.LargerBean
 import com.starot.larger.enums.LargerDataEnum
-import com.starot.larger.impl.OnLargerType
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class ImageBean(
-    val thumbnailsUrl: String,
-    val fullUrl: String
-) : OnLargerType {
+class ImageBean : LargerBean() {
     override fun getType(): LargerDataEnum {
         return LargerDataEnum.IMAGE
     }
+
 }

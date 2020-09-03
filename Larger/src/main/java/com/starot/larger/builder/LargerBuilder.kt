@@ -3,7 +3,7 @@ package com.starot.larger.builder
 import android.content.Context
 import android.content.Intent
 import androidx.recyclerview.widget.RecyclerView
-import com.starot.larger.act.ImageLargerAct
+import com.starot.larger.act.CustomLargerAct
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLargerType
@@ -32,7 +32,7 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
 
     //开始
     fun start(context: Context) {
-        val intent = Intent(context, ImageLargerAct::class.java)
+        val intent = Intent(context, CustomLargerAct::class.java)
         context.startActivity(intent)
     }
 
