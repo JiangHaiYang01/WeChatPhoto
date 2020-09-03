@@ -28,11 +28,27 @@ class VideoFg : BaseLargerFragment<LargerBean>() {
         ?: -1
     }
 
-    override fun onDoBefore(data: LargerBean?, fullView: View?, position: Int, view: View) {
-
+    override fun onDoBefore(
+        data: LargerBean?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View
+    ) {
+        if (data == null) {
+            return
+        }
+        if (thumbnailView is ImageView)
+            Larger.largerConfig?.videoLoad?.onAudioThumbnail(view, thumbnailView.drawable)
     }
 
-    override fun onDoAfter(data: LargerBean?, fullView: View?, position: Int, view: View) {
+    override fun onDoAfter(
+        data: LargerBean?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View
+    ) {
         if (data != null) {
             val fullUrl = data.fullUrl
             if (fullUrl != null)

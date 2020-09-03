@@ -40,7 +40,7 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
         return Larger.largerConfig?.fullViewId ?: R.id.image
     }
 
-    override fun onDoBefore(data: LargerBean?, fullView: View?, position: Int, view: View) {
+    override fun onDoBefore(data: LargerBean?, fullView: View?,thumbnailView: View?, position: Int, view: View) {
         if (fullView is ImageView && data != null) {
             val thumbnailsUrl = data.thumbnailsUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
@@ -51,7 +51,7 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
         }
     }
 
-    override fun onDoAfter(data: LargerBean?, fullView: View?, position: Int, view: View) {
+    override fun onDoAfter(data: LargerBean?, fullView: View?, thumbnailView: View?,position: Int, view: View) {
         if (fullView is ImageView && data != null) {
             val thumbnailsUrl = data.fullUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
