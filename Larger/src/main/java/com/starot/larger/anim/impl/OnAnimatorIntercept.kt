@@ -5,6 +5,7 @@ import android.transition.Transition
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import com.starot.larger.enums.AnimType
 
 
 interface OnAnimatorListener {
@@ -12,22 +13,26 @@ interface OnAnimatorListener {
 
     //变化开始之前
     fun onTranslatorBefore(
+        type: AnimType,
         fullView: View,
         thumbnailView: View
     )
 
     //开始变化
-    fun onTranslatorStart( fullView: View,
-                           thumbnailView: View)
+    fun onTranslatorStart(
+        type: AnimType,
+        fullView: View,
+        thumbnailView: View
+    )
 
     //动画开始
-    fun onAnimatorStart()
+    fun onAnimatorStart(type: AnimType)
 
     //动画结束
-    fun onAnimatorEnd()
+    fun onAnimatorEnd(type: AnimType)
 
     //动画取消
-    fun onAnimatorCancel()
+    fun onAnimatorCancel(type: AnimType)
 
 
 }
@@ -37,6 +42,7 @@ interface OnAnimatorIntercept {
 
 
     fun start(
+        type: AnimType,
         duration: Long,
         fullView: View,
         thumbnailView: View?,
@@ -49,22 +55,23 @@ interface OnAnimatorIntercept {
             {
                 TransitionManager.beginDelayedTransition(
                     fullView.parent as ViewGroup,
-                    getTransition(duration, listener)
+                    getTransition(type, duration, listener)
                 )
-                startTransition(fullView, thumbnailView,listener)
+                startTransition(fullView, thumbnailView, listener)
             }, 50
         )
     }
 
 
     fun getTransition(
+        type: AnimType,
         duration: Long,
         listener: OnAnimatorListener
     ): Transition {
         return transitionSet(duration).apply {
             addListener(object : Transition.TransitionListener {
                 override fun onTransitionEnd(transition: Transition?) {
-                    listener.onAnimatorEnd()
+                    listener.onAnimatorEnd(type)
                 }
 
                 override fun onTransitionResume(transition: Transition?) {
@@ -74,11 +81,11 @@ interface OnAnimatorIntercept {
                 }
 
                 override fun onTransitionCancel(transition: Transition?) {
-                    listener.onAnimatorCancel()
+                    listener.onAnimatorCancel(type)
                 }
 
                 override fun onTransitionStart(transition: Transition?) {
-                    listener.onAnimatorStart()
+                    listener.onAnimatorStart(type)
                 }
             })
         }

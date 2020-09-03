@@ -57,13 +57,11 @@ class LargerGestureDetector(imageView: View, private val listener: OnGuestListen
     }
 
     override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-        LogUtils.i("onSingleTapConfirmed")
         listener.onSingleTap()
         return true
     }
 
     override fun onDoubleTap(e: MotionEvent?): Boolean {
-        LogUtils.i("onDoubleTap")
         listener.onDoubleTap()
         return true
     }

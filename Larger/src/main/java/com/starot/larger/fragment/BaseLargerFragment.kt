@@ -2,19 +2,17 @@ package com.starot.larger.fragment
 
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
-import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.starot.larger.Larger
 import com.starot.larger.anim.impl.AnimListener
 import com.starot.larger.config.LargerConfig
+import com.starot.larger.enums.AnimStatus
+import com.starot.larger.enums.AnimType
 import com.starot.larger.guest.GuestAgent
 import com.starot.larger.guest.impl.OnGuestListener
 import com.starot.larger.impl.OnLargerListener
 import com.starot.larger.impl.OnLargerType
+import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 
 
@@ -29,7 +27,9 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     }
 
     private lateinit var fragmentView: View
-
+    private var data: T? = null
+    private var fullView: View? = null
+    private var position: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,32 +46,25 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         GuestAgent().setGuestView(fragmentView, this)
 
         //获取数据源
-        val data = arguments?.getParcelable<T>(KEY_FRAGMENT_PARAMS)
-        if (data == null) {
-            LogUtils.i(" fragment data is null")
+        data = arguments?.getParcelable<T>(KEY_FRAGMENT_PARAMS)
+        //下标
+        val pos = arguments?.getInt(KEY_FRAGMENT_PARAMS_POS)
+        if (pos == null) {
+            this.position = -1
+        } else {
+            this.position = pos
+        }
+        //加载的view
+        fullView = view.findViewById(getFullViewId())
+        if (LargerStatus.isLoad) {
+            LogUtils.i("判断已经执行过了不在触发")
+            onLoad(data, fullView, position)
             return
         }
-        val position = arguments?.getInt(KEY_FRAGMENT_PARAMS_POS)
-        if (position == null) {
-            LogUtils.i(" fragment position is null")
-            return
-        }
-
-        val mView = view.findViewById<View>(getFullViewId())
-
-        if (mView == null) {
-            LogUtils.i(" fragment view is null")
-            return
-        }
-        loadBeforeAnimStart(Larger.largerConfig, data, mView, view)
-
+        LargerStatus.isLoad = true
         //执行动画
-        enterAnimStart(view, getDuration(), mView, getThumbnailView(position))
+        enterAnimStart(view, getDuration(), fullView, getThumbnailView(position))
     }
-
-
-
-
 
 
     //==============================================================================================
@@ -79,14 +72,14 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //==============================================================================================
 
 
-    /***
-     * [config] 使用配置中的加载器
-     * [data] 数据
-     * [fullView] 通过FUllId 获取到的 view
-     * [view] 根视图
-     * @Des 开始动画 之前做一些事情
-     */
-    abstract fun loadBeforeAnimStart(config: LargerConfig?, data: T, fullView: View, view: View)
+    //处理原本应该干的事情
+    abstract fun onLoad(data: T?, fullView: View?, position: Int)
+
+    //数据
+    fun getData(): T? {
+        return data
+    }
+
 
     //实例化
     open fun newInstance(data: T, position: Int): BaseLargerFragment<T> {
@@ -99,25 +92,54 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
     //单点击手势
     override fun onSingleTap() {
+        LogUtils.i("单点击手势")
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
+        exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
     }
 
     //双击手势
     override fun onDoubleTap() {
+        LogUtils.i("双击手势")
+        if (isAnimIng()) {
+            LogUtils.i("正在执行动画 点击无效")
+            return
+        }
     }
 
     //动画开始
-    override fun onAnimatorStart() {
+    override fun onAnimatorStart(type: AnimType) {
+        when (type) {
+            AnimType.ENTER -> LargerStatus.status.postValue(AnimStatus.ENTER_START)
+            AnimType.EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_START)
+        }
     }
 
     //动画结束
-    override fun onAnimatorEnd() {
+    override fun onAnimatorEnd(type: AnimType) {
+        when (type) {
+            AnimType.ENTER -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
+            AnimType.EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
+        }
     }
 
     //动画取消
-    override fun onAnimatorCancel() {
+    override fun onAnimatorCancel(type: AnimType) {
+        when (type) {
+            AnimType.ENTER -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
+            AnimType.EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
+        }
     }
 
 
-
+    //是否正在动画
+    private fun isAnimIng(): Boolean {
+        if (LargerStatus.status.value == AnimStatus.ENTER_START || LargerStatus.status.value == AnimStatus.EXIT_START) {
+            return true
+        }
+        return false
+    }
 
 }

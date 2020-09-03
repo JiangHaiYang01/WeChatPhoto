@@ -1,20 +1,20 @@
 package com.starot.larger.anim
 
 import android.os.Build
-import android.transition.ChangeBounds
-import android.transition.ChangeImageTransform
-import android.transition.Transition
-import android.transition.TransitionSet
+import android.transition.*
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
+import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.anim.impl.OnAnimatorIntercept
 import com.starot.larger.anim.impl.OnAnimatorListener
 import com.starot.larger.enums.AnimType
 import com.starot.larger.utils.LogUtils
 
-object AnimEnterHelper : OnAnimatorIntercept {
+object AnimExitHelper : OnAnimatorIntercept {
 
+    private var thumbnailView: View? = null
 
     override fun beforeTransition(
         itemView: View,
@@ -22,16 +22,12 @@ object AnimEnterHelper : OnAnimatorIntercept {
         thumbnailView: View?,
         listener: OnAnimatorListener
     ) {
+        this.thumbnailView = thumbnailView
         if (thumbnailView == null) {
             LogUtils.i("beforeTransition thumbnailView is null")
             return
         }
-        listener.onTranslatorBefore(AnimType.ENTER,fullView, thumbnailView)
-        fullView.layoutParams = fullView.layoutParams.apply {
-            width = thumbnailView.width
-            height = thumbnailView.height
-            AnimParentHelper.parentAnim(this, thumbnailView, fullView)
-        }
+        listener.onTranslatorBefore(AnimType.EXIT, fullView, thumbnailView)
 
     }
 
@@ -45,22 +41,28 @@ object AnimEnterHelper : OnAnimatorIntercept {
             LogUtils.i("startTransition thumbnailView is null")
             return
         }
-        listener.onTranslatorStart(AnimType.ENTER,fullView, thumbnailView)
+        listener.onTranslatorStart(AnimType.EXIT, fullView, thumbnailView)
+        fullView.translationX = 0f
+        fullView.translationY = 0f
+        fullView.scaleX = 1f
+        fullView.scaleY = 1f
         fullView.layoutParams = fullView.layoutParams.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height = ViewGroup.LayoutParams.MATCH_PARENT
-            if (this is ViewGroup.MarginLayoutParams) {
-                marginStart = 0
-                topMargin = 0
-            }
+            width = thumbnailView.width
+            height = thumbnailView.height
+            AnimParentHelper.parentAnim(this, thumbnailView, fullView)
         }
     }
 
     override fun transitionSet(durationTime: Long): Transition {
         return TransitionSet().apply {
-            addTransition(ChangeBounds())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                addTransition(ChangeImageTransform())
+            if (thumbnailView == null) {
+                addTransition(AutoTransition())
+            } else {
+                addTransition(ChangeBounds())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    addTransition(ChangeImageTransform())
+                    addTransition(ChangeTransform())
+                }
             }
             duration = durationTime
             interpolator = DecelerateInterpolator()
