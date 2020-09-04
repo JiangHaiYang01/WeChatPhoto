@@ -140,6 +140,8 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         if (scale > getMaxScale() || scale < getMinScale()) {
             return
         }
+        fullView?.pivotX = focusX
+        fullView?.pivotY = focusY
         fullView?.scaleY = scale
         fullView?.scaleX = scale
 
