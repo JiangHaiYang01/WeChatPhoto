@@ -2,6 +2,7 @@ package com.starot.larger.guest.impl
 
 interface OnGuestListener : OnGuestTapListener, OnGuestDragListener, OnGuestScaleListener {
 
+    fun onTranslate(dx: Float, dy: Float)
 
 }
 
@@ -11,7 +12,7 @@ interface OnGuestScaleListener {
     fun onScaleStart()
 
     //缩放手势
-    fun onScale(scale: Float, focusX: Float, focusY: Float)
+    fun onScale(scale: Float, focusX: Float, focusY: Float):Boolean
 
     //缩放结束
     fun onScaleEnd(scale: Float)

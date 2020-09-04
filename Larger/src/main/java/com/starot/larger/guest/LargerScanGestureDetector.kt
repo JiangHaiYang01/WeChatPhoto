@@ -33,11 +33,13 @@ class LargerScanGestureDetector(
 
             //当前的伸缩值*之前的伸缩值 保持连续性
             val curScale = scaleFactor * lastScale
-            listener.onScale(
-                curScale,
-                detector.focusX, detector.focusY
-            )
-            lastScale = curScale
+            if (listener.onScale(
+                    curScale,
+                    detector.focusX, detector.focusY
+                )
+            ) {
+                lastScale = curScale
+            }
         }
         return true
     }
@@ -70,6 +72,10 @@ class LargerScanGestureDetector(
     //是否在缩放
     fun isScaleIng(): Boolean {
         return mIsScaleIng.get()
+    }
+
+    fun getScale(): Float {
+        return lastScale
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {

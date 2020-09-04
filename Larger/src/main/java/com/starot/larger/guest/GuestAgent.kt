@@ -16,6 +16,7 @@ open class GuestAgent : View.OnTouchListener {
     private lateinit var listener: OnGuestListener
 
     private var mIsDragging = AtomicBoolean(false)
+    private var mIsTouch = AtomicBoolean(false)
 
 
     private var mLastTouchX = 0f
@@ -62,6 +63,7 @@ open class GuestAgent : View.OnTouchListener {
                 mLastTouchX = getActiveX(event)
                 mLastTouchY = getActiveY(event)
                 mIsDragging.set(false)
+                mIsTouch.set(true)
             }
             MotionEvent.ACTION_MOVE -> {
                 val x = getActiveX(event)
@@ -69,33 +71,47 @@ open class GuestAgent : View.OnTouchListener {
                 val dx = x - mLastTouchX
                 val dy = y - mLastTouchY
 
-                if (!mIsDragging.get()) {
-                    //角度满足
-                    if (abs(dx) > 30 && abs(dy) > 60) {
-                        // 一开始向上滑动无效的
-                        if (dy > 0) {
-                            // Use Pythagoras to see if drag length is larger than
-                            // touch slop
 
-                            //不在缩放
-                            if (!isScaleIng()) {
-                                mIsDragging.set(sqrt(dx * dx + (dy * dy).toDouble()) >= mTouchSlop)
-                                if (mIsDragging.get()) {
-                                    listener.onDragStart()
+                when {
+                    getScale() > 1.0f -> {
+                        if (!isScaleIng() && mIsTouch.get()) {
+                            listener.onTranslate(dx, dy)
+                        }
+                    }
+                    else -> {
+                        if (!mIsDragging.get()) {
+                            //角度满足
+                            if (abs(dx) > 30 && abs(dy) > 60) {
+                                // 一开始向上滑动无效的
+                                if (dy > 0) {
+                                    // Use Pythagoras to see if drag length is larger than
+                                    // touch slop
+
+                                    //不在缩放
+                                    if (!isScaleIng() && mIsTouch.get()) {
+                                        mIsDragging.set(sqrt(dx * dx + (dy * dy).toDouble()) >= mTouchSlop)
+                                        if (mIsDragging.get()) {
+                                            listener.onDragStart()
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
 
+
             }
             MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
                 mActivePointerId = INVALID_POINTER_ID
+                mIsTouch.set(false)
                 if (mIsDragging.get()) {
                     listener.onDragEnd()
                 }
             }
+            //代表用户的一个手指离开了触摸屏，但是还有其他手指还在触摸屏上
             MotionEvent.ACTION_POINTER_UP -> {
+                mIsTouch.set(false)
                 val pointerIndex: Int = getPointerIndex(event.action)
                 val pointerId: Int = event.getPointerId(pointerIndex)
                 if (pointerId == mActivePointerId) {
@@ -132,6 +148,10 @@ open class GuestAgent : View.OnTouchListener {
     //是否在缩放
     fun isScaleIng(): Boolean {
         return largerScanGestureDetector.isScaleIng()
+    }
+
+    fun getScale(): Float {
+        return largerScanGestureDetector.getScale()
     }
 
     private fun getActiveY(ev: MotionEvent): Float {

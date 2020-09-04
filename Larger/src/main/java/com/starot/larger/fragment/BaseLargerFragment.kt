@@ -117,6 +117,13 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
     }
 
+    override fun onTranslate(x: Float, y: Float) {
+        LogUtils.i("onTranslate x $x y $y")
+        if (checkIsAnimIng()) return
+        fullView?.translationX = x
+        fullView?.translationY = y
+    }
+
     override fun onScaleStart() {
         LogUtils.i("onScaleStart")
         if (checkIsAnimIng()) return
@@ -133,23 +140,24 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     }
 
     //缩放手势
-    override fun onScale(scale: Float, focusX: Float, focusY: Float) {
-//        LogUtils.i("缩放手势 fullView scale $scale focusX $focusX focusY $focusY")
-        if (checkIsAnimIng()) return
+    override fun onScale(scale: Float, focusX: Float, focusY: Float): Boolean {
+        LogUtils.i("缩放手势 fullView scale $scale focusX $focusX focusY $focusY")
+        if (checkIsAnimIng()) return false
         //当前的伸缩值*之前的伸缩值 保持连续性
-        if (scale > getMaxScale() || scale < getMinScale()) {
-            return
-        }
+//        if (scale > getMaxScale() || scale < getMinScale()) {
+//            return false
+//        }
         fullView?.pivotX = focusX
         fullView?.pivotY = focusY
         fullView?.scaleY = scale
         fullView?.scaleX = scale
+        return true
 
     }
 
     //拖动
     override fun onDrag(x: Float, y: Float) {
-//        LogUtils.i("拖动 X $x y $y")
+        LogUtils.i("拖动 X $x y $y")
         if (checkIsAnimIng()) return
         startDrag(fragmentView, fullView, x, y)
     }
