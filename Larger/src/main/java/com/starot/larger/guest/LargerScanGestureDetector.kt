@@ -1,11 +1,15 @@
 package com.starot.larger.guest
 
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import android.view.WindowManager
+import androidx.core.content.ContextCompat.getSystemService
 import com.starot.larger.guest.impl.OnGuestListener
 import com.starot.larger.guest.impl.OnGuestTouchListener
+
 
 class LargerScanGestureDetector(view: View, val listener: OnGuestListener) :
     ScaleGestureDetector.OnScaleGestureListener,
@@ -29,10 +33,18 @@ class LargerScanGestureDetector(view: View, val listener: OnGuestListener) :
     }
 
     override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
+        if (detector == null) {
+            return false
+        }
+        listener.onScaleStart()
         return true
     }
 
     override fun onScaleEnd(detector: ScaleGestureDetector?) {
+        if (detector == null) {
+            return
+        }
+        listener.onScaleEnd()
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {

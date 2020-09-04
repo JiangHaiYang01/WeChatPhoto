@@ -51,6 +51,7 @@ class LargerGestureDetector(
     }
 
     override fun onLongPress(e: MotionEvent?) {
+        listener.onLongPress()
     }
 
     override fun onFling(

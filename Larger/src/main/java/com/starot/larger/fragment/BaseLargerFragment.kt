@@ -31,6 +31,12 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     private var fullView: View? = null
     private var position: Int = -1
 
+    private var lastScale = 1.0f
+
+    private var isDragging = false
+
+    private var isScaling = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -105,32 +111,55 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         return this
     }
 
+    override fun onLongPress() {
+        LogUtils.i("onLongPress")
+    }
+
     //单点击手势
     override fun onSingleTap() {
         LogUtils.i("单点击手势")
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
+        if (checkIsAnimIng()) return
+        exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+    }
+
+    override fun onScaleStart() {
+        LogUtils.i("onScaleStart")
+        if (checkIsAnimIng()) return
+        if (isDragging) {
+            LogUtils.i("当前已经开始 dragging")
             return
         }
-        exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+        isScaling = true
+    }
+
+    override fun onScaleEnd() {
+        LogUtils.i("onScaleEnd")
+        if (checkIsAnimIng()) return
+        isScaling = false
     }
 
     //缩放手势
     override fun onScale(scaleFactor: Float, focusX: Float, focusY: Float) {
         LogUtils.i("缩放手势 fullView scaleFactor $scaleFactor focusX $focusX focusY $focusY")
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
+        if (checkIsAnimIng()) return
+        if (!isScaling) {
+            LogUtils.i("当前状态不可以进行scale")
             return
         }
-//        fullView?.scaleY = scaleFactor
-//        fullView?.scaleX = scaleFactor
+        //当前的伸缩值*之前的伸缩值 保持连续性
+        val curScale = scaleFactor * lastScale
+        fullView?.scaleY = curScale
+        fullView?.scaleX = curScale
+        lastScale = curScale
+
     }
 
     //拖动
     override fun onDrag(x: Float, y: Float) {
         LogUtils.i("拖动 X $x y $y")
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
+        if (checkIsAnimIng()) return
+        if (!isDragging) {
+            LogUtils.i("当前状态不可以进行 拖动")
             return
         }
         startDrag(fragmentView, fullView, x, y)
@@ -138,14 +167,22 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
     override fun onDragStart() {
         LogUtils.i("onDragStart")
+        if (checkIsAnimIng()) return
+        if (isScaling) {
+            LogUtils.i("当前已经开始 Scaling")
+            return
+        }
+        isDragging = true
     }
 
     override fun onDragEnd() {
         LogUtils.i("onDragEnd")
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
+        if (checkIsAnimIng()) return
+        if (!isDragging) {
+            LogUtils.i("当前不在drag 模式 不处理事件")
             return
         }
+        isDragging = false
         endDrag(fullView)
     }
 
@@ -153,10 +190,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //drag 以后推出
     override fun onDragExit(scale: Float, fullView: View) {
         LogUtils.i("drag 以后推出")
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
-            return
-        }
+        if (checkIsAnimIng()) return
         exitAnimStart(
             AnimType.DRAG_EXIT,
             scale,
@@ -170,10 +204,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //drag 以后恢复
     override fun onDragResume(scale: Float, fullView: View) {
         LogUtils.i("drag 以后恢复")
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
-            return
-        }
+        if (checkIsAnimIng()) return
         dragResumeAnimStart(
             scale,
             fragmentView,
@@ -186,10 +217,15 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //双击手势
     override fun onDoubleTap() {
         LogUtils.i("双击手势")
+        checkIsAnimIng()
+    }
+
+    private fun checkIsAnimIng(): Boolean {
         if (isAnimIng()) {
             LogUtils.i("正在执行动画 点击无效")
-            return
+            return true
         }
+        return false
     }
 
     //动画开始
