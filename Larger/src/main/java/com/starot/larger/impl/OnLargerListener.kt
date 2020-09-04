@@ -23,6 +23,24 @@ interface OnLargerListener {
     }
 
 
+    //缩放最大
+    fun getMaxScale(): Float {
+        val maxScale = Larger.largerConfig?.maxScale ?: return 3.0f
+        if (maxScale < 2.0f) {
+            return 2.0f
+        }
+        return maxScale
+    }
+
+    //缩放最小
+    fun getMinScale(): Float {
+        val minScale = Larger.largerConfig?.minScale ?: return 0.2f
+        if (minScale > 0.7f) {
+            return 0.7f
+        }
+        return minScale
+    }
+
     //获取小图
     fun getThumbnailView(position: Int): View? {
         return when (Larger.largerConfig?.largerType) {

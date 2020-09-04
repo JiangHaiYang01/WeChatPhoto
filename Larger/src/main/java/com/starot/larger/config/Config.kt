@@ -23,6 +23,12 @@ data class LargerConfig(
     //持续时间
     var duration: Long = 300,
 
+    //最大缩放比例 （2 - f)
+    var maxScale: Float = 3.0f,
+
+    //最小缩放比例 (0.1f-0.7f)
+    var minScale: Float = 0.2f,
+
     //数据集合
     var data: List<OnLargerType>? = null,
 

@@ -11,10 +11,10 @@ interface OnGuestScaleListener {
     fun onScaleStart()
 
     //缩放手势
-    fun onScale(scaleFactor: Float, focusX: Float, focusY: Float)
+    fun onScale(scale: Float, focusX: Float, focusY: Float)
 
     //缩放结束
-    fun onScaleEnd()
+    fun onScaleEnd(scale: Float)
 }
 
 

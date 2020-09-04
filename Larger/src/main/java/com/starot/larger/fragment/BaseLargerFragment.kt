@@ -31,11 +31,6 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     private var fullView: View? = null
     private var position: Int = -1
 
-    private var lastScale = 1.0f
-
-    private var isDragging = false
-
-    private var isScaling = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -125,64 +120,46 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     override fun onScaleStart() {
         LogUtils.i("onScaleStart")
         if (checkIsAnimIng()) return
-        if (isDragging) {
-            LogUtils.i("当前已经开始 dragging")
-            return
-        }
-        isScaling = true
     }
 
-    override fun onScaleEnd() {
+    override fun onScaleEnd(scale: Float) {
         LogUtils.i("onScaleEnd")
         if (checkIsAnimIng()) return
-        isScaling = false
+
+        if (scale < 1.0f) {
+            LogUtils.i("现在是缩小的状态  动画改成1.0 比例")
+        }
+
     }
 
     //缩放手势
-    override fun onScale(scaleFactor: Float, focusX: Float, focusY: Float) {
-        LogUtils.i("缩放手势 fullView scaleFactor $scaleFactor focusX $focusX focusY $focusY")
+    override fun onScale(scale: Float, focusX: Float, focusY: Float) {
+//        LogUtils.i("缩放手势 fullView scale $scale focusX $focusX focusY $focusY")
         if (checkIsAnimIng()) return
-        if (!isScaling) {
-            LogUtils.i("当前状态不可以进行scale")
+        //当前的伸缩值*之前的伸缩值 保持连续性
+        if (scale > getMaxScale() || scale < getMinScale()) {
             return
         }
-        //当前的伸缩值*之前的伸缩值 保持连续性
-        val curScale = scaleFactor * lastScale
-        fullView?.scaleY = curScale
-        fullView?.scaleX = curScale
-        lastScale = curScale
+        fullView?.scaleY = scale
+        fullView?.scaleX = scale
 
     }
 
     //拖动
     override fun onDrag(x: Float, y: Float) {
-        LogUtils.i("拖动 X $x y $y")
+//        LogUtils.i("拖动 X $x y $y")
         if (checkIsAnimIng()) return
-        if (!isDragging) {
-            LogUtils.i("当前状态不可以进行 拖动")
-            return
-        }
         startDrag(fragmentView, fullView, x, y)
     }
 
     override fun onDragStart() {
         LogUtils.i("onDragStart")
         if (checkIsAnimIng()) return
-        if (isScaling) {
-            LogUtils.i("当前已经开始 Scaling")
-            return
-        }
-        isDragging = true
     }
 
     override fun onDragEnd() {
         LogUtils.i("onDragEnd")
         if (checkIsAnimIng()) return
-        if (!isDragging) {
-            LogUtils.i("当前不在drag 模式 不处理事件")
-            return
-        }
-        isDragging = false
         endDrag(fullView)
     }
 

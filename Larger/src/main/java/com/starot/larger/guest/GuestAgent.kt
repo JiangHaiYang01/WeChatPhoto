@@ -17,6 +17,7 @@ open class GuestAgent : View.OnTouchListener {
 
     private var mIsDragging = AtomicBoolean(false)
 
+
     private var mLastTouchX = 0f
     private var mActivePointerIndex = 0
     private var mLastTouchY = 0f
@@ -32,8 +33,8 @@ open class GuestAgent : View.OnTouchListener {
     @SuppressLint("ClickableViewAccessibility")
     fun setGuestView(view: View, listener: OnGuestListener) {
         this.listener = listener
-        largerGestureDetector = LargerGestureDetector(view,this, listener)
-        largerScanGestureDetector = LargerScanGestureDetector(view, listener)
+        largerGestureDetector = LargerGestureDetector(view, this, listener)
+        largerScanGestureDetector = LargerScanGestureDetector(view, this, listener)
         view.setOnTouchListener(this)
         initView(view)
     }
@@ -75,9 +76,13 @@ open class GuestAgent : View.OnTouchListener {
                         if (dy > 0) {
                             // Use Pythagoras to see if drag length is larger than
                             // touch slop
-                            mIsDragging.set(sqrt(dx * dx + (dy * dy).toDouble()) >= mTouchSlop)
-                            if (mIsDragging.get()) {
-                                listener.onDragStart()
+
+                            //不在缩放
+                            if (!isScaleIng()) {
+                                mIsDragging.set(sqrt(dx * dx + (dy * dy).toDouble()) >= mTouchSlop)
+                                if (mIsDragging.get()) {
+                                    listener.onDragStart()
+                                }
                             }
                         }
                     }
@@ -120,8 +125,13 @@ open class GuestAgent : View.OnTouchListener {
     }
 
     //是否正在Drag
-     fun isDragging(): Boolean {
+    fun isDragging(): Boolean {
         return mIsDragging.get()
+    }
+
+    //是否在缩放
+    fun isScaleIng(): Boolean {
+        return largerScanGestureDetector.isScaleIng()
     }
 
     private fun getActiveY(ev: MotionEvent): Float {
