@@ -35,34 +35,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
             fullView.scaleType = thumbnailView.scaleType
 
-            //这里使用的是改写 PhotoView 的
-            if (fullView is LargerImageView) {
-                this.fullView = fullView
-                fullView.setOnLargerDragListener(this)
-                //设置动画时长
-                fullView.setZoomTransitionDuration(getDuration().toInt())
 
-                //设置缩放范围
-                fullView.maximumScale = getMaxScale()
-                fullView.mediumScale = getMediumScale()
-
-                //单点击
-                fullView.setOnViewTapListener { _, _, _ ->
-                    //动画过程不给点击
-                    if (isAnimIng()) return@setOnViewTapListener
-                    exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
-                }
-
-                //动画全部结束以后才能够触发放大缩小的功能
-                LargerStatus.status.observe(this, {
-                    when (it) {
-                        AnimStatus.ENTER_END, AnimStatus.EXIT_END -> {
-                            fullView.setCustomZoomable(true)
-                        }
-                    }
-                })
-
-            }
         }
     }
 
@@ -92,6 +65,37 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             }
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
+
+
+            //这里使用的是改写 PhotoView 的
+            if (fullView is LargerImageView) {
+                this.fullView = fullView
+                fullView.setOnLargerDragListener(this)
+                //设置动画时长
+                fullView.setZoomTransitionDuration(getDuration().toInt())
+
+                //设置缩放范围
+                fullView.maximumScale = getMaxScale()
+                fullView.mediumScale = getMediumScale()
+
+                //单点击
+                fullView.setOnViewTapListener { _, _, _ ->
+                    //动画过程不给点击
+                    if (isAnimIng()) return@setOnViewTapListener
+                    exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+                }
+
+                //动画全部结束以后才能够触发放大缩小的功能
+                LargerStatus.status.observe(this, {
+                    when (it) {
+                        AnimStatus.ENTER_END, AnimStatus.EXIT_END -> {
+                            fullView.setCustomZoomable(true)
+                        }
+                    }
+                })
+
+            }
+
         }
     }
 

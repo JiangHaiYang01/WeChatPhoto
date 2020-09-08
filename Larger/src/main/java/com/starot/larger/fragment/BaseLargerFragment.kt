@@ -54,22 +54,14 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         //加载的view
         fullView = view.findViewById(getFullViewId())
 
-//        LargerStatus.isLoad.observe(this,{
-//            when(it){
-//                true->{
-//
-//                }
-//                false->{
-//
-//                }
-//            }
-//        })
         val isLoad = LargerStatus.isLoad.value
         if (isLoad != null && isLoad) {
             LogUtils.i("判断已经执行过了不在触发")
+            fragmentView.setBackgroundColor(getBackGroundColor())
             onDoBefore(data, fullView, getThumbnailView(position), position, view)
             return
         }
+        onDoBefore(data, fullView, getThumbnailView(position), position, view)
         LargerStatus.isLoad.postValue(true)
         //执行动画
         enterAnimStart(view, getDuration(), fullView, getThumbnailView(position))

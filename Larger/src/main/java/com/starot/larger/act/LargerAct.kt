@@ -37,15 +37,6 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         larger_viewpager.setCurrentItem(mCurrentIndex, false)
         //viewpager 滑动 index 更改
         PageChange().register(viewPager2 = larger_viewpager, listener = this)
-        //加载过了就改变颜色
-        LargerStatus.isLoad.observe(this, {
-            if (it) {
-                //设置背景颜色
-                larger_parent.postDelayed({
-                    larger_parent.setBackgroundColor(getBackGroundColor())
-                }, getDuration())
-            }
-        })
 
 
         //检查状态判断是否可以滑动viewpager
