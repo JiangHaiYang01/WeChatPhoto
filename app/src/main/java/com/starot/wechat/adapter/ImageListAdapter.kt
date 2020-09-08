@@ -55,7 +55,7 @@ class ImageListAdapter(
                 .setMaxScale(4f)
                 .setMediumScale(4f)
                 .setDuration(3000)
-                .setBackgroundColor(Color.YELLOW)
+                .setBackgroundColor(Color.BLACK)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .start(context) //启动默认的activity

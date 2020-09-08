@@ -10,7 +10,9 @@ open class LargerStatus {
             postValue(AnimStatus.NOME)
         }
         //是否已经加载过了
-        var isLoad = false
+        var isLoad = MutableLiveData<Boolean>().apply {
+            postValue(false)
+        }
     }
 
 

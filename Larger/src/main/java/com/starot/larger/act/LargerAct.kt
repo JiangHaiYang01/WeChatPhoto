@@ -6,13 +6,16 @@ import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.FgPageAdapter
 import com.starot.larger.enums.AnimStatus
+import com.starot.larger.impl.OnLargerConfigListener
 import com.starot.larger.impl.OnLargerType
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 import com.starot.larger.utils.PageChange
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
-abstract class LargerAct<T : OnLargerType> : AppCompatActivity(), PageChange.PageChangeListener,
+abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
+    PageChange.PageChangeListener,
+    OnLargerConfigListener,
     FgPageAdapter.OnCreateFragmentListener<T> {
 
     //当前的index
@@ -34,6 +37,16 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(), PageChange.Pag
         larger_viewpager.setCurrentItem(mCurrentIndex, false)
         //viewpager 滑动 index 更改
         PageChange().register(viewPager2 = larger_viewpager, listener = this)
+        //加载过了就改变颜色
+        LargerStatus.isLoad.observe(this, {
+            if (it) {
+                //设置背景颜色
+                larger_parent.postDelayed({
+                    larger_parent.setBackgroundColor(getBackGroundColor())
+                }, getDuration())
+            }
+        })
+
 
         //检查状态判断是否可以滑动viewpager
         LargerStatus.status.observe(this, {
@@ -78,7 +91,7 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(), PageChange.Pag
         super.onDestroy()
         //清理资源
         Larger.largerConfig = null
-        LargerStatus.isLoad = false
+        LargerStatus.isLoad.postValue(false)
         LargerStatus.status.postValue(AnimStatus.NOME)
     }
 
