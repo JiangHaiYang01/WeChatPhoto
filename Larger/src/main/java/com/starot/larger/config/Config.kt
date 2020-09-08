@@ -19,6 +19,7 @@ class DefConfig() {
         var def_medium_scale = 1.5f
         var def_min_scale = 0.2f
         var def_back_color = Color.BLACK
+        var def_automatic = true
     }
 }
 
@@ -36,6 +37,9 @@ data class LargerConfig(
 
     //持续时间
     var duration: Long = DefConfig.def_duration,
+
+    //是否自动加载大图
+    var automatic: Boolean = DefConfig.def_automatic,
 
     //最大缩放比例 （2 - f)
     var maxScale: Float = DefConfig.def_max_scale,
@@ -59,7 +63,7 @@ data class LargerConfig(
     var fullViewId: Int? = null,
 
     //默认的背景颜色
-    var backgroundColor:Int = DefConfig.def_back_color,
+    var backgroundColor: Int = DefConfig.def_back_color,
 
     //图片加载器
     var imageLoad: OnImageLoadListener? = null,

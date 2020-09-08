@@ -11,10 +11,15 @@ interface OnImageLoadListener : OnLoadProgressPrepareListener {
     fun load(url: String, isLoadFull: Boolean, imageView: ImageView)
 
     //判断是有有缓存
-    fun checkCache(url: String, cacheLiveData: MutableLiveData<Boolean>)
+    fun checkCache(url: String, listener: OnImageCacheListener)
 
     //清理缓存
     fun clearCache()
+}
+
+//是否有缓存
+interface OnImageCacheListener {
+    fun onCache(hasCache: Boolean)
 }
 
 interface OnLoadProgressPrepareListener {

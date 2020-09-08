@@ -12,7 +12,6 @@ import com.starot.larger.enums.LargerEnum
 interface OnLargerConfigListener {
 
 
-
     //动画时长
     fun getDuration(): Long {
         return Larger.largerConfig?.duration ?: DefConfig.def_duration
@@ -64,6 +63,11 @@ interface OnLargerConfigListener {
                 null
             }
         }
+    }
+
+    //是否自动加载
+    fun isAutomatic(): Boolean {
+        return Larger.largerConfig?.automatic ?: DefConfig.def_automatic
     }
 
     //获取singles 小图

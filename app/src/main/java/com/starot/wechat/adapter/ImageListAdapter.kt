@@ -54,6 +54,7 @@ class ImageListAdapter(
                 .setIndex(position)//下标
                 .setMaxScale(4f)
                 .setMediumScale(4f)
+                .setAutomatic(false)
                 .setDuration(3000)
                 .setBackgroundColor(Color.BLACK)
                 .setRecyclerView(recyclerView)//recyclerview

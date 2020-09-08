@@ -24,6 +24,12 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    //是否自动加载
+    fun setAutomatic(automatic: Boolean): LargerBuilder {
+        listConfig?.automatic = automatic
+        return this
+    }
+
 
     //设置数据源
     fun setData(data: List<OnLargerType>): LargerBuilder {

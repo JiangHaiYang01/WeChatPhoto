@@ -2,6 +2,7 @@ package com.starot.larger.fragment
 
 import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.MutableLiveData
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.bean.LargerBean
@@ -9,6 +10,7 @@ import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
 import com.starot.larger.image.LargerImageView
 import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_larger_base.*
@@ -106,13 +108,28 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         position: Int,
         view: View
     ) {
+
         if (fullView is ImageView && data != null) {
-            val thumbnailsUrl = data.fullUrl
-            if (thumbnailsUrl.isNullOrEmpty()) {
+            val fullUrl = data.fullUrl
+            if (fullUrl.isNullOrEmpty()) {
                 return
             }
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, true, fullView)
+            //不自动加载
+            if (!isAutomatic()) {
+                //判断是否有缓存
+                Larger.largerConfig?.imageLoad?.checkCache(fullUrl, object : OnImageCacheListener {
+                    override fun onCache(hasCache: Boolean) {
+                        LogUtils.i("url:$fullUrl 是否有缓存:$hasCache")
+                        if (hasCache) {
+                            Larger.largerConfig?.imageLoad?.load(fullUrl, true, fullView)
+                        }
+                    }
+                })
+                return
+            }
+            //不管有没有缓存自动加载
+            Larger.largerConfig?.imageLoad?.load(fullUrl, true, fullView)
         }
     }
 
