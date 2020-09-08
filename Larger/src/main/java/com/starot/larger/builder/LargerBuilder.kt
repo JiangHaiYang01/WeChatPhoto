@@ -51,6 +51,12 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    //设置背景颜色
+    fun setBackgroundColor(color: Int): LargerBuilder {
+        listConfig?.backgroundColor = color
+        return this
+    }
+
     //设置图片加载器
     fun setImageLoad(imageLoad: OnImageLoadListener): LargerBuilder {
         listConfig?.imageLoad = imageLoad

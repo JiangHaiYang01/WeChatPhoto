@@ -1,6 +1,7 @@
 package com.starot.wechat.adapter
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,6 +55,7 @@ class ImageListAdapter(
                 .setMaxScale(4f)
                 .setMediumScale(4f)
                 .setDuration(3000)
+                .setBackgroundColor(Color.YELLOW)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .start(context) //启动默认的activity

@@ -7,13 +7,14 @@ import com.starot.larger.anim.AnimBgHelper
 import com.starot.larger.anim.AnimDragHelper
 import com.starot.larger.anim.AnimExitHelper
 import com.starot.larger.enums.AnimType
+import com.starot.larger.impl.OnLargerConfigListener
 import com.starot.larger.utils.ColorTool
 import com.starot.larger.utils.LogUtils
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-interface OnDragAnimListener {
+interface OnDragAnimListener : OnLargerConfigListener {
 
     //开始移动
     fun startDrag(parent: View, view: View?, x: Float, y: Float) {
@@ -37,7 +38,7 @@ interface OnDragAnimListener {
             val scale: Float = abs(y) / getWindowHeight(view.context)
             AnimDragHelper.currentScale = 1 - scale
             parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, 1 - scale)
+                ColorTool.getColorWithAlpha(getBackGroundColor(), 1 - scale)
             )
         }
     }

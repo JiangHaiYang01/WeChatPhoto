@@ -1,5 +1,6 @@
 package com.starot.larger.config
 
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ class DefConfig() {
         var def_max_scale_last_size = 1.0f
         var def_medium_scale = 1.5f
         var def_min_scale = 0.2f
+        var def_back_color = Color.BLACK
     }
 }
 
@@ -55,6 +57,9 @@ data class LargerConfig(
 
     //大图的ImageViewID
     var fullViewId: Int? = null,
+
+    //默认的背景颜色
+    var backgroundColor:Int = DefConfig.def_back_color,
 
     //图片加载器
     var imageLoad: OnImageLoadListener? = null,

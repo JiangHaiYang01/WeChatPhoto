@@ -3,10 +3,10 @@ package com.starot.larger.anim
 import android.animation.ValueAnimator
 import android.graphics.Color
 import android.view.View
-import androidx.core.graphics.ColorUtils
+import com.starot.larger.impl.OnLargerConfigListener
 import com.starot.larger.utils.ColorTool
 
-object AnimBgHelper {
+object AnimBgHelper : OnLargerConfigListener {
     //修改进入的时候背景 渐变 黑色
     fun enter(
         parent: View,
@@ -18,7 +18,7 @@ object AnimBgHelper {
         valueAnimator.setFloatValues(originalScale, 1f)
         valueAnimator.addUpdateListener { animation ->
             parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
+                ColorTool.getColorWithAlpha(getBackGroundColor(), (animation.animatedValue as Float))
             )
         }
         valueAnimator.start()
@@ -46,7 +46,7 @@ object AnimBgHelper {
         valueAnimator.setFloatValues(start, end)
         valueAnimator.addUpdateListener { animation ->
             parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
+                ColorTool.getColorWithAlpha(getBackGroundColor(), (animation.animatedValue as Float))
             )
         }
         valueAnimator.start()
