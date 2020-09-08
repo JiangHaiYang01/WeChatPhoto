@@ -12,6 +12,7 @@ import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_larger_base.*
+import kotlin.math.abs
 
 class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
@@ -111,7 +112,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         endDrag(fullView)
     }
 
-    override fun onDragPrepare(): Boolean {
+    override fun onDragPrepare(dx: Float, dy: Float): Boolean {
         //动画过程中不能触发drag
         if (isAnimIng()) {
             return false
@@ -120,7 +121,14 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         if (fullView.scale != 1f) {
             return false
         }
-        return true
+
+        if (abs(dx) > 30 && abs(dy) > 60) {
+            // 一开始向上滑动无效的
+            if (dy > 0) {
+                return true
+            }
+        }
+        return false
     }
 
     override fun onDragStart() {

@@ -199,9 +199,10 @@ public class PhotoViewAttacher implements View.OnTouchListener,
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 if (onLargerDragListener != null) {
                     if (!isDragging.get()) {
-                        if (onLargerDragListener.onDragPrepare()) {
-                            float dx = e2.getRawX() - e1.getRawX();
-                            float dy = e2.getRawY() - e1.getRawY();
+                        float dx = e2.getRawX() - e1.getRawX();
+                        float dy = e2.getRawY() - e1.getRawY();
+                        if (onLargerDragListener.onDragPrepare(dx, dy)) {
+
                             isDragging.set(Math.sqrt(dx * dx + (dy * dy)) >= mTouchSlop);
                             if (isDragging.get()) {
                                 onLargerDragListener.onDragStart();

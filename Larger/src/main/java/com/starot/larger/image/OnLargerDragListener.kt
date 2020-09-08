@@ -7,7 +7,9 @@ interface OnLargerDragListener {
 
     fun onDragEnd(){}
 
-    fun onDragPrepare():Boolean{return true}
 
     fun onDragStart(){}
+    fun onDragPrepare(dx: Float, dy: Float): Boolean {
+        return true
+    }
 }
