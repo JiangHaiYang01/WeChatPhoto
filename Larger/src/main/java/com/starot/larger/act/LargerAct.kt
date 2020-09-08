@@ -2,7 +2,6 @@ package com.starot.larger.act
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.FgPageAdapter
@@ -40,10 +39,10 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(), PageChange.Pag
         LargerStatus.status.observe(this, {
             LogUtils.i("动画状态 $it")
             when (it) {
-                AnimStatus.ENTER_START, AnimStatus.EXIT_START -> {
+                AnimStatus.ENTER_START, AnimStatus.EXIT_START, AnimStatus.DRAG_START -> {
                     larger_viewpager.isUserInputEnabled = false //true:滑动，false：禁止滑动
                 }
-                AnimStatus.ENTER_END -> {
+                AnimStatus.ENTER_END, AnimStatus.DRAG_END -> {
                     larger_viewpager.isUserInputEnabled = true //true:滑动，false：禁止滑动
                 }
                 AnimStatus.EXIT_END -> {

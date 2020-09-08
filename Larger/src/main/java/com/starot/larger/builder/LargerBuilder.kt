@@ -63,5 +63,12 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    //自定义布局
+    fun setCustomListener(layoutId:Int,fullViewId:Int): LargerBuilder {
+        listConfig?.layoutId = layoutId
+        listConfig?.fullViewId = fullViewId
+        return this
+    }
+
 
 }

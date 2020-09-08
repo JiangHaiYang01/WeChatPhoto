@@ -5,10 +5,17 @@ import android.widget.ImageView
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.bean.LargerBean
+import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
+import com.starot.larger.image.LargerImageView
+import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 
-class ImageFg : BaseLargerFragment<LargerBean>() {
+class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
+
+    private lateinit var fullView: View
+
     override fun getLayoutId(): Int {
         return Larger.largerConfig?.layoutId ?: R.layout.fg_image
     }
@@ -25,6 +32,12 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
             }
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
             fullView.scaleType = thumbnailView.scaleType
+
+            //这里使用的是改写 PhotoView 的
+            if (fullView is LargerImageView) {
+                this.fullView = fullView
+                fullView.setOnLargerDragListener(this)
+            }
         }
     }
 
@@ -40,7 +53,13 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
         return Larger.largerConfig?.fullViewId ?: R.id.image
     }
 
-    override fun onDoBefore(data: LargerBean?, fullView: View?,thumbnailView: View?, position: Int, view: View) {
+    override fun onDoBefore(
+        data: LargerBean?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View
+    ) {
         if (fullView is ImageView && data != null) {
             val thumbnailsUrl = data.thumbnailsUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
@@ -51,7 +70,13 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
         }
     }
 
-    override fun onDoAfter(data: LargerBean?, fullView: View?, thumbnailView: View?,position: Int, view: View) {
+    override fun onDoAfter(
+        data: LargerBean?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View
+    ) {
         if (fullView is ImageView && data != null) {
             val thumbnailsUrl = data.fullUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
@@ -60,6 +85,27 @@ class ImageFg : BaseLargerFragment<LargerBean>() {
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, true, fullView)
         }
+    }
+
+    override fun onDrag(x: Float, y: Float) {
+        if (isAnimIng())return
+        LogUtils.i("onDrag")
+        startDrag(fragmentView, fullView, x = x, y = y)
+    }
+
+    override fun onDragEnd() {
+        LogUtils.i("onDragEnd")
+        LargerStatus.status.postValue(AnimStatus.DRAG_END)
+        endDrag(fullView)
+    }
+
+    override fun onDragPrepare(): Boolean {
+        return !isAnimIng()
+    }
+
+    override fun onDragStart() {
+        LogUtils.i("onDragStart")
+        LargerStatus.status.postValue(AnimStatus.DRAG_START)
     }
 
 

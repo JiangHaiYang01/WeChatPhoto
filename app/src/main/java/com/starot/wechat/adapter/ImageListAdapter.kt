@@ -39,7 +39,6 @@ class ImageListAdapter(
     }
 
 
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context)
             .load(data[position].thumbnailsUrl)
@@ -50,8 +49,9 @@ class ImageListAdapter(
             Larger.create()
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))
+//                .setCustomListener(R.layout.item_custom_image, R.id.item_custom_image)
                 .setIndex(position)//下标
-                .setDuration(300)
+                .setDuration(3000)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .start(context) //启动默认的activity

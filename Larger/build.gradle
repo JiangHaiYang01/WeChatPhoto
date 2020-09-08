@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    buildToolsVersion "30.0.2"
 
     defaultConfig {
         minSdkVersion 19
@@ -38,6 +38,9 @@ dependencies {
 
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+
+
+//    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
 
 
 

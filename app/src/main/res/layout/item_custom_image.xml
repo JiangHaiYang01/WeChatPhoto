@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
 
-    <com.starot.larger.view.image.PhotoView
+    <com.starot.larger.image.LargerImageView
         android:id="@+id/item_custom_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

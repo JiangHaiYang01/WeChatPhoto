@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment
 import com.starot.larger.anim.impl.AnimListener
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
-import com.starot.larger.guest.GuestAgent
-import com.starot.larger.guest.impl.OnGuestListener
 import com.starot.larger.impl.OnLargerListener
 import com.starot.larger.impl.OnLargerType
 import com.starot.larger.status.LargerStatus
@@ -17,7 +15,6 @@ import com.starot.larger.utils.LogUtils
 
 
 abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
-    OnGuestListener,
     AnimListener,
     OnLargerListener {
 
@@ -26,7 +23,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         const val KEY_FRAGMENT_PARAMS_POS = "com.allens.larger.fragment.config.pos"
     }
 
-    private lateinit var fragmentView: View
+    lateinit var fragmentView: View
     private var data: T? = null
     private var fullView: View? = null
     private var position: Int = -1
@@ -43,8 +40,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //手势监听
-        GuestAgent().setGuestView(fragmentView, this)
+
 
         //获取数据源
         data = arguments?.getParcelable<T>(KEY_FRAGMENT_PARAMS)
@@ -57,6 +53,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         }
         //加载的view
         fullView = view.findViewById(getFullViewId())
+
         if (LargerStatus.isLoad) {
             LogUtils.i("判断已经执行过了不在触发")
             onDoBefore(data, fullView, getThumbnailView(position), position, view)
@@ -106,78 +103,87 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         return this
     }
 
-    override fun onLongPress() {
-        LogUtils.i("onLongPress")
-    }
+    //    override fun onLongPress() {
+//        LogUtils.i("onLongPress")
+//    }
+//
+//
+//    //双击手势
+//    override fun onDoubleTap() {
+//        LogUtils.i("双击手势")
+//        checkIsAnimIng()
+//    }
+//
+//    //单点击手势
+//    override fun onSingleTap() {
+//        LogUtils.i("单点击手势")
+//        if (checkIsAnimIng()) return
+//        exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+//    }
 
-    //单点击手势
-    override fun onSingleTap() {
-        LogUtils.i("单点击手势")
-        if (checkIsAnimIng()) return
-        exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
-    }
-
-    override fun onTranslate(x: Float, y: Float) {
-        LogUtils.i("onTranslate x $x y $y")
-        if (checkIsAnimIng()) return
-        fullView?.translationX = x
-        fullView?.translationY = y
-    }
-
-    override fun onScaleStart() {
-        LogUtils.i("onScaleStart")
-        if (checkIsAnimIng()) return
-    }
-
-    override fun onScaleEnd(scale: Float) {
-        LogUtils.i("onScaleEnd")
-        if (checkIsAnimIng()) return
-
-        if (scale < 1.0f) {
-            LogUtils.i("现在是缩小的状态  动画改成1.0 比例")
-        }
-
-    }
-
-    //缩放手势
-    override fun onScale(scale: Float, focusX: Float, focusY: Float): Boolean {
-        LogUtils.i("缩放手势 fullView scale $scale focusX $focusX focusY $focusY")
-        if (checkIsAnimIng()) return false
-        //当前的伸缩值*之前的伸缩值 保持连续性
-//        if (scale > getMaxScale() || scale < getMinScale()) {
-//            return false
+    //
+//    override fun onTranslate(x: Float, y: Float) {
+//        LogUtils.i("onTranslate x $x y $y")
+//        if (checkIsAnimIng()) return
+//        fullView?.translationX = x
+//        fullView?.translationY = y
+//    }
+//
+//    override fun onScaleStart() {
+//        LogUtils.i("onScaleStart")
+//        if (checkIsAnimIng()) return
+//    }
+//
+//    override fun onScaleEnd(scale: Float) {
+//        LogUtils.i("onScaleEnd")
+//        if (checkIsAnimIng()) return
+//
+//        if (scale < 1.0f) {
+//            LogUtils.i("现在是缩小的状态  动画改成1.0 比例")
 //        }
-        fullView?.pivotX = focusX
-        fullView?.pivotY = focusY
-        fullView?.scaleY = scale
-        fullView?.scaleX = scale
-        return true
-
-    }
-
-    //拖动
-    override fun onDrag(x: Float, y: Float) {
-        LogUtils.i("拖动 X $x y $y")
-        if (checkIsAnimIng()) return
-        startDrag(fragmentView, fullView, x, y)
-    }
-
-    override fun onDragStart() {
-        LogUtils.i("onDragStart")
-        if (checkIsAnimIng()) return
-    }
-
-    override fun onDragEnd() {
-        LogUtils.i("onDragEnd")
-        if (checkIsAnimIng()) return
-        endDrag(fullView)
-    }
+//
+//    }
+//
+//    //缩放手势
+//    override fun onScale(scale: Float, focusX: Float, focusY: Float): Boolean {
+//        LogUtils.i("缩放手势 fullView scale $scale focusX $focusX focusY $focusY")
+//        if (checkIsAnimIng()) return false
+//        //当前的伸缩值*之前的伸缩值 保持连续性
+////        if (scale > getMaxScale() || scale < getMinScale()) {
+////            return false
+////        }
+//        fullView?.pivotX = focusX
+//        fullView?.pivotY = focusY
+//        fullView?.scaleY = scale
+//        fullView?.scaleX = scale
+//        return true
+//
+//    }
+//
+//    //拖动
+//    override fun onDrag(x: Float, y: Float): Boolean {
+//        LogUtils.i("拖动 X $x y $y")
+//        if (checkIsAnimIng()) return false
+//        startDrag(fragmentView, fullView, x, y)
+//        return true
+//    }
+//
+//    override fun onDragStart() {
+//        LogUtils.i("onDragStart")
+//        if (checkIsAnimIng()) return
+//    }
+//
+//    override fun onDragEnd() {
+//        LogUtils.i("onDragEnd")
+//        if (checkIsAnimIng()) return
+//        endDrag(fullView)
+//    }
 
 
     //drag 以后推出
     override fun onDragExit(scale: Float, fullView: View) {
         LogUtils.i("drag 以后推出")
-        if (checkIsAnimIng()) return
+        if (isAnimIng()) return
         exitAnimStart(
             AnimType.DRAG_EXIT,
             scale,
@@ -191,7 +197,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //drag 以后恢复
     override fun onDragResume(scale: Float, fullView: View) {
         LogUtils.i("drag 以后恢复")
-        if (checkIsAnimIng()) return
+        if (isAnimIng()) return
         dragResumeAnimStart(
             scale,
             fragmentView,
@@ -201,19 +207,6 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         )
     }
 
-    //双击手势
-    override fun onDoubleTap() {
-        LogUtils.i("双击手势")
-        checkIsAnimIng()
-    }
-
-    private fun checkIsAnimIng(): Boolean {
-        if (isAnimIng()) {
-            LogUtils.i("正在执行动画 点击无效")
-            return true
-        }
-        return false
-    }
 
     //动画开始
     override fun onAnimatorStart(type: AnimType) {
@@ -245,8 +238,12 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
 
 
     //是否正在动画
-    private fun isAnimIng(): Boolean {
-        if (LargerStatus.status.value == AnimStatus.ENTER_START || LargerStatus.status.value == AnimStatus.EXIT_START) {
+    fun isAnimIng(): Boolean {
+        if (
+            LargerStatus.status.value == AnimStatus.ENTER_START
+            || LargerStatus.status.value == AnimStatus.EXIT_START
+//            || LargerStatus.status.value == AnimStatus.DRAG_START
+        ) {
             return true
         }
         return false
