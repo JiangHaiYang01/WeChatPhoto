@@ -11,10 +11,11 @@ import com.starot.larger.image.LargerImageView
 import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
+import kotlinx.android.synthetic.main.activity_larger_base.*
 
 class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
-    private lateinit var fullView: View
+    private lateinit var fullView: LargerImageView
 
     override fun getLayoutId(): Int {
         return Larger.largerConfig?.layoutId ?: R.layout.fg_image
@@ -37,6 +38,17 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (fullView is LargerImageView) {
                 this.fullView = fullView
                 fullView.setOnLargerDragListener(this)
+
+
+                //动画全部结束以后才能够触发放大缩小的功能
+                LargerStatus.status.observe(this, {
+                    when (it) {
+                        AnimStatus.ENTER_END, AnimStatus.EXIT_END -> {
+                            fullView.setCustomZoomable(true)
+                        }
+                    }
+                })
+
             }
         }
     }
@@ -88,7 +100,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
     override fun onDrag(x: Float, y: Float) {
-        if (isAnimIng())return
+        if (isAnimIng()) return
         LogUtils.i("onDrag")
         startDrag(fragmentView, fullView, x = x, y = y)
     }
@@ -100,7 +112,15 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
     override fun onDragPrepare(): Boolean {
-        return !isAnimIng()
+        //动画过程中不能触发drag
+        if (isAnimIng()) {
+            return false
+        }
+        //图片处于缩放状态
+        if (fullView.scale != 1f) {
+            return false
+        }
+        return true
     }
 
     override fun onDragStart() {

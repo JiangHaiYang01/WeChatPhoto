@@ -230,6 +230,11 @@ public class LargerImageView extends AppCompatImageView {
         attacher.setOnLargerDragListener(listener);
     }
 
+    //控制缩放
+    public void setCustomZoomable(boolean zoomable) {
+        attacher.setCustomZoomable(zoomable);
+    }
+
     public void setScale(float scale) {
         attacher.setScale(scale);
     }

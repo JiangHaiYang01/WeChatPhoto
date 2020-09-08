@@ -104,6 +104,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     private AtomicBoolean isDragging = new AtomicBoolean(false);
     private int mTouchSlop;
 
+
+    private boolean customZoomEnable = true;
+
     private OnGestureListener onGestureListener = new OnGestureListener() {
         @Override
         public void onDrag(float dx, float dy) {
@@ -153,6 +156,10 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         @Override
         public void onScale(float scaleFactor, float focusX, float focusY) {
+            if (!customZoomEnable) {
+                return;
+            }
+
             if (getScale() < mMaxScale || scaleFactor < 1f) {
                 if (mScaleChangeListener != null) {
                     mScaleChangeListener.onScaleChange(scaleFactor, focusX, focusY);
@@ -198,6 +205,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                             isDragging.set(Math.sqrt(dx * dx + (dy * dy)) >= mTouchSlop);
                             if (isDragging.get()) {
                                 onLargerDragListener.onDragStart();
+                                setCustomZoomable(false);
                             }
                         }
                     } else {
@@ -299,6 +307,12 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     @Deprecated
     public boolean isZoomEnabled() {
         return mZoomEnabled;
+    }
+
+    //设置放大缩小 是否可用
+    public void setCustomZoomable(boolean zoomable) {
+        customZoomEnable = zoomable;
+        update();
     }
 
     public RectF getDisplayRect() {
