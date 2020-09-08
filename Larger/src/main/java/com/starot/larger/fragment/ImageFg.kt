@@ -39,7 +39,19 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (fullView is LargerImageView) {
                 this.fullView = fullView
                 fullView.setOnLargerDragListener(this)
+                //设置动画时长
+                fullView.setZoomTransitionDuration(getDuration().toInt())
 
+                //设置缩放范围
+                fullView.maximumScale = getMaxScale()
+                fullView.mediumScale = getMediumScale()
+
+                //单点击
+                fullView.setOnViewTapListener { _, _, _ ->
+                    //动画过程不给点击
+                    if (isAnimIng()) return@setOnViewTapListener
+                    exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+                }
 
                 //动画全部结束以后才能够触发放大缩小的功能
                 LargerStatus.status.observe(this, {

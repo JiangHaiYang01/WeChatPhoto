@@ -49,8 +49,10 @@ class ImageListAdapter(
             Larger.create()
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))
-//                .setCustomListener(R.layout.item_custom_image, R.id.item_custom_image)
+                .setCustomListener(R.layout.item_custom_image, R.id.item_custom_image)
                 .setIndex(position)//下标
+                .setMaxScale(4f)
+                .setMediumScale(4f)
                 .setDuration(3000)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源

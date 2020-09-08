@@ -26,7 +26,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     lateinit var fragmentView: View
     private var data: T? = null
     private var fullView: View? = null
-    private var position: Int = -1
+    var position: Int = -1
 
 
     override fun onCreateView(

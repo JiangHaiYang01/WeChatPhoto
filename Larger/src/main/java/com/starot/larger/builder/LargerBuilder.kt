@@ -64,9 +64,21 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
     }
 
     //自定义布局
-    fun setCustomListener(layoutId:Int,fullViewId:Int): LargerBuilder {
+    fun setCustomListener(layoutId: Int, fullViewId: Int): LargerBuilder {
         listConfig?.layoutId = layoutId
         listConfig?.fullViewId = fullViewId
+        return this
+    }
+
+    //最大的比例
+    fun setMaxScale(maxScale: Float): LargerBuilder {
+        listConfig?.maxScale = maxScale
+        return this
+    }
+
+    //设置双击中间的比例 可以和 max 相同 但是不能大于max
+    fun setMediumScale(mediumScale: Float): LargerBuilder {
+        listConfig?.mediumScale = mediumScale
         return this
     }
 

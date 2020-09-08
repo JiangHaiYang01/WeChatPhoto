@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.starot.larger.Larger
+import com.starot.larger.config.DefConfig
 import com.starot.larger.enums.LargerEnum
 
 //处理返回一些 框架需要的数据
@@ -19,22 +20,31 @@ interface OnLargerListener {
 
     //动画时长
     fun getDuration(): Long {
-        return Larger.largerConfig?.duration ?: 300
+        return Larger.largerConfig?.duration ?: DefConfig.def_duration
     }
 
 
     //缩放最大
     fun getMaxScale(): Float {
-        val maxScale = Larger.largerConfig?.maxScale ?: return 3.0f
-        if (maxScale < 2.0f) {
-            return 2.0f
+        val maxScale = Larger.largerConfig?.maxScale ?: return DefConfig.def_max_scale
+        if (maxScale < DefConfig.def_max_scale_last_size) {
+            return DefConfig.def_max_scale_last_size
         }
         return maxScale
     }
 
+    //双击 中间的大小
+    fun getMediumScale(): Float {
+        val mediumScale = Larger.largerConfig?.mediumScale ?: return DefConfig.def_medium_scale
+        if (getMaxScale() < mediumScale) {
+            throw Throwable("mediumScale must <= maxScale")
+        }
+        return mediumScale
+    }
+
     //缩放最小
     fun getMinScale(): Float {
-        val minScale = Larger.largerConfig?.minScale ?: return 0.2f
+        val minScale = Larger.largerConfig?.minScale ?: return DefConfig.def_min_scale
         if (minScale > 0.7f) {
             return 0.7f
         }

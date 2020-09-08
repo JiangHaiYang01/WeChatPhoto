@@ -9,6 +9,18 @@ import com.starot.larger.impl.OnLargerType
 import com.starot.larger.impl.OnVideoLoadListener
 
 
+class DefConfig() {
+
+    companion object {
+        var def_duration = 300L
+        var def_max_scale = 3.0f
+        var def_max_scale_last_size = 1.0f
+        var def_medium_scale = 1.5f
+        var def_min_scale = 0.2f
+    }
+}
+
+
 data class LargerConfig(
 
     //单个或者多个图片
@@ -21,13 +33,16 @@ data class LargerConfig(
     var largerType: LargerEnum = LargerEnum.LISTS,
 
     //持续时间
-    var duration: Long = 300,
+    var duration: Long = DefConfig.def_duration,
 
     //最大缩放比例 （2 - f)
-    var maxScale: Float = 3.0f,
+    var maxScale: Float = DefConfig.def_max_scale,
+
+    //双击中间的大小 需要小于等于 max
+    var mediumScale: Float = DefConfig.def_medium_scale,
 
     //最小缩放比例 (0.1f-0.7f)
-    var minScale: Float = 0.2f,
+    var minScale: Float = DefConfig.def_min_scale,
 
     //数据集合
     var data: List<OnLargerType>? = null,
