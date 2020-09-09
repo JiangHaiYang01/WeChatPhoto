@@ -20,6 +20,14 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
     private lateinit var fullView: LargerImageView
 
+
+    //使用liveData 记录 加载进度变化
+    private var progressStatusChangeLiveData: MutableLiveData<Int> = MutableLiveData()
+
+    //使用liveData 记录 加载变化
+    private var progressLoadChangeLiveData: MutableLiveData<Boolean> = MutableLiveData()
+
+
     override fun getLayoutId(): Int {
         return Larger.largerConfig?.layoutId ?: R.layout.fg_image
     }
@@ -70,6 +78,9 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             Larger.largerConfig?.customImageLoadListener?.onCustomImageLoad(
                 Larger.largerConfig?.imageLoad, fragmentView, position, data
             )
+
+            //注册监听liveData
+            registerLiveData()
 
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
@@ -173,6 +184,25 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     override fun onDragStart() {
         LogUtils.i("onDragStart")
         LargerStatus.status.postValue(AnimStatus.DRAG_START)
+    }
+
+
+    private fun registerLiveData() {
+        //将监听变化的liveData 通过接口保存
+        Larger.largerConfig?.imageLoad?.onPrepareLoadProgress(progressStatusChangeLiveData)
+        //将监听变化的liveData
+        Larger.largerConfig?.imageLoad?.onPrepareProgressView(progressLoadChangeLiveData)
+
+        //对于加载进度条的逻辑判断
+        progressStatusChangeLiveData.observe(this, {
+            Larger.largerConfig?.progressLoad?.onLoadProgress(it)
+        })
+
+        //监听 加载大图进度变化
+        progressLoadChangeLiveData.observe(this, {
+            //大图加载进度
+            Larger.largerConfig?.progressLoad?.onProgressChange(fullView.context, it)
+        })
     }
 
 

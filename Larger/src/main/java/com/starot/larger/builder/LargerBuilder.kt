@@ -6,10 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.act.CustomLargerAct
 import com.starot.larger.config.LargerConfig
-import com.starot.larger.impl.OnCustomImageLoadListener
-import com.starot.larger.impl.OnImageLoadListener
-import com.starot.larger.impl.OnLargerType
-import com.starot.larger.impl.OnVideoLoadListener
+import com.starot.larger.impl.*
 
 class LargerBuilder(private val listConfig: LargerConfig?) {
 
@@ -67,6 +64,12 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
     //设置图片加载器
     fun setImageLoad(imageLoad: OnImageLoadListener): LargerBuilder {
         listConfig?.imageLoad = imageLoad
+        return this
+    }
+
+    //设置加载的进度
+    fun setProgress(progressLoad: OnLoadProgressListener): LargerBuilder{
+        listConfig?.progressLoad = progressLoad
         return this
     }
 

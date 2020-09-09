@@ -5,10 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.enums.LargerEnum
-import com.starot.larger.impl.OnCustomImageLoadListener
-import com.starot.larger.impl.OnImageLoadListener
-import com.starot.larger.impl.OnLargerType
-import com.starot.larger.impl.OnVideoLoadListener
+import com.starot.larger.impl.*
 
 
 class DefConfig() {
@@ -71,6 +68,9 @@ data class LargerConfig(
 
     //图片加载器
     var imageLoad: OnImageLoadListener? = null,
+
+    //加载的进度
+    var progressLoad: OnLoadProgressListener? = null,
 
     //视屏加载器
     var videoLoad: OnVideoLoadListener? = null

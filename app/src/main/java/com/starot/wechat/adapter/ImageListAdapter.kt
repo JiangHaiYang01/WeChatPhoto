@@ -9,13 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
+import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
 import com.starot.larger.impl.OnCustomImageLoadListener
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
-import com.starot.larger.utils.LogUtils
 import com.starot.wechat.R
 import com.starot.wechat.bean.ImageBean
 import kotlin.collections.ArrayList
@@ -44,6 +44,37 @@ class ImageListAdapter(
         return data.size
     }
 
+    private val listener = object : OnCustomImageLoadListener {
+        override fun onCustomImageLoad(
+            listener: OnImageLoadListener?,
+            view: View,
+            position: Int,
+            data: LargerBean
+        ) {
+            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
+            val fullUrl = data.fullUrl
+            if (fullUrl != null) {
+                listener?.checkCache(fullUrl, object : OnImageCacheListener {
+                    override fun onCache(hasCache: Boolean) {
+                        if (hasCache) {
+                            textView.visibility = View.GONE
+                        }
+                    }
+                })
+
+                textView.setOnClickListener {
+                    listener?.load(
+                        fullUrl,
+                        true,
+                        view.findViewById(R.id.item_custom_image)
+                    )
+                }
+            } else {
+                textView.visibility = View.GONE
+            }
+        }
+    }
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Glide.with(context)
@@ -55,44 +86,13 @@ class ImageListAdapter(
             Larger.create()
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))
-                .setCustomListener(
-                    R.layout.item_custom_image,
-                    R.id.item_custom_image,
-                    object : OnCustomImageLoadListener {
-                        override fun onCustomImageLoad(
-                            listener: OnImageLoadListener?,
-                            view: View,
-                            position: Int,
-                            data: LargerBean
-                        ) {
-                            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
-                            val fullUrl = data.fullUrl
-                            if (fullUrl != null) {
-                                listener?.checkCache(fullUrl, object : OnImageCacheListener {
-                                    override fun onCache(hasCache: Boolean) {
-                                        if(hasCache){
-                                            textView.visibility = View.GONE
-                                        }
-                                    }
-                                })
-
-                                textView.setOnClickListener {
-                                    listener?.load(
-                                        fullUrl,
-                                        true,
-                                        view.findViewById(R.id.item_custom_image)
-                                    )
-                                }
-                            } else {
-                                textView.visibility = View.GONE
-                            }
-                        }
-                    })
+                .setCustomListener(R.layout.item_custom_image, R.id.item_custom_image, listener)
                 .setIndex(position)//下标
                 .setMaxScale(4f)
                 .setMediumScale(4f)
                 .setAutomatic(false)
                 .setDuration(3000)
+                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 .setBackgroundColor(Color.BLACK)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源

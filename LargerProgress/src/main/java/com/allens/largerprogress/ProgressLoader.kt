@@ -5,16 +5,16 @@ import android.util.Log
 import com.starot.larger.impl.OnLoadProgressListener
 import com.starot.larger.utils.LogUtils
 
-class GlideProgressLoader(private val type: ProgressType) : OnLoadProgressListener {
+class ProgressLoader(private val type: ProgressType) : OnLoadProgressListener {
 
     private var dialog: ProgressDialog? = null
 
-    override fun onProgressChange(context: Context, isGone: Boolean) {
-        LogUtils.i( "GlideProgressLoader onProgressChange  isGone $isGone")
+    override fun onProgressChange(context: Context, isFinish: Boolean) {
+        LogUtils.i( "GlideProgressLoader onProgressChange  isGone $isFinish")
         if (dialog == null) {
             dialog = createDialog(context, type)
         }
-        if (isGone) {
+        if (isFinish) {
             dialog?.dismiss()
             dialog = null
         } else {
