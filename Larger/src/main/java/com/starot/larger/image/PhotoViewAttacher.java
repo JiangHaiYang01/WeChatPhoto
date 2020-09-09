@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.OverScroller;
 
+import com.starot.larger.utils.LogUtils;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -166,9 +168,22 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                 }
                 mSuppMatrix.postScale(scaleFactor, scaleFactor, focusX, focusY);
                 checkAndDisplayMatrix();
+
+
+            } else if (getScale() >= mMaxScale) {
+                if (mScaleChangeListener != null) {
+                    mScaleChangeListener.onScaleChange(scaleFactor, focusX, focusY);
+                }
+                mSuppMatrix.postScale(scaleFactor, scaleFactor, focusX, focusY);
+                checkAndDisplayMatrix();
+
+                lastFocusX = focusX;
+                lastFocusY = focusY;
             }
         }
     };
+
+    private float lastFocusX,lastFocusY;
 
     public PhotoViewAttacher(ImageView imageView) {
         mImageView = imageView;
@@ -421,8 +436,10 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                     } else if (getScale() > mMaxScale) {
                         RectF rect = getDisplayRect();
                         if (rect != null) {
+//                            v.post(new AnimatedZoomRunnable(getScale(), mMaxScale,
+//                                    rect.centerX(), rect.centerY()));
                             v.post(new AnimatedZoomRunnable(getScale(), mMaxScale,
-                                    rect.centerX(), rect.centerY()));
+                                    lastFocusX, lastFocusY));
                             handled = true;
                         }
                     }
@@ -806,6 +823,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         @Override
         public void run() {
+            LogUtils.i("AnimatedZoomRunnable run");
             float t = interpolate();
             float scale = mZoomStart + t * (mZoomEnd - mZoomStart);
             float deltaScale = scale / getScale();
