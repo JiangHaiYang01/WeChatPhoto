@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.act.CustomLargerAct
 import com.starot.larger.config.LargerConfig
+import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.*
 
 class LargerBuilder(private val listConfig: LargerConfig?) {
@@ -68,8 +69,14 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
     }
 
     //设置加载的进度
-    fun setProgress(progressLoad: OnLoadProgressListener): LargerBuilder{
+    fun setProgress(progressLoad: OnLoadProgressListener): LargerBuilder {
         listConfig?.progressLoad = progressLoad
+        return this
+    }
+
+    //设置加载方向
+    fun setOrientation(orientation: Orientation): LargerBuilder {
+        listConfig?.orientation = orientation
         return this
     }
 

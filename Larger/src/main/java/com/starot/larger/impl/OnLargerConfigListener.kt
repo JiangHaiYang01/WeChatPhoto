@@ -4,9 +4,11 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.Larger
 import com.starot.larger.config.DefConfig
 import com.starot.larger.enums.LargerEnum
+import com.starot.larger.enums.Orientation
 
 //处理返回一些 框架需要的数据
 interface OnLargerConfigListener {
@@ -20,6 +22,20 @@ interface OnLargerConfigListener {
     //背景颜色
     fun getBackGroundColor(): Int {
         return Larger.largerConfig?.backgroundColor ?: DefConfig.def_back_color
+    }
+
+    //加载方向
+    fun getOrientation(): Int {
+        return if (Larger.largerConfig?.orientation == null) {
+            ViewPager2.ORIENTATION_HORIZONTAL
+        } else {
+            if (Larger.largerConfig?.orientation == Orientation.ORIENTATION_HORIZONTAL) {
+                ViewPager2.ORIENTATION_HORIZONTAL
+            } else {
+                ViewPager2.ORIENTATION_VERTICAL
+            }
+        }
+
     }
 
 

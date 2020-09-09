@@ -2,6 +2,7 @@ package com.starot.larger.act
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.FgPageAdapter
@@ -38,6 +39,9 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         //viewpager 滑动 index 更改
         PageChange().register(viewPager2 = larger_viewpager, listener = this)
 
+
+        //竖着滑动
+        larger_viewpager.orientation = getOrientation()
 
         //检查状态判断是否可以滑动viewpager
         LargerStatus.status.observe(this, {

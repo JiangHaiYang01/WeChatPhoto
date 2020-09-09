@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.enums.LargerEnum
+import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.*
 
 
@@ -18,6 +19,7 @@ class DefConfig() {
         var def_min_scale = 0.2f
         var def_back_color = Color.BLACK
         var def_automatic = true
+        var orientation = Orientation.ORIENTATION_HORIZONTAL
     }
 }
 
@@ -71,6 +73,9 @@ data class LargerConfig(
 
     //加载的进度
     var progressLoad: OnLoadProgressListener? = null,
+
+    //设置滑动方向
+    var orientation: Orientation = DefConfig.orientation,
 
     //视屏加载器
     var videoLoad: OnVideoLoadListener? = null

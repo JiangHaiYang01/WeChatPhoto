@@ -3,6 +3,7 @@ package com.starot.larger.fragment
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
+import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.bean.LargerBean
@@ -172,12 +173,18 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             return false
         }
 
-        if (abs(dx) > 30 && abs(dy) > 60) {
-            // 一开始向上滑动无效的
-            if (dy > 0) {
+        if (getOrientation() == ViewPager2.ORIENTATION_HORIZONTAL) {
+            if (abs(dx) > 30 && abs(dy) > 60) {
+                if (dy > 0) {
+                    return true
+                }
+            }
+        } else {
+            if (abs(dx) > 60 && abs(dy) > 30) {
                 return true
             }
         }
+
         return false
     }
 

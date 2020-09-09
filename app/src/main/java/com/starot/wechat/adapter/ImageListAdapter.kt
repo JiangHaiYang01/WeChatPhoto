@@ -13,6 +13,7 @@ import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
+import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.OnCustomImageLoadListener
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
@@ -91,8 +92,9 @@ class ImageListAdapter(
                 .setMaxScale(4f)
                 .setMediumScale(4f)
                 .setAutomatic(false)
-                .setDuration(3000)
+                .setDuration(300)
                 .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+                .setOrientation(Orientation.ORIENTATION_VERTICAL)
                 .setBackgroundColor(Color.BLACK)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
