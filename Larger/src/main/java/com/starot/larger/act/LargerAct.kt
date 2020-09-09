@@ -2,6 +2,7 @@ package com.starot.larger.act
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.Larger
 import com.starot.larger.R
@@ -43,6 +44,10 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         //竖着滑动
         larger_viewpager.orientation = getOrientation()
 
+//        larger_viewpager.setPageTransformer(
+//            MarginPageTransformer(dp2px(20f))
+//        )
+
         //检查状态判断是否可以滑动viewpager
         LargerStatus.status.observe(this, {
             LogUtils.i("动画状态 $it")
@@ -63,6 +68,10 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
 
     }
 
+
+    private fun dp2px(dpValue: Float): Int {
+        return (resources.displayMetrics.density * dpValue + 0.5f).toInt()
+    }
 
     //数据源
     private fun getData(): List<T>? {

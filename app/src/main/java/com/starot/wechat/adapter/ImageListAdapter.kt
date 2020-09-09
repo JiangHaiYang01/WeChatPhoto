@@ -94,7 +94,7 @@ class ImageListAdapter(
                 .setAutomatic(false)
                 .setDuration(300)
                 .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
-                .setOrientation(Orientation.ORIENTATION_VERTICAL)
+                .setOrientation(Orientation.ORIENTATION_HORIZONTAL)
                 .setBackgroundColor(Color.BLACK)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
