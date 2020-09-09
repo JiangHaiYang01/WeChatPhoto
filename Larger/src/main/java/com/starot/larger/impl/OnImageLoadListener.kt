@@ -29,6 +29,7 @@ interface OnImageCacheListener {
 interface OnCustomImageLoadListener {
     //自定义的 itemViewHolder 让用户自行处理
     fun onCustomImageLoad(
+        listener: OnImageLoadListener?,
         view: View,
         position: Int,
         data: LargerBean

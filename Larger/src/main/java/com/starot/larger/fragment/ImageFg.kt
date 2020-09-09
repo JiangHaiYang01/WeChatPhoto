@@ -68,7 +68,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
             //放给开发者自行处理
             Larger.largerConfig?.customImageLoadListener?.onCustomImageLoad(
-                fragmentView, position, data
+                Larger.largerConfig?.imageLoad, fragmentView, position, data
             )
 
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER

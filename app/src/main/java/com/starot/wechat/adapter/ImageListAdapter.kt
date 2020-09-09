@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
 import com.starot.larger.impl.OnCustomImageLoadListener
+import com.starot.larger.impl.OnImageCacheListener
+import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.utils.LogUtils
 import com.starot.wechat.R
 import com.starot.wechat.bean.ImageBean
@@ -53,13 +55,39 @@ class ImageListAdapter(
             Larger.create()
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))
-                .setCustomListener(R.layout.item_custom_image, R.id.item_custom_image,object :OnCustomImageLoadListener{
-                    override fun onCustomImageLoad(view: View, position: Int, data: LargerBean) {
-                        view.findViewById<TextView>(R.id.item_custom_tv).setOnClickListener {
-                            LogUtils.i("fuck you mom")
+                .setCustomListener(
+                    R.layout.item_custom_image,
+                    R.id.item_custom_image,
+                    object : OnCustomImageLoadListener {
+                        override fun onCustomImageLoad(
+                            listener: OnImageLoadListener?,
+                            view: View,
+                            position: Int,
+                            data: LargerBean
+                        ) {
+                            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
+                            val fullUrl = data.fullUrl
+                            if (fullUrl != null) {
+                                listener?.checkCache(fullUrl, object : OnImageCacheListener {
+                                    override fun onCache(hasCache: Boolean) {
+                                        if(hasCache){
+                                            textView.visibility = View.GONE
+                                        }
+                                    }
+                                })
+
+                                textView.setOnClickListener {
+                                    listener?.load(
+                                        fullUrl,
+                                        true,
+                                        view.findViewById(R.id.item_custom_image)
+                                    )
+                                }
+                            } else {
+                                textView.visibility = View.GONE
+                            }
                         }
-                    }
-                })
+                    })
                 .setIndex(position)//下标
                 .setMaxScale(4f)
                 .setMediumScale(4f)
