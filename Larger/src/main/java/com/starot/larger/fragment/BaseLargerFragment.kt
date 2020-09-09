@@ -59,6 +59,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
             LogUtils.i("判断已经执行过了不在触发")
             fragmentView.setBackgroundColor(getBackGroundColor())
             onDoBefore(data, fullView, getThumbnailView(position), position, view)
+            onDoAfter(data, fullView, getThumbnailView(position), position, view)
             return
         }
         onDoBefore(data, fullView, getThumbnailView(position), position, view)
@@ -106,81 +107,6 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         return this
     }
 
-    //    override fun onLongPress() {
-//        LogUtils.i("onLongPress")
-//    }
-//
-//
-//    //双击手势
-//    override fun onDoubleTap() {
-//        LogUtils.i("双击手势")
-//        checkIsAnimIng()
-//    }
-//
-//    //单点击手势
-//    override fun onSingleTap() {
-//        LogUtils.i("单点击手势")
-//        if (checkIsAnimIng()) return
-//        exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
-//    }
-
-    //
-//    override fun onTranslate(x: Float, y: Float) {
-//        LogUtils.i("onTranslate x $x y $y")
-//        if (checkIsAnimIng()) return
-//        fullView?.translationX = x
-//        fullView?.translationY = y
-//    }
-//
-//    override fun onScaleStart() {
-//        LogUtils.i("onScaleStart")
-//        if (checkIsAnimIng()) return
-//    }
-//
-//    override fun onScaleEnd(scale: Float) {
-//        LogUtils.i("onScaleEnd")
-//        if (checkIsAnimIng()) return
-//
-//        if (scale < 1.0f) {
-//            LogUtils.i("现在是缩小的状态  动画改成1.0 比例")
-//        }
-//
-//    }
-//
-//    //缩放手势
-//    override fun onScale(scale: Float, focusX: Float, focusY: Float): Boolean {
-//        LogUtils.i("缩放手势 fullView scale $scale focusX $focusX focusY $focusY")
-//        if (checkIsAnimIng()) return false
-//        //当前的伸缩值*之前的伸缩值 保持连续性
-////        if (scale > getMaxScale() || scale < getMinScale()) {
-////            return false
-////        }
-//        fullView?.pivotX = focusX
-//        fullView?.pivotY = focusY
-//        fullView?.scaleY = scale
-//        fullView?.scaleX = scale
-//        return true
-//
-//    }
-//
-//    //拖动
-//    override fun onDrag(x: Float, y: Float): Boolean {
-//        LogUtils.i("拖动 X $x y $y")
-//        if (checkIsAnimIng()) return false
-//        startDrag(fragmentView, fullView, x, y)
-//        return true
-//    }
-//
-//    override fun onDragStart() {
-//        LogUtils.i("onDragStart")
-//        if (checkIsAnimIng()) return
-//    }
-//
-//    override fun onDragEnd() {
-//        LogUtils.i("onDragEnd")
-//        if (checkIsAnimIng()) return
-//        endDrag(fullView)
-//    }
 
 
     //drag 以后推出

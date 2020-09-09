@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.enums.LargerEnum
+import com.starot.larger.impl.OnCustomImageLoadListener
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLargerType
 import com.starot.larger.impl.OnVideoLoadListener
@@ -64,6 +65,9 @@ data class LargerConfig(
 
     //默认的背景颜色
     var backgroundColor: Int = DefConfig.def_back_color,
+
+    //自定义
+    var customImageLoadListener: OnCustomImageLoadListener? = null,
 
     //图片加载器
     var imageLoad: OnImageLoadListener? = null,

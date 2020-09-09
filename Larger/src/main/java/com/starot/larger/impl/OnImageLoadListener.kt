@@ -1,7 +1,9 @@
 package com.starot.larger.impl
 
+import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
+import com.starot.larger.bean.LargerBean
 
 //加载图片接口
 interface OnImageLoadListener : OnLoadProgressPrepareListener {
@@ -21,6 +23,18 @@ interface OnImageLoadListener : OnLoadProgressPrepareListener {
 interface OnImageCacheListener {
     fun onCache(hasCache: Boolean)
 }
+
+
+//自行处理view
+interface OnCustomImageLoadListener {
+    //自定义的 itemViewHolder 让用户自行处理
+    fun onCustomImageLoad(
+        view: View,
+        position: Int,
+        data: LargerBean
+    )
+}
+
 
 interface OnLoadProgressPrepareListener {
 

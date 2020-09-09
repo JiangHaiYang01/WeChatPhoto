@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.act.CustomLargerAct
 import com.starot.larger.config.LargerConfig
+import com.starot.larger.impl.OnCustomImageLoadListener
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnLargerType
 import com.starot.larger.impl.OnVideoLoadListener
@@ -76,9 +77,14 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
     }
 
     //自定义布局
-    fun setCustomListener(layoutId: Int, fullViewId: Int): LargerBuilder {
+    fun setCustomListener(
+        layoutId: Int,
+        fullViewId: Int,
+        listener: OnCustomImageLoadListener?
+    ): LargerBuilder {
         listConfig?.layoutId = layoutId
         listConfig?.fullViewId = fullViewId
+        listConfig?.customImageLoadListener = listener
         return this
     }
 

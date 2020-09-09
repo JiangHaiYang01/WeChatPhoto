@@ -65,6 +65,12 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
+
+            //放给开发者自行处理
+            Larger.largerConfig?.customImageLoadListener?.onCustomImageLoad(
+                fragmentView, position, data
+            )
+
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
             Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
 
