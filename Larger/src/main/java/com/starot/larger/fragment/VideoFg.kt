@@ -10,6 +10,7 @@ import com.starot.larger.enums.AnimType
 import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
+import kotlinx.android.synthetic.main.activity_larger_base.*
 import kotlin.math.abs
 
 class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
@@ -94,6 +95,10 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         view: View
     ) {
         if (data != null) {
+            val poster = getPoster(view)
+            if (poster != null) {
+                poster.scaleType = ImageView.ScaleType.FIT_CENTER
+            }
             Larger.largerConfig?.videoLoad?.loadVideo(data, view, this)
         }
 

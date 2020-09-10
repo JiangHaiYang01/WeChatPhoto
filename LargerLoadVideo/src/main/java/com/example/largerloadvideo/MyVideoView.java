@@ -57,27 +57,7 @@ public class MyVideoView extends JzvdStd {
 
     public void setDragListener(OnLargerDragListener listener) {
         this.listener = listener;
-        largerDrag = new LargerDrag(new OnLargerDragListener() {
-            @Override
-            public void onDrag(float x, float y) {
-                listener.onDrag(x, y);
-            }
-
-            @Override
-            public void onDragEnd() {
-                listener.onDragEnd();
-            }
-
-            @Override
-            public void onDragStart() {
-                listener.onDragStart();
-            }
-
-            @Override
-            public boolean onDragPrepare(float dx, float dy) {
-                return listener.onDragPrepare(dx, dy);
-            }
-        }, getContext());
+        largerDrag = new LargerDrag(listener, getContext());
         gestureDetector = new GestureDetector(getContext(), largerDrag);
     }
 

@@ -2,8 +2,6 @@ package com.starot.larger.act
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.FgPageAdapter
@@ -98,6 +96,14 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         LargerStatus.isLoad.postValue(false)
         LargerStatus.status.postValue(AnimStatus.NOME)
         Larger.largerConfig?.videoLoad?.onRelease()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Larger.largerConfig?.videoLoad?.onRelease()
+    }
+
+    override fun onBackPressed() {
     }
 
 }
