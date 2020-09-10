@@ -97,6 +97,7 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         Larger.largerConfig = null
         LargerStatus.isLoad.postValue(false)
         LargerStatus.status.postValue(AnimStatus.NOME)
+        Larger.largerConfig?.videoLoad?.onRelease()
     }
 
 }

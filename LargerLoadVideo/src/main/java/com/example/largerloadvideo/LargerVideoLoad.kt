@@ -4,16 +4,16 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
+import cn.jzvd.JZUtils
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
 import com.starot.larger.bean.LargerBean
-import com.starot.larger.enums.AnimType
 import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.impl.OnVideoLoadListener
 
 
 //视屏加载器
-class LargerVideoLoad : OnVideoLoadListener {
+class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
 
     private var progressLiveData: MutableLiveData<Int>? = null
@@ -36,6 +36,18 @@ class LargerVideoLoad : OnVideoLoadListener {
         video.setDragListener(listener)
     }
 
+    override fun onRelease() {
+        Jzvd.releaseAllVideos()
+    }
+
+    override fun onPause() {
+        JZUtils.clearSavedProgress(context.applicationContext, null)
+        Jzvd.goOnPlayOnPause()
+    }
+
+    override fun onResume() {
+        Jzvd.goOnPlayOnResume()
+    }
 
 
     override fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>) {

@@ -18,7 +18,15 @@ interface OnVideoLoadListener : OnLoadProgressPrepareListener,
     //加载视屏
     fun loadVideo(data: LargerBean, view: View)
 
+    //拖动
     fun dragListener(view: View,listener: OnLargerDragListener)
+
+    //清理资源
+    fun onRelease()
+
+    fun onPause()
+
+    fun onResume()
 }
 
 
@@ -28,9 +36,6 @@ interface OnVideoViewIdListener {
 
     //返回布局id
     fun getVideoLayoutId(): Int
-
-    //返回转换时候的imageViewId
-//    fun getImageViewId(): Int
 
 
 }

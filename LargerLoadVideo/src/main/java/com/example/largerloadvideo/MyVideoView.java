@@ -28,6 +28,17 @@ public class MyVideoView extends JzvdStd {
         super(context, attrs);
     }
 
+    //播放完成后显示textureview而不是封面图
+    @Override
+    public void onCompletion() {
+        super.onCompletion();
+        posterImageView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.layout_jzstd_notitle;
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
