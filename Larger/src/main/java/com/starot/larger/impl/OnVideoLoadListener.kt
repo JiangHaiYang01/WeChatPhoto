@@ -30,7 +30,7 @@ interface OnVideoViewIdListener {
     fun getVideoLayoutId(): Int
 
     //返回转换时候的imageViewId
-    fun getImageViewId(): Int
+//    fun getImageViewId(): Int
 
 
 }

@@ -17,22 +17,18 @@ import kotlin.math.abs
 
 class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
-
     private lateinit var videoView: View
+
 
     override fun getLayoutId(): Int {
         return Larger.largerConfig?.layoutId ?: Larger.largerConfig?.videoLoad?.getVideoLayoutId()
         ?: -1
     }
 
-    private fun getVideoId():Int{
-        return Larger.largerConfig?.layoutId ?: Larger.largerConfig?.videoLoad?.getVideoViewId()
-        ?: -1
-    }
 
     override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
-        this.videoView = fragmentView.findViewById(getVideoId())
-        if (fullView is ImageView && thumbnailView is ImageView && type == AnimType.ENTER) {
+        val imageView = getPoster(fragmentView)
+        if (imageView != null && thumbnailView is ImageView && type == AnimType.ENTER) {
             LogUtils.i("将大图的 image scale type 设置成 和小图一样的 ${thumbnailView.scaleType}")
             val data = getData() ?: return
             LogUtils.i("加载缩略图")
@@ -41,21 +37,22 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
-            fullView.scaleType = thumbnailView.scaleType
+            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, imageView)
+            imageView.scaleType = thumbnailView.scaleType
         }
     }
 
     override fun onTranslatorStart(type: AnimType, fullView: View, thumbnailView: View) {
-        if (fullView is ImageView && type == AnimType.ENTER) {
-            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-        } else if (fullView is ImageView && thumbnailView is ImageView && (type == AnimType.EXIT || type == AnimType.DRAG_EXIT)) {
-            fullView.scaleType = thumbnailView.scaleType
+        val imageView = getPoster(fragmentView)
+        if (imageView is ImageView && type == AnimType.ENTER) {
+            imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+        } else if (imageView is ImageView && thumbnailView is ImageView && (type == AnimType.EXIT || type == AnimType.DRAG_EXIT)) {
+            imageView.scaleType = thumbnailView.scaleType
         }
     }
 
     override fun getFullViewId(): Int {
-        return Larger.largerConfig?.fullViewId ?: Larger.largerConfig?.videoLoad?.getImageViewId()
+        return Larger.largerConfig?.fullViewId ?: Larger.largerConfig?.videoLoad?.getVideoViewId()
         ?: -1
     }
 
@@ -66,14 +63,22 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         position: Int,
         view: View
     ) {
-        if (fullView is ImageView && data != null) {
+        if (fullView != null) {
+            this.videoView = fullView
+        }
+
+        val imageView = getPoster(view)
+        if (imageView != null && data != null) {
             val thumbnailsUrl = data.thumbnailsUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
+            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, imageView)
         }
+    }
+
+    private fun getPoster(view: View): ImageView? {
+        return Larger.largerConfig?.videoLoad?.getPoster(view)
     }
 
     override fun onDoAfter(
@@ -84,14 +89,14 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         view: View
     ) {
         if (data != null) {
-            val imageView = Larger.largerConfig?.videoLoad?.getPoster(view)
+            val imageView = getPoster(view)
             val thumbnailsUrl = data.thumbnailsUrl
             if (imageView != null && thumbnailsUrl != null) {
                 imageView.scaleType = ImageView.ScaleType.FIT_CENTER
                 Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, imageView)
             }
 
-            Larger.largerConfig?.videoLoad?.dragListener( view,this)
+            Larger.largerConfig?.videoLoad?.dragListener(view, this)
             Larger.largerConfig?.videoLoad?.loadVideo(data, view)
         }
 
@@ -139,7 +144,6 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         LogUtils.i("onDragStart")
         LargerStatus.status.postValue(AnimStatus.DRAG_START)
     }
-
 
 
 }

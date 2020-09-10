@@ -13,7 +13,7 @@ import com.starot.larger.impl.OnVideoLoadListener
 
 
 //视屏加载器
-class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
+class LargerVideoLoad : OnVideoLoadListener {
 
 
     private var progressLiveData: MutableLiveData<Int>? = null
@@ -25,12 +25,8 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
     }
 
 
-    //todo bug 会扇一下黑屏
     override fun loadVideo(data: LargerBean, view: View) {
         val video = view.findViewById<MyVideoView>(getVideoViewId())
-        video.visibility = View.VISIBLE
-        view.findViewById<ImageView>(getImageViewId()).visibility = View.GONE
-
         video.setUp(data.fullUrl, "", Jzvd.SCREEN_NORMAL)
 
     }
@@ -57,10 +53,6 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
     override fun getVideoLayoutId(): Int {
         return R.layout.item_larger_video
-    }
-
-    override fun getImageViewId(): Int {
-        return R.id.audio_imageView
     }
 
 }

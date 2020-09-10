@@ -6,18 +6,17 @@
     android:orientation="vertical">
 
 
-    <ImageView
-        android:id="@+id/audio_imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+<!--    <ImageView-->
+<!--        android:id="@+id/audio_imageView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 
     <com.example.largerloadvideo.MyVideoView
-        android:visibility="gone"
         android:id="@+id/audio_video"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -51,9 +51,9 @@ class VideoListAdapter(
             Larger.create()
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))
-                .setVideoLoad(LargerVideoLoad(context))
+                .setVideoLoad(LargerVideoLoad())
                 .setIndex(position)//下标
-                .setDuration(300)
+                .setDuration(3000)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .start(context) //启动默认的activity
