@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.starot.wechat.activity.HybridListAct
-import com.starot.wechat.activity.ImageListAct
-import com.starot.wechat.activity.SingleImageAct
-import com.starot.wechat.activity.VideoListAct
+import com.starot.wechat.activity.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +23,8 @@ class MainActivity : AppCompatActivity() {
             "设置背景颜色",
             "加载列表视屏",
             "图片视屏混合",
-            "单个view",
+            "单个图片",
+            "单个视屏",
             "清理缓存"
         )
 
@@ -38,20 +36,20 @@ class MainActivity : AppCompatActivity() {
 
 
                 when (index) {
-                    0->{
+                    0 -> {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 0)
                         startActivity(intent)
                     }
-                    1->{
+                    1 -> {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 1)
                         startActivity(intent)
                     }
 
-                    2->{
+                    2 -> {
 
                         Glide.get(this).clearMemory()
                         Thread(Runnable { Glide.get(this).clearDiskCache() }).start()
@@ -61,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("type", 2)
                         startActivity(intent)
                     }
-                    3->{
+                    3 -> {
 
                         Glide.get(this).clearMemory()
                         Thread(Runnable { Glide.get(this).clearDiskCache() }).start()
@@ -71,40 +69,46 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("type", 3)
                         startActivity(intent)
                     }
-                    4->{
+                    4 -> {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 4)
                         startActivity(intent)
                     }
-                    5->{
+                    5 -> {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 5)
                         startActivity(intent)
                     }
-                    6->{
+                    6 -> {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 6)
                         startActivity(intent)
                     }
-                    7->{
+                    7 -> {
                         val intent = Intent(this, VideoListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 0)
                         startActivity(intent)
                     }
 
-                    8->{
+                    8 -> {
                         val intent = Intent(this, HybridListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 0)
                         startActivity(intent)
                     }
 
-                    9->{
+                    9 -> {
                         val intent = Intent(this, SingleImageAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", 0)
+                        startActivity(intent)
+                    }
+                    10 -> {
+                        val intent = Intent(this, SingleAudioAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 0)
                         startActivity(intent)
