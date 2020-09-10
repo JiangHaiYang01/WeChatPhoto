@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
             "竖着滑动",
             "设置缩放大小",
             "设置背景颜色",
+            "加载列表视屏",
             "清理缓存"
         )
 
@@ -81,6 +82,12 @@ class MainActivity : AppCompatActivity() {
                         intent.putExtra("type", 6)
                         startActivity(intent)
                     }
+                    7->{
+                        val intent = Intent(this, VideoListAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", 0)
+                        startActivity(intent)
+                    }
 
                     arrayListOf.size - 1 -> {
                         Glide.get(this).clearMemory()
@@ -93,11 +100,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//        btn_1.setOnClickListener {
-//            startActivity(Intent(this, ImageListAct::class.java))
-//        }
-//        btn_2.setOnClickListener {
-//            startActivity(Intent(this, VideoListAct::class.java))
-//        }
     }
 }

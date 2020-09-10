@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
+import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger
-import com.starot.larger.bean.LargerBean
+import com.starot.larger.enums.Orientation
 import com.starot.wechat.R
 import com.starot.wechat.bean.VideoBean
 import kotlin.collections.ArrayList
@@ -19,6 +20,7 @@ import kotlin.collections.ArrayList
 class VideoListAdapter(
     private val data: ArrayList<VideoBean>,
     private val recyclerView: RecyclerView,
+    private val type: Int,
 ) :
     RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
 
@@ -47,16 +49,21 @@ class VideoListAdapter(
             .into(holder.image)
 
 
+
         holder.itemView.setOnClickListener {
-            Larger.create()
+            val withListType = Larger.create()
                 .withListType()//这里展示的是列表类型的
-                .setImageLoad(GlideImageLoader(context))
-                .setVideoLoad(LargerVideoLoad(context))
+                .setImageLoad(GlideImageLoader(context))   //图片加载器
+                .setVideoLoad(LargerVideoLoad(context))//视屏加载器
                 .setIndex(position)//下标
-                .setDuration(3000)
+                .setDuration(300)//动画持续时间
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
-                .start(context) //启动默认的activity
+            when (type) {
+                0 -> {
+                }
+            }
+            withListType.start(context)
         }
 
     }

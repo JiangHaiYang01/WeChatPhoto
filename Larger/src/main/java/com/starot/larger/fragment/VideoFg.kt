@@ -8,6 +8,7 @@ import com.starot.larger.bean.LargerBean
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
 import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_larger_base.*
@@ -81,7 +82,8 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, imageView)
+            imageView.scaleType = ImageView.ScaleType.FIT_CENTER
+//            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, imageView)
         }
     }
 
@@ -96,12 +98,13 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         position: Int,
         view: View
     ) {
+        LogUtils.i("video onDoAfter")
         if (data != null) {
             val poster = getPoster(view)
             if (poster != null) {
                 poster.scaleType = ImageView.ScaleType.FIT_CENTER
             }
-            if(isLoadVideo){
+            if (isLoadVideo) {
                 LogUtils.i("isLoadVideo ")
                 return
             }
@@ -156,7 +159,22 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         view: View,
         success: (LargerBean) -> Unit
     ) {
-
+        val imageView = getPoster(view)
+        if (imageView != null && data != null) {
+            val thumbnailsUrl = data.thumbnailsUrl
+            if (thumbnailsUrl.isNullOrEmpty()) {
+                return
+            }
+            Larger.largerConfig?.imageLoad?.load(
+                thumbnailsUrl,
+                imageView,
+                object : OnImageLoadReadyListener {
+                    override fun onReady() {
+                        LogUtils.i("onReady")
+                        success(data)
+                    }
+                })
+        }
     }
 
 
