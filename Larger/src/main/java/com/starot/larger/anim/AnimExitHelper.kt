@@ -41,6 +41,7 @@ object AnimExitHelper : OnAnimatorIntercept {
     ) {
         if (thumbnailView == null) {
             LogUtils.i("startTransition thumbnailView is null")
+            fullView.visibility = View.GONE
             return
         }
         listener.onTranslatorStart(type, fullView, thumbnailView)
