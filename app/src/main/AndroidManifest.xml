@@ -26,6 +26,7 @@
         <activity android:name=".activity.ImageListAct"/>
         <activity android:name=".activity.VideoListAct"/>
         <activity android:name=".activity.HybridListAct"/>
+        <activity android:name=".activity.SingleImageAct"/>
     </application>
 
 </manifest>

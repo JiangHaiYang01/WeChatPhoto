@@ -22,5 +22,12 @@ object Larger {
             })
         }
 
+        fun withSingle(): LargerBuilder {
+            largerConfig = LargerConfig()
+            return LargerBuilder(largerConfig?.apply {
+                largerType = LargerEnum.SINGLES
+            })
+        }
+
     }
 }

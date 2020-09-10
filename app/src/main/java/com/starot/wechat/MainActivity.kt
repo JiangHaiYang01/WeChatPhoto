@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.starot.wechat.activity.HybridListAct
 import com.starot.wechat.activity.ImageListAct
+import com.starot.wechat.activity.SingleImageAct
 import com.starot.wechat.activity.VideoListAct
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             "设置背景颜色",
             "加载列表视屏",
             "图片视屏混合",
+            "单个view",
             "清理缓存"
         )
 
@@ -37,7 +39,10 @@ class MainActivity : AppCompatActivity() {
 
                 when (index) {
                     0->{
-
+                        val intent = Intent(this, ImageListAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", 0)
+                        startActivity(intent)
                     }
                     1->{
                         val intent = Intent(this, ImageListAct::class.java)
@@ -93,6 +98,13 @@ class MainActivity : AppCompatActivity() {
 
                     8->{
                         val intent = Intent(this, HybridListAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", 0)
+                        startActivity(intent)
+                    }
+
+                    9->{
+                        val intent = Intent(this, SingleImageAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 0)
                         startActivity(intent)

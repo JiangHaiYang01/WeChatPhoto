@@ -2,6 +2,7 @@ package com.starot.larger.builder
 
 import android.content.Context
 import android.content.Intent
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.Larger
 import com.starot.larger.act.CustomLargerAct
@@ -29,6 +30,11 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    //withSingle 模式下 设置imageView
+    fun setImagesWithSingle(images: List<ImageView>): LargerBuilder {
+        listConfig?.images = images
+        return this
+    }
 
     //设置数据源
     fun setData(data: List<OnLargerType>): LargerBuilder {

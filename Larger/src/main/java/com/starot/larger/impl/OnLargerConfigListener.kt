@@ -73,7 +73,7 @@ interface OnLargerConfigListener {
                 getViewInRecycler(position)
             }
             LargerEnum.SINGLES -> {
-                getThumbnailView(position)
+                getViewInSingles(position)
             }
             else -> {
                 null
