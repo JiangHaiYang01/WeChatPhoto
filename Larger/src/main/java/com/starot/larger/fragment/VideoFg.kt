@@ -18,6 +18,8 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     private lateinit var videoView: View
 
 
+    private var isLoadVideo = false
+
     override fun getLayoutId(): Int {
         return Larger.largerConfig?.layoutId ?: Larger.largerConfig?.videoLoad?.getVideoLayoutId()
         ?: -1
@@ -99,6 +101,11 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (poster != null) {
                 poster.scaleType = ImageView.ScaleType.FIT_CENTER
             }
+            if(isLoadVideo){
+                LogUtils.i("isLoadVideo ")
+                return
+            }
+            isLoadVideo = true
             Larger.largerConfig?.videoLoad?.loadVideo(data, view, this)
         }
 

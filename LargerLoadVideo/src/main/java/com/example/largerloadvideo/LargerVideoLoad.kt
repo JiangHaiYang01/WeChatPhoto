@@ -11,6 +11,7 @@ import com.starot.larger.bean.LargerBean
 import com.starot.larger.fragment.VideoFg
 import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.impl.OnVideoLoadListener
+import com.starot.larger.utils.LogUtils
 
 
 //视屏加载器
@@ -27,6 +28,7 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
 
     override fun loadVideo(data: LargerBean, view: View, listener: OnLargerDragListener) {
+        LogUtils.i("loadVideo")
         val video = view.findViewById<MyVideoView>(getVideoViewId())
         video.setDragListener(object : OnLargerDragListener {
             override fun onDrag(x: Float, y: Float) {
@@ -43,7 +45,7 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
             override fun onDragStart() {
                 listener.onDragStart()
-                onPause()
+//                onPause()
             }
         })
         video.setUp(data.fullUrl, "", Jzvd.SCREEN_NORMAL)
@@ -52,15 +54,18 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
 
     override fun onRelease() {
+        LogUtils.i("onRelease")
         Jzvd.releaseAllVideos()
     }
 
     override fun onPause() {
+        LogUtils.i("onPause")
         JZUtils.clearSavedProgress(context.applicationContext, null)
         Jzvd.goOnPlayOnPause()
     }
 
     override fun onResume() {
+        LogUtils.i("onResume")
         Jzvd.goOnPlayOnResume()
     }
 
