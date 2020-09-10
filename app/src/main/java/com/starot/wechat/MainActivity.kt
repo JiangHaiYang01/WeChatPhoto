@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.starot.wechat.activity.HybridListAct
 import com.starot.wechat.activity.ImageListAct
 import com.starot.wechat.activity.VideoListAct
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
             "设置缩放大小",
             "设置背景颜色",
             "加载列表视屏",
+            "图片视屏混合",
             "清理缓存"
         )
 
@@ -84,6 +86,13 @@ class MainActivity : AppCompatActivity() {
                     }
                     7->{
                         val intent = Intent(this, VideoListAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", 0)
+                        startActivity(intent)
+                    }
+
+                    8->{
+                        val intent = Intent(this, HybridListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 0)
                         startActivity(intent)
