@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
+import com.starot.larger.utils.LogUtils
 import java.io.File
 
 //Glide 加载图片 这里记录了 加载的进度 和 加载状态 后续考虑 移植到其他地方 以便于拓展
@@ -51,6 +52,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
 //                .skipMemoryCache(true)
 //                .diskCacheStrategy(DiskCacheStrategy.NONE)
         }
+        LogUtils.i("load image isLoadFull:$isLoadFull, url:$url")
         Glide.with(context)
             .load(url)
             .apply(options)

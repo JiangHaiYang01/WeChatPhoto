@@ -53,7 +53,7 @@ class VideoListAdapter(
                 .setImageLoad(GlideImageLoader(context))
                 .setVideoLoad(LargerVideoLoad(context))
                 .setIndex(position)//下标
-                .setDuration(3000)
+                .setDuration(300)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .start(context) //启动默认的activity

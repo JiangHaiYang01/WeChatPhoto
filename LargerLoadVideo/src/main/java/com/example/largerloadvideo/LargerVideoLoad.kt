@@ -1,17 +1,16 @@
 package com.example.largerloadvideo
 
 import android.content.Context
-import android.graphics.drawable.Drawable
-import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
+import cn.jzvd.Jzvd
+import cn.jzvd.JzvdStd
+import com.starot.larger.bean.LargerBean
+import com.starot.larger.enums.AnimType
+import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.impl.OnVideoLoadListener
-import com.starot.larger.utils.LogUtils
-import org.salient.artplayer.conduction.PlayerState
-import org.salient.artplayer.player.SystemMediaPlayer
-import org.salient.artplayer.ui.VideoView
+
 
 //视屏加载器
 class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
@@ -20,60 +19,27 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
     private var progressLiveData: MutableLiveData<Int>? = null
     private var progressViewLiveData: MutableLiveData<Boolean>? = null
 
-
-    private lateinit var videoView: VideoView
-
-
-    override fun onAudioThumbnail(itemView: View, drawable: Drawable) {
-        LogUtils.i("视屏加载缩略图")
-        val videoView = itemView.findViewById<VideoView>(getVideoViewId())
-        videoView.cover.setImageDrawable(drawable)
+    override fun getPoster(view: View): ImageView {
+        val video = view.findViewById<JzvdStd>(getVideoViewId())
+        return video.posterImageView
     }
 
-    override fun load(url: String, view: View) {
-        LogUtils.i("start play audio")
 
-        //显示加载等待框
-        progressViewLiveData?.postValue(false)
+    //todo bug 会扇一下黑屏
+    override fun loadVideo(data: LargerBean, view: View) {
+        val video = view.findViewById<MyVideoView>(getVideoViewId())
+        video.visibility = View.VISIBLE
+        view.findViewById<ImageView>(getImageViewId()).visibility = View.GONE
 
-        this.videoView = view.findViewById(getVideoViewId())
-        videoView.mediaPlayer = SystemMediaPlayer().apply {
-            setDataSource(context, Uri.parse(url))
-        }
-        videoView.prepare()
+        video.setUp(data.fullUrl, "", Jzvd.SCREEN_NORMAL)
 
-
-        //缓冲状态发生改变
-        videoView.mediaPlayer?.bufferingProgressLD?.observeForever {
-            LogUtils.i("audio bufferPercentage:$it")
-            if (it != progressLiveData?.value) {
-                progressLiveData?.postValue(it)
-            }
-        }
-
-        //播放器的状态
-        videoView.mediaPlayer?.playerStateLD?.observeForever {
-            LogUtils.i("播放器的状态 :${it.code}")
-            if (it.code == PlayerState.STARTED.code) {
-                LogUtils.i("播放器的状态 STARTED")
-                //取消加载框
-                progressViewLiveData?.postValue(true)
-            } else if (it.code == PlayerState.ERROR.code || it.code == PlayerState.COMPLETED.code) {
-                progressViewLiveData?.postValue(true)
-            }
-        }
     }
 
-    override fun pause() {
-        LogUtils.i("LargerVideoLoad pause")
-        videoView.pause()
+    override fun dragListener(view: View, listener: OnLargerDragListener) {
+        val video = view.findViewById<MyVideoView>(getVideoViewId())
+        video.setDragListener(listener)
     }
 
-    override fun stop() {
-        LogUtils.i("LargerVideoLoad stop")
-        videoView.stop()
-        videoView.release()
-    }
 
 
     override fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>) {
@@ -85,11 +51,16 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
     }
 
     override fun getVideoViewId(): Int {
-        return R.id.audio_videoView
+        return R.id.audio_video
     }
 
 
     override fun getVideoLayoutId(): Int {
         return R.layout.item_larger_video
     }
+
+    override fun getImageViewId(): Int {
+        return R.id.audio_imageView
+    }
+
 }

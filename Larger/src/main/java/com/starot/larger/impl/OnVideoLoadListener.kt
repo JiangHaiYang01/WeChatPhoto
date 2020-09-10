@@ -4,21 +4,21 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
+import com.starot.larger.anim.impl.OnAnimatorListener
+import com.starot.larger.bean.LargerBean
+import com.starot.larger.image.OnLargerDragListener
 
 //加载图片接口
-interface OnVideoLoadListener : OnLoadProgressPrepareListener, OnVideoViewIdListener {
+interface OnVideoLoadListener : OnLoadProgressPrepareListener,
+    OnVideoViewIdListener {
 
-    //设置预览图
-    fun onAudioThumbnail(itemView: View, drawable: Drawable)
+    //返回预览图
+    fun getPoster(view: View): ImageView
 
     //加载视屏
-    fun load(url: String, view: View)
+    fun loadVideo(data: LargerBean, view: View)
 
-    //暂停
-    fun pause()
-
-    //销毁资源
-    fun stop()
+    fun dragListener(view: View,listener: OnLargerDragListener)
 }
 
 
@@ -28,4 +28,9 @@ interface OnVideoViewIdListener {
 
     //返回布局id
     fun getVideoLayoutId(): Int
+
+    //返回转换时候的imageViewId
+    fun getImageViewId(): Int
+
+
 }
