@@ -28,7 +28,6 @@ public class MyVideoView extends JzvdStd {
         super(context, attrs);
     }
 
-    //播放完成后显示textureview而不是封面图
     @Override
     public void onCompletion() {
         super.onCompletion();
@@ -44,8 +43,9 @@ public class MyVideoView extends JzvdStd {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (gestureDetector != null && largerDrag != null) {
             gestureDetector.onTouchEvent(ev);
-            if (ev.getAction() == MotionEvent.ACTION_UP) {
+            if (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_CANCEL) {
                 if (listener != null && largerDrag.isDragging().get()) {
+                    largerDrag.isDragging().set(false);
                     listener.onDragEnd();
                 }
             }

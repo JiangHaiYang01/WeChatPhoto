@@ -107,6 +107,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
     override fun onDrag(x: Float, y: Float) {
         if (isAnimIng()) return
+        LogUtils.i("video drag------------------")
         startDrag(fragmentView, videoView, x = x, y = y)
     }
 

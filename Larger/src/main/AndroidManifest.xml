@@ -4,6 +4,7 @@
     <application>
 
         <activity
+            android:launchMode="singleTop"
             android:name=".act.CustomLargerAct"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/custom_larger" />
