@@ -25,6 +25,7 @@ import kotlin.collections.ArrayList
 class ImageListAdapter(
     private val data: ArrayList<ImageBean>,
     private val recyclerView: RecyclerView,
+    private val type: Int,
 ) :
     RecyclerView.Adapter<ImageListAdapter.ViewHolder>() {
 
@@ -84,21 +85,57 @@ class ImageListAdapter(
 
 
         holder.itemView.setOnClickListener {
-            Larger.create()
+            val withListType = Larger.create()
                 .withListType()//这里展示的是列表类型的
-                .setImageLoad(GlideImageLoader(context))
-                .setCustomListener(R.layout.item_custom_image, R.id.item_custom_image, listener)
+                .setImageLoad(GlideImageLoader(context))   //图片加载器
                 .setIndex(position)//下标
-                .setMaxScale(4f)
-                .setMediumScale(4f)
-                .setAutomatic(false)
-                .setDuration(300)
+                .setDuration(300)//动画持续时间
                 .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
-                .setOrientation(Orientation.ORIENTATION_HORIZONTAL)
-                .setBackgroundColor(Color.BLACK)
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
-                .start(context) //启动默认的activity
+            when (type) {
+                0 -> {
+                }
+                1 -> {
+                    withListType
+                        .setAutomatic(false)//设置不自动加载大图
+                        .setCustomListener(
+                            R.layout.item_custom_image,
+                            R.id.item_custom_image,
+                            listener
+                        )//自定义布局
+                }
+                2->{
+                    withListType
+                        .setAutomatic(false)//设置不自动加载大图
+                        .setCustomListener(
+                            R.layout.item_custom_image,
+                            R.id.item_custom_image,
+                            listener
+                        )//自定义布局
+                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+                }
+                3->{
+                    withListType
+                        .setAutomatic(false)//设置不自动加载大图
+                        .setCustomListener(
+                            R.layout.item_custom_image,
+                            R.id.item_custom_image,
+                            listener
+                        )//自定义布局
+                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.NONE)) //添加进度显示
+                }
+                4->{
+                    withListType
+                        .setOrientation(Orientation.ORIENTATION_VERTICAL)//滑动的方向
+                }
+                5->{
+                    withListType
+                        .setMaxScale(4f)//设置最大比例
+                        .setMediumScale(4f)//设置中间比例 不能超过最大比例
+                }
+            }
+            withListType.start(context)
         }
 
     }

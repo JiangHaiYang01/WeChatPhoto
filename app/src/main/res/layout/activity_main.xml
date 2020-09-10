@@ -8,20 +8,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btn_1"
-        android:text="Grid Image 布局"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
-    <Button
-        android:id="@+id/btn_2"
-        android:text="Grid Audio 布局"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
 
 
 </LinearLayout>
