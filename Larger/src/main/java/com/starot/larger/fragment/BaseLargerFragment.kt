@@ -1,6 +1,8 @@
 package com.starot.larger.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,6 +29,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     private var data: T? = null
     private var fullView: View? = null
     var position: Int = -1
+    private val handler = Handler(Looper.getMainLooper())
 
 
     override fun onCreateView(
@@ -59,7 +62,12 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
             LogUtils.i("判断已经执行过了不在触发")
             fragmentView.setBackgroundColor(getBackGroundColor())
             onDoBefore(data, fullView, getThumbnailView(position), position, view)
-            onDoAfter(data, fullView, getThumbnailView(position), position, view)
+            onAlreadyLoad(data, fullView, getThumbnailView(position), position, view, {
+                handler.post {
+                    onDoAfter(data, fullView, getThumbnailView(position), position, view)
+                }
+
+            })
             return
         }
         onDoBefore(data, fullView, getThumbnailView(position), position, view)
@@ -73,6 +81,15 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     // 抽象方法
     //==============================================================================================
 
+
+    abstract fun onAlreadyLoad(
+        data: T?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View,
+        success: (T) -> Unit
+    )
 
     //动画开始以前做啥事情
     abstract fun onDoBefore(
@@ -106,7 +123,6 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         arguments = args
         return this
     }
-
 
 
     //drag 以后推出

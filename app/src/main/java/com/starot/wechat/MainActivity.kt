@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
             "加载框的样式2",
             "竖着滑动",
             "设置缩放大小",
+            "设置背景颜色",
             "清理缓存"
         )
 
@@ -72,6 +73,12 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this, ImageListAct::class.java)
                         intent.putExtra("name", arrayListOf[index])
                         intent.putExtra("type", 5)
+                        startActivity(intent)
+                    }
+                    6->{
+                        val intent = Intent(this, ImageListAct::class.java)
+                        intent.putExtra("name", arrayListOf[index])
+                        intent.putExtra("type", 6)
                         startActivity(intent)
                     }
 

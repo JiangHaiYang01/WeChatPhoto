@@ -12,6 +12,8 @@ interface OnImageLoadListener : OnLoadProgressPrepareListener {
     //加载图片
     fun load(url: String, isLoadFull: Boolean, imageView: ImageView)
 
+    fun load(url: String, imageView: ImageView, listener: OnImageLoadReadyListener)
+
     //判断是有有缓存
     fun checkCache(url: String, listener: OnImageCacheListener)
 
@@ -24,6 +26,10 @@ interface OnImageCacheListener {
     fun onCache(hasCache: Boolean)
 }
 
+
+interface OnImageLoadReadyListener {
+    fun onReady()
+}
 
 //自行处理view
 interface OnCustomImageLoadListener {

@@ -1,5 +1,7 @@
 package com.starot.larger.fragment
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +14,7 @@ import com.starot.larger.enums.AnimType
 import com.starot.larger.image.LargerImageView
 import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.impl.OnImageCacheListener
+import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_larger_base.*
@@ -84,7 +87,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             registerLiveData()
 
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
+//            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
 
 
             //这里使用的是改写 PhotoView 的
@@ -212,5 +215,27 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         })
     }
 
-
+    override fun onAlreadyLoad(
+        data: LargerBean?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View,
+        success: (LargerBean) -> Unit
+    ) {
+        if (fullView is ImageView && data != null) {
+            val thumbnailsUrl = data.thumbnailsUrl
+            if (thumbnailsUrl.isNullOrEmpty()) {
+                return
+            }
+            Larger.largerConfig?.imageLoad?.load(
+                thumbnailsUrl,
+                fullView,
+                object : OnImageLoadReadyListener {
+                    override fun onReady() {
+                        success(data)
+                    }
+                })
+        }
+    }
 }

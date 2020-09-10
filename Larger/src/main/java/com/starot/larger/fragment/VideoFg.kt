@@ -148,5 +148,16 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         LargerStatus.status.postValue(AnimStatus.DRAG_START)
     }
 
+    override fun onAlreadyLoad(
+        data: LargerBean?,
+        fullView: View?,
+        thumbnailView: View?,
+        position: Int,
+        view: View,
+        success: (LargerBean) -> Unit
+    ) {
+
+    }
+
 
 }
