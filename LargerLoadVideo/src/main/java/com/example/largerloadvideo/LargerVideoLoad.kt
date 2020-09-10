@@ -8,6 +8,7 @@ import cn.jzvd.JZUtils
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
 import com.starot.larger.bean.LargerBean
+import com.starot.larger.fragment.VideoFg
 import com.starot.larger.image.OnLargerDragListener
 import com.starot.larger.impl.OnVideoLoadListener
 
@@ -25,16 +26,13 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
     }
 
 
-    override fun loadVideo(data: LargerBean, view: View) {
+    override fun loadVideo(data: LargerBean, view: View,  listener: OnLargerDragListener) {
         val video = view.findViewById<MyVideoView>(getVideoViewId())
+        video.setDragListener(listener)
         video.setUp(data.fullUrl, "", Jzvd.SCREEN_NORMAL)
 
     }
 
-    override fun dragListener(view: View, listener: OnLargerDragListener) {
-        val video = view.findViewById<MyVideoView>(getVideoViewId())
-        video.setDragListener(listener)
-    }
 
     override fun onRelease() {
         Jzvd.releaseAllVideos()

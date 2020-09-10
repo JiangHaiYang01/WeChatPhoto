@@ -1,11 +1,9 @@
 package com.starot.larger.impl
 
-import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
-import com.starot.larger.anim.impl.OnAnimatorListener
 import com.starot.larger.bean.LargerBean
+import com.starot.larger.fragment.VideoFg
 import com.starot.larger.image.OnLargerDragListener
 
 //加载图片接口
@@ -16,10 +14,8 @@ interface OnVideoLoadListener : OnLoadProgressPrepareListener,
     fun getPoster(view: View): ImageView
 
     //加载视屏
-    fun loadVideo(data: LargerBean, view: View)
+    fun loadVideo(data: LargerBean, view: View, listener: OnLargerDragListener)
 
-    //拖动
-    fun dragListener(view: View,listener: OnLargerDragListener)
 
     //清理资源
     fun onRelease()
