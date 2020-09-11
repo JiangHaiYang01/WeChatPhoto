@@ -1,7 +1,7 @@
 
 
 
-> 建议在 [个人博客](https://allens.icu/posts/30acc017/#more) 中查看,阅读体验更佳
+> 建议在 [个人博客](https://allens.icu/posts/4a05dc12/#more) 中查看,阅读体验更佳
 
 高仿微信朋友圈，点击查看大图，放大 缩小，可自定义
 
@@ -10,369 +10,28 @@
 
 # 前言
 
-相信大家都用过微信，在微信盆友圈中，点点击一个小图片的时候，会很自然的切换到大图模式，然后再点击一下就缩回去，这个动画效果非常好看，为了到达这个效果首先确认微信的动画效果哪些
+之前写过一个  [高仿微信查看大图 放大缩小](https://allens.icu/posts/30acc017/) ,开源以后，有小伙伴提出疑问，想要加入视屏的功能，反思了一下，自己当初写这个轮子时候，为什么没有考虑到这个问题，后来经过修改，吧兼容视频放入轮子中
 
+> 举一反三
 
+- 除了保留当初设计的图片功能，还需要保留拓展，给以后的其他功能加入
+- 能够兼容各种模式在一起
+- 开发者只需要图片功能，不需要视屏，那么就不需要视屏的轮子，
+- 可以自行拓展想要的布局，和可修改的拓展性
 
 
-# 实现目的
+# apk 下载体验
 
-- 点击小图 渐变切换到大图，背景渐变成黑色
-- 点击大图 渐变到小图，背景变成原来的样式
-- 往下拖拽,背景的颜色根据往下拖拽的进度改变，越往下 颜色越浅
-- 图片可以放大，缩小
-- 可以滑动
-- 小图到大图的过程中有一个图片加载进度
 
 
-> 目前这个使我们需要完成的需求，eumm  还是有点烦人的
-
-
-
-# 演示效果
-
-最终的项目效果如下图所示
-
-> 因为白嫖 gitee 作为图库 将 gif 进行了压缩，有点失真
-
-
-| 渐变放大缩小 | 拖动效果 | 放大缩小 |
-| ------ | ------ | ------ |
-| ![](https://gitee.com/_Allens/BlogImage/raw/master/image/z2chz.gif) | ![](https://gitee.com/_Allens/BlogImage/raw/master/image/0cb2n.gif) | ![](https://gitee.com/_Allens/BlogImage/raw/master/image/3ewcf.gif) |
-
-
-
-## 支持多种类型的 imagetype (matrix 和 center 不支持)
-
-
-| fix_xy | fit_start | fix_center |
-| ------ | ------ | ------ |
-|![](https://gitee.com/_Allens/BlogImage/raw/master/image/uecr0.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/tlidq.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/blr8f.gif)|
-
-
-| fix_end | center_crop | center_inside |
-| ------ | ------ | ------ |
-|![](https://gitee.com/_Allens/BlogImage/raw/master/image/as5q9.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/5iish.gif)|![](https://gitee.com/_Allens/BlogImage/raw/master/image/6kvt7.gif)|
-
-
-
-# 实现讲解
-
-
-## 滑动分析
-
-一下子让拿到这个需求，其实还是比较懵逼的，不过饭要一口一口吃，既然这个是仿造微信的，他的最基本的需求就是 点击小图 然后显示一个大图，并且能够切换，分析可最基本的需求，一个activity + viewpager  搞定 打完收工，动画什么的都是浮云~~
-
-
-> 滑动  viewpager + activity  ,点击跳转到新的activity 中
-
-完成了第一个基本的需求
-
-产品说:"不行，要有动画"
-
-
-> 项目中使用的是viewpager2 算尝个鲜，实际使用中也没发现问题
-
-
-## 点击小图切换到大图的过程  狸猫换代太子
-
-仔细的看一下上面的动画，一个小图的activityA  跳转到 大图的 activityB ，我想到的一个思路是 当跳转到activityB 以后，首先在B 的位置上画一个 和A上一模一样的imageview  然后 缩放的 大图的位置
-
-那么问题来了，如何在 activityB 上显示一个和activityA 上相同的imageview 呢
-
-我想到的办法是 将 activityA 的ImageView 记录下来，然后在 activityB 中 将 imageview 的 宽 高 和 图片的 scaleType 设置的和他相同 这样图片的大小 和样式就和  activityA 中一样了
-
-
-> 如何将 activityB 的图片位置确定下来
-
-我们一开始得到的 activityA 中的 imageview  我们是知道他的xy 坐标的 只需要将这个坐标给到 activityB 中就行了
-
-
-代码如下
-
-```java
- override fun beforeTransition(
-        photoId: Int,
-        fullView: ImageView,
-        thumbnailView: ImageView
-    ) {
-        fullView.scaleType = thumbnailView.scaleType
-        fullView.layoutParams = fullView.layoutParams.apply {
-            width = thumbnailView.width
-            height = thumbnailView.height
-            val location = getLocationOnScreen(thumbnailView)
-            when (fullView.parent) {
-                is ConstraintLayout -> {
-                    val constraintSet = ConstraintSet().apply {
-                        clone(fullView.parent as ConstraintLayout)
-                        clear(photoId, ConstraintSet.START)
-                        clear(photoId, ConstraintSet.TOP)
-                        clear(photoId, ConstraintSet.BOTTOM)
-                        clear(photoId, ConstraintSet.RIGHT)
-                        //重新建立约束
-                        connect(
-                            photoId, ConstraintSet.TOP, ConstraintSet.PARENT_ID,
-                            ConstraintSet.TOP, location[1]
-                        )
-                        connect(
-                            photoId, ConstraintSet.START, ConstraintSet.PARENT_ID,
-                            ConstraintSet.START, location[0]
-                        )
-                    }
-                    constraintSet.applyTo(fullView.parent as ConstraintLayout)
-                }
-                else -> {
-                    if (this is ViewGroup.MarginLayoutParams) {
-                        marginStart = location[0]
-                        topMargin = location[1]
-                    }
-                }
-            }
-
-
-        }
-
-    }
-
-```
-
-
-> activityB 中的图片 变大
-
-上面的 beforeTransition 方法 我们已经可以 从 activityA 跳转到 activityB 并且在activityB 中绘制了一个和activityA 中相同大小，位置，样式的图片，接着 我们要把这个图片变大。。既然是变大，肯定少不了动画，分析一下这个由小到大，
-
-
-图片的宽高不在是原来小图的  位置也不再是小图的 ，样式也不再是小图的，真正的变成了太子。。
-
-
-```java
-
-   override fun startTransition(fullView: ImageView, thumbnailView: ImageView) {
-        fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-        fullView.layoutParams = fullView.layoutParams.apply {
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height = ViewGroup.LayoutParams.MATCH_PARENT
-            if (this is ViewGroup.MarginLayoutParams) {
-                marginStart = 0
-                topMargin = 0
-            }
-        }
-    }
-
-    override fun transitionSet(durationTime: Long): Transition {
-        return TransitionSet().apply {
-            addTransition(ChangeBounds())
-            addTransition(ChangeImageTransform())
-            duration = durationTime
-            interpolator = DecelerateInterpolator()
-        }
-    }
-```
-
-> 背景的颜色变成黑色
-
-拿到父类的view 改变他的背景颜色透明度 加上一个 渐变的动画效果就行了
-
-```java
-
-   //修改进入的时候背景 渐变 黑色
-    fun start(
-        parent: View,
-        originalScale: Float,
-        duration: Long
-    ) {
-        val valueAnimator = ValueAnimator()
-        valueAnimator.duration = duration
-        valueAnimator.setFloatValues(originalScale, 1f)
-        valueAnimator.addUpdateListener { animation ->
-            parent.setBackgroundColor(
-                ColorTool.getColorWithAlpha(Color.BLACK, (animation.animatedValue as Float))
-            )
-        }
-        valueAnimator.start()
-    }
-```
-
-
-## 大图变成小图
-
-上面的小图到大图的 看官理解啦，那么大图到小图 就返回来就行啦
-
-
-## 图片的放大，缩小
-
-这个图片的放大缩小，我用的是开源的框架  [PhotoView](https://github.com/chrisbanes/PhotoView)，
-
-
-
-## 手指拖动改变大小和背景颜色
-
-
-先看一下效果
-
-
-
-<!-- <video src='https://gitee.com/_Allens/BlogImage/raw/master/image/gv1o4.mp4' type='video/mp4' controls='controls'  width='50%' height='50%'>
-</video> -->
-
-| 返回原来的状态 | 变成小图  |
-| ------ | ------  |
-| ![](https://gitee.com/_Allens/BlogImage/raw/master/image/0cb2n.gif) | ![](https://gitee.com/_Allens/BlogImage/raw/master/image/y32a1.gif)  |
-
-
-
-
-分析一下 这里有两个动画，
-- 下拉的位置不大，返回原来的状态，
-- 下拉的位置很大，直接变成小图
-
-
-因为 PhotoView 不知道 图片的 drag 所以 在 PhotoView 的基础上进行拓展
-
-```java
-
-object ImageDragHelper {
-
-
-    //是否正在移动
-    private var isDragIng = false
-
-    //是否正在动画
-    var isAnimIng = false
-
-
-    fun startDrag(
-        image: PhotoView,
-        holder: ViewPagerAdapter.PhotoViewHolder,
-        listener: OnDragAnimListener
-    ) {
-        image.setOnViewDragListener(object : OnViewDragListener {
-            override fun onDrag(dx: Float, dy: Float) {
-            }
-
-            override fun onScroll(x: Float, y: Float) {
-                //这里 需要判断一下滑动的角度  防止和 viewpager 滑动冲突
-                if (isDragIng) {
-                    //正在播放动画 不给滑动
-                    if (isAnimIng) {
-                        return
-                    }
-                    //图片处于缩放状态
-                    if (image.scale != 1.0f) {
-                        return
-                    }
-                    drag(image, x, y, listener)
-                } else {
-                    if (abs(x) > 30 && abs(y) > 60) {
-                        //正在播放动画 不给滑动
-                        if (isAnimIng) {
-                            return
-                        }
-                        //图片处于缩放状态
-                        if (image.scale != 1.0f) {
-                            return
-                        }
-                        // 一开始向上滑动无效的
-                        if (y > 0) {
-                            isDragIng = true
-                            drag(image, x, y, listener)
-                        }
-                    }
-                }
-            }
-
-            override fun onScrollFinish() {
-                if (isDragIng)
-                    listener.onEndDrag(image,holder)
-            }
-
-            override fun onScrollStart() {
-                isDragIng = false
-            }
-        })
-
-    }
-
-    private fun drag(image: PhotoView, x: Float, y: Float, listener: OnDragAnimListener) {
-        listener.onStartDrag(image, x, y)
-    }
-}
-```
-
-知道了 x y 就好处理了
-
-
-```java
-
-            //图片的缩放 和位置变化
-            val fixedOffsetY = y - 0
-            val fraction = abs(max(-1f, min(1f, fixedOffsetY / image.height)))
-            val fakeScale = 1 - min(0.4f, fraction)
-            image.scaleX = fakeScale
-            image.scaleY = fakeScale
-            image.translationY = fixedOffsetY * dampingData
-            image.translationX = x / 2 * dampingData
-```
-
-> 判断是缩回去 还是 返回原来的样子，
-
-```java
-
-  override fun onEndDrag(
-            image: PhotoView,
-            holder: ViewPagerAdapter.PhotoViewHolder
-        ) {
-            setViewPagerEnable(true)
-            setZoomable(image, true)
-
-            var fraction = setFraction()
-            if (fraction > 1f) {
-                fraction = 1f
-            } else if (fraction < 0f) {
-                fraction = 0f
-            }
-            if (abs(image.translationY) < image.height * fraction) {
-                AnimDragHelper.start(
-                    getPhotoViewId(),
-                    setDuration(),
-                    image,
-                    getImageArrayList()[mCurrentIndex],
-                    holder,
-                    enterAnimListener,
-                    afterTransitionListener
-                )
-                //背景颜色变化
-                AnimBgEnterHelper.start(parentView, currentScale, setDuration())
-            } else {
-                exitAnim(currentScale, holder)
-            }
-        }
-```
-
-
-## 自定义的图片加载器
-
-这里原本想着放到框架内部，又想到 郭婶在 litepal 中说的 做减法，所以没有放在内部，而是作为demo 的形式放在了外部， 开发者可以更大程度的自定义样式
-
-demo 用到的是 glide ,
-
-
-## 图片加载进度
-
-这个功能其实不属于框架本身的样式，所以我放在了demno 中 供大家参考，有兴趣的小伙伴可以参考 [Glide 图片加载进度](https://allens.icu/posts/9a2c02b8/#more)
-
+[apk 点击下载](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911111134.apk)
 
 
 # 下载
 
+这里将每个部分模块化，可以单独依赖，减少体积
 
-
-Step 1. Add the JitPack repository to your build file
-
-
-Add it in your root build.gradle at the end of repositories:
-
-```
+```java
 	allprojects {
 		repositories {
 			...
@@ -381,212 +40,326 @@ Add it in your root build.gradle at the end of repositories:
 	}
 ```
 
-Step 2. Add the dependency
+必须添加的模块，也是基础模块
 
-```
+```java
 	dependencies {
-	        implementation 'com.github.JiangHaiYang01:WeChatPhoto:Tag'
+	        implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerGlide:0.0.4'
 	}
 ```
 
-> 当前最新版本
-
-[![](https://www.jitpack.io/v/JiangHaiYang01/WeChatPhoto.svg)](https://www.jitpack.io/#JiangHaiYang01/WeChatPhoto)
-
-# 使用
-
-## step1 继承 ``LargerAct``
+最新版本 [![](https://www.jitpack.io/v/JiangHaiYang01/WeChatPhoto.svg)](https://www.jitpack.io/#JiangHaiYang01/WeChatPhoto)
 
 
-继承 LargerAct 类型可自定义 sample 中方式的是string
+提供默认的图片加载器
 
 ```java
+ implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerGlide:0.0.4'
+```
+
+提供默认的视屏加载器
+```java
+implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerLoadVideo:0.0.4'
+```
+
+提供默认的进度加载样式
+
+```java
+implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerProgress:0.0.4'
+```
 
 
-class SampleAct : LargerAct<String>() {
+# 使用介绍
+
+## 加载列表类型的图片
 
 
-    companion object {
-        const val IMAGE = "images"
-        const val INDEX = "index"
+自定义数据类型，需要继承 ``LargerBean``  并且设置这个类型的是想要改成哪种模式，当前支持的模式 图片 和 视屏模式
+
+```java
+@Parcelize
+class ImageBean : LargerBean() {
+    override fun getType(): LargerDataEnum {
+        return LargerDataEnum.IMAGE
     }
-
-
-    //添加数据源
-    override fun getData(): ArrayList<String>? {
-        return intent.getStringArrayListExtra(IMAGE)
-    }
-
-    //长按事件
-    override fun onLongClickListener() {
-        Toast.makeText(this, "长按图片", Toast.LENGTH_LONG).show()
-    }
-
-    //item 布局
-    override fun getItemLayout(): Int {
-        return R.layout.item_def
-    }
-
-    //一定要返回一个 PhotoView 的id  内部处理还是需要用到的
-    override fun getPhotoViewId(): Int {
-        return R.id.image
-    }
-
-    //当前是第几个图片  index 和 image 一一对应
-    override fun getIndex(): Int {
-        return intent.getIntExtra(INDEX, 0)
-    }
-
-    //设置持续时间
-    override fun setDuration(): Long {
-        return 2000
-    }
-
-    //默认拖动时候的阻尼系数   [0.0f----1.0f] 越小越难滑动
-    override fun setDamping(): Float {
-        return 1.0f
-    }
-
-    //设置下拉的参数 [0.0f----1.0f] 越小越容易退出
-    override fun setFraction(): Float {
-        return 0.5f
-    }
-
-    //设置原来的图片源
-    override fun getImageArrayList(): ArrayList<ImageView> {
-        return ImagesHelper.images
-    }
-
-    //处理自己的业务逻辑
-    override fun itemBindViewHolder(
-        isLoadFull: Boolean,
-        itemView: View,
-        position: Int,
-        data: String?
-    ) {
-        if (data == null) {
-            return
-        }
-        //这里用到了自己写的一个 进度条 可自定义
-        val progressView = itemView.findViewById<CircleProgressView>(R.id.progress)
-        val imageView = itemView.findViewById<PhotoView>(R.id.image)
-
-        //Glide 加载图片的进度 具体可参考代码
-        ProgressInterceptor.addListener(data, object : ProgressListener {
-            override fun onProgress(progress: Int) {
-                progressView.visibility = View.VISIBLE
-                progressView.progress = progress
-            }
-        })
-
-        //这里为了演示效果  取消了缓存  正常使用是不需要的
-        val options = RequestOptions()
-        if (isLoadFull)
-            options
-                .placeholder(imageView.drawable)
-                .override(imageView.width, imageView.height)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-
-
-        Glide.with(this)
-            .load(data)
-            .apply(options)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    Log.i(TAG, "图片加载失败")
-                    progressView.visibility = View.GONE
-                    return false
-                }
-
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: com.bumptech.glide.load.DataSource?,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    Log.i(TAG, "图片加载成功")
-                    progressView.visibility = View.GONE
-                    return false
-                }
-            })
-            .into(imageView)
-    }
-
 
 }
+```
+
+> 需要导入 图片加载器
+
+在需要的地方启动 下面是最基础的用法， 就能实现之前版本的需求
+
+```java
+Larger.create()
+    .withListType()//这里展示的是列表类型的
+    .setImageLoad(GlideImageLoader(context))   //图片加载器
+    .setIndex(position)//下标
+    .setRecyclerView(recyclerView)//recyclerview
+    .setData(data) //添加默认的数据源
+    .start(context)//跳转
 
 ```
 
-## step2 添加theme
+
+
+
+![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911091816.gif)
+
+
+## 加载视屏
+
+和图片一样需要自定义数据类型
+
+```
+@Parcelize
+class VideoBean : LargerBean() {
+    override fun getType(): LargerDataEnum {
+        return LargerDataEnum.Video
+    }
+
+}
+```
+
+导入图片加载器和视屏加载器
+
+```java
+Larger.create()
+    .withListType()//这里展示的是列表类型的
+    .setImageLoad(GlideImageLoader(context))   //图片加载器
+    .setVideoLoad(LargerVideoLoad(context))//视屏加载器
+    .setIndex(position)//下标
+    .setRecyclerView(recyclerView)//recyclerview
+    .setData(data) //添加默认的数据源
+    .start(context)//跳转
+
+```
+
+
+
+
+![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911092159.gif)
+
+
+## 处理加载进度
+
+
+
+添加默认的进度加载样式
+
+```java
+implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerProgress:0.0.4'
+```
+
+
+```java
+Larger.create()
+    .withListType()//这里展示的是列表类型的
+    .setImageLoad(GlideImageLoader(context))   //图片加载器
+    .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+    .setIndex(position)//下标
+    .setRecyclerView(recyclerView)//recyclerview
+    .setData(data) //添加默认的数据源
+    .start(context)//跳转
+
+```
+
+这里提供了两种模式的加载进度样式
+
+### FULL
+
+![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911092404.gif)
+
+### NONE
+
+![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911092550.gif)
+
+
+
+
+## 设置缩放比例
+
+双击图片，可以变大（默认1.5f），再次双击会变得更大(默认3.0f)，当最大的时候，双击变成 正常比例(1.0f)，
+
+当然也可以上设置自己想要的比例,
+
+
+```java
+Larger.create()
+    .withListType()//这里展示的是列表类型的
+    .setImageLoad(GlideImageLoader(context))   //图片加载器
+    .setMediumScale(4f)//设置中间比例 不能超过最大比例
+    .setMaxScale(4f)//设置最大比例
+    .setIndex(position)//下标
+    .setRecyclerView(recyclerView)//recyclerview
+    .setData(data) //添加默认的数据源
+    .start(context)//跳转
+
+
+```
+
+这样就可以设置成，双击一下 变成4f 再次双击变成1f
+
+
+## 自定义布局
+
+需要使用 LargerImageView 作为图片信息
+
+下面是查看原图示例
 
 ```xml
 
-        <activity
-            android:name=".larger.SampleAct"
-            android:screenOrientation="portrait"
-            android:theme="@style/custom_larger" />
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.starot.larger.image.LargerImageView
+        android:id="@+id/item_custom_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <TextView
+        android:id="@+id/item_custom_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="#BEBEBE"
+        android:paddingLeft="20dp"
+        android:paddingTop="6dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="6dp"
+        android:text="查看原图"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-## step3 跳转
+
+因为是需要点击加载大图，所以 需要将 自动加载大图设置成false ``setAutomatic(false)``
+
+使用 ``setCustomListener`` 设置自定义的布局
+
+> 参数说明
+
+第一个参数:当前布局的id
+第二个参数:准备展示的LargerImageView id
+第三个参数:自定义的接口处理
 
 ```java
- private fun startAct(
-        index: Int,
-        images: ArrayList<String>
-    ) {
-        val intent = Intent(this, SampleAct::class.java)
-        //传入图片信息 按需求自定义
-        intent.putStringArrayListExtra(SampleAct.IMAGE, images)
-        //传入当前的 index  用于处理viewpager
-        intent.putExtra(SampleAct.INDEX, index)
-        startActivity(intent)
+  private val listener = object : OnCustomImageLoadListener {
+        override fun onCustomImageLoad(
+            listener: OnImageLoadListener?,
+            view: View,
+            position: Int,
+            data: LargerBean
+        ) {
+            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
+            val fullUrl = data.fullUrl
+            if (fullUrl != null) {
+                listener?.checkCache(fullUrl, object : OnImageCacheListener {
+                    override fun onCache(hasCache: Boolean) {
+                        if (hasCache) {
+                            textView.visibility = View.GONE
+                        }
+                    }
+                })
+
+                textView.setOnClickListener {
+                    listener?.load(
+                        fullUrl,
+                        true,
+                        view.findViewById(R.id.item_custom_image)
+                    )
+                }
+            } else {
+                textView.visibility = View.GONE
+            }
+        }
     }
+
+
+Larger.create()
+    .withListType()//这里展示的是列表类型的
+    .setImageLoad(GlideImageLoader(context))   //图片加载器
+    .setMediumScale(4f)//设置中间比例 不能超过最大比例
+    .setMaxScale(4f)//设置最大比例
+    .setIndex(position)//下标
+    .setAutomatic(false)//设置不自动加载大图
+    .setCustomListener(R.layout.item_custom_image,R.id.item_custom_image,listener)//自定义布局
+    .setRecyclerView(recyclerView)//recyclerview
+    .setData(data) //添加默认的数据源
+    .start(context)//跳转
+
+
 ```
 
-# 更新说明
+## 设置像抖音那样的上下滑动方式
 
-> 0.0.3
+```java
 
-- fix bug 返回的时候不是走的动画，而是直接退出
-- fix viewpager 滑动以后 在单点击返回出问题
-- fix 动画开始以后，可以缩放image
+Larger.create()
+    .withListType()//这里展示的是列表类型的
+    .setImageLoad(GlideImageLoader(context))   //图片加载器
+    .setIndex(position)//下标
+    .setOrientation(Orientation.ORIENTATION_VERTICAL)//滑动的方向
+    .setRecyclerView(recyclerView)//recyclerview
+    .setData(data) //添加默认的数据源
+    .start(context)//跳转
 
-> 0.0.2
-
-在0.0.1 版本 实际使用的时候发现一个问题 当图片是 FIT_XY 或者 CENTER_CROP 等 对图片裁剪的时候 小图到大图的过程中会有问题
-
-- 兼容了 CENTER_CROP 等状态的处理 （MATRIX 和 CENTER 不兼容）
-
-# 未处理的问题
-
-在 原本图片的 style 是  MATRIX  或者 CENTER 的时候，图片不能很好的从 原来的样式 渐渐切换到 大图的样式，这里的原因我还不知道为啥，知道的的小伙伴可以 说一下
-
-# apk 下载体验
-
-[0.0.3版本](https://gitee.com/_Allens/BlogImage/raw/master/image/20200804201331.apk)
-
-[0.0.2版本](https://gitee.com/_Allens/BlogImage/raw/master/image/arjp8.apk)
-
-[0.0.1版本](https://gitee.com/_Allens/BlogImage/raw/master/image/v86p6.apk)
+```
 
 
+## 单个View 的方式
+
+使用 withSingle  通过 ``setImagesWithSingle``设置单个图片信息，
+
+这里使用list 主要是考虑 万一有两个呢
+
+```java
+  Larger.create()
+        .withSingle()//这里展示的单个view
+        .setImageLoad(GlideImageLoader(this))   //图片加载器
+        .setDuration(300)//动画持续时间
+        .setImagesWithSingle(arrayListOf(src_image))//设置imageView
+        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+        .setData(list) //添加默认的数据源
+        .start(this)
+```
+
+## 设置背景颜色
 
 
-# 源码
+```java
+  Larger.create()
+        .withSingle()//这里展示的单个view
+        .setImageLoad(GlideImageLoader(this))   //图片加载器
+        .setDuration(300)//动画持续时间
+        .setBackgroundColor(Color.Red)//默认是黑色 可以设置自己需要的颜色
+        .setImagesWithSingle(arrayListOf(src_image))//设置imageView
+        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+        .setData(list) //添加默认的数据源
+        .start(this)
+```
+
+
+# 最后
+
+整个架构用fragment 的方式去处理，方便后续的拓展，视屏部分使用的是  [JiaoZiVideoPlayer](https://github.com/Jzvd/JiaoZiVideoPlayer) 作为播放器，eumm 可以替换自己喜欢的播放器去处理，
+
+
+
+# github
 
 [Github](https://github.com/JiangHaiYang01/WeChatPhoto)
-[博客说明](https://allens.icu/posts/30acc017/#more)
-[掘金](https://juejin.im/post/5f0c24006fb9a07e9824d5d6)
+[博客说明](https://allens.icu/posts/4a05dc12/#more)
 
 
-
-# 写在最后
-
-这边博客其实之前就写完了，直接放出效果图 + 使用方式，我想着其实写不是关键，还是想将自己写的时候的一些心得分享一下
