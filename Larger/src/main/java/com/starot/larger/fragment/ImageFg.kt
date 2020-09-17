@@ -167,6 +167,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
     override fun onDragPrepare(dx: Float, dy: Float): Boolean {
+        LogUtils.i("onDragPrepare dx $dx dy $dy")
         //动画过程中不能触发drag
         if (isAnimIng()) {
             return false
@@ -177,13 +178,12 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         }
 
         if (getOrientation() == ViewPager2.ORIENTATION_HORIZONTAL) {
-            if (abs(dx) > 30 && abs(dy) > 60) {
-                if (dy > 0) {
-                    return true
-                }
+            //一开始向上无效
+            if (abs(dy) > abs(dx) && dy > 0) {
+                return true
             }
         } else {
-            if (abs(dx) > 60 && abs(dy) > 30) {
+            if (abs(dx) > abs(dy)) {
                 return true
             }
         }

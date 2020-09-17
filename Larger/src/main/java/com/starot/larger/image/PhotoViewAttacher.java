@@ -104,7 +104,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
 
     private AtomicBoolean isDragging = new AtomicBoolean(false);
-    private int mTouchSlop;
+//    private int mTouchSlop;
 
 
     private boolean customZoomEnable = true;
@@ -193,7 +193,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
             return;
         }
 
-        mTouchSlop = ViewConfiguration.get(imageView.getContext()).getScaledEdgeSlop();
+//        mTouchSlop = ViewConfiguration.get(imageView.getContext()).getScaledEdgeSlop();
 
 
         mBaseRotation = 0.0f;
@@ -217,8 +217,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                         float dx = e2.getRawX() - e1.getRawX();
                         float dy = e2.getRawY() - e1.getRawY();
                         if (onLargerDragListener.onDragPrepare(dx, dy)) {
-
-                            isDragging.set(Math.sqrt(dx * dx + (dy * dy)) >= mTouchSlop);
+                            LogUtils.i("可以开始 drag ----");
+//                            isDragging.set(Math.sqrt(dx * dx + (dy * dy)) >= mTouchSlop);
+                            isDragging.set(true);
                             if (isDragging.get()) {
                                 onLargerDragListener.onDragStart();
                                 setCustomZoomable(false);
