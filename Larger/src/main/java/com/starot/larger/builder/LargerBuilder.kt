@@ -62,6 +62,14 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+
+    //是否直接向上就能够拖动，微信直接向上不可以拖动，这里默认false
+    fun setUpCanMove(canMove: Boolean): LargerBuilder {
+        listConfig?.upCanMove = canMove
+        return this
+    }
+
+    //是否打印日志
     fun setDebug(debug: Boolean): LargerBuilder {
         listConfig?.debug = debug
         return this

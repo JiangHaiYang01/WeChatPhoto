@@ -3,6 +3,7 @@ package com.starot.larger.anim.impl
 import android.content.Context
 import android.graphics.Color
 import android.view.View
+import com.starot.larger.Larger
 import com.starot.larger.anim.AnimBgHelper
 import com.starot.larger.anim.AnimDragHelper
 import com.starot.larger.anim.AnimExitHelper
@@ -32,15 +33,26 @@ interface OnDragAnimListener : OnLargerConfigListener {
         view.translationX = x
 
 
-        //已经向上了 就黑色背景 不需要改动了
-        if (y > 0) {
-            //背景的颜色 变化
+        //如果将upCanMove 设置成true 就给他改变颜色
+        val upCanMove = Larger.largerConfig?.upCanMove
+        if (upCanMove == null || upCanMove == false) {
+            //已经向上了 就黑色背景 不需要改动了
+            if (y > 0) {
+                //背景的颜色 变化
+                val scale: Float = abs(y) / getWindowHeight(view.context)
+                AnimDragHelper.currentScale = 1 - scale
+                parent.setBackgroundColor(
+                    ColorTool.getColorWithAlpha(getBackGroundColor(), 1 - scale)
+                )
+            }
+        } else {
             val scale: Float = abs(y) / getWindowHeight(view.context)
             AnimDragHelper.currentScale = 1 - scale
             parent.setBackgroundColor(
                 ColorTool.getColorWithAlpha(getBackGroundColor(), 1 - scale)
             )
         }
+
     }
 
     fun endDrag(view: View?) {

@@ -20,12 +20,16 @@ class DefConfig() {
         var def_back_color = Color.BLACK
         var def_automatic = true
         var def_debug = true
+        var def_up_can_move = false
         var orientation = Orientation.ORIENTATION_HORIZONTAL
     }
 }
 
 
 data class LargerConfig(
+
+    //是否直接向上就能够拖动，微信直接向上不可以拖动，这里默认false
+    var upCanMove :Boolean = DefConfig.def_up_can_move,
 
     //是否打印日志
     var debug: Boolean = DefConfig.def_debug,

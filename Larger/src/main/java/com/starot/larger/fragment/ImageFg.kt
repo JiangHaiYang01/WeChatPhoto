@@ -179,7 +179,14 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
 
         if (getOrientation() == ViewPager2.ORIENTATION_HORIZONTAL) {
             //一开始向上无效
-            if (abs(dy) > abs(dx) && dy > 0) {
+            if (abs(dy) > abs(dx)) {
+                //默认是可以不可以直接向上滑的
+                val upCanMove = Larger.largerConfig?.upCanMove
+                if (upCanMove == null || upCanMove == false) {
+                    if (dy < 0) {
+                        return false
+                    }
+                }
                 return true
             }
         } else {

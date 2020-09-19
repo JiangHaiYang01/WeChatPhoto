@@ -95,6 +95,7 @@ class ImageListAdapter(
                 .setData(data) //添加默认的数据源
             when (type) {
                 0 -> {
+                    withListType.setUpCanMove(true)//向上滑动有效
                 }
                 1 -> {
                     withListType
