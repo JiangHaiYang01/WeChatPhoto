@@ -211,7 +211,9 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         //监听 加载大图进度变化
         progressLoadChangeLiveData.observe(this, {
             //大图加载进度
-            Larger.largerConfig?.progressLoad?.onProgressChange(fullView.context, it)
+            val context = context
+            if (context != null)
+                Larger.largerConfig?.progressLoad?.onProgressChange(context, it)
         })
     }
 

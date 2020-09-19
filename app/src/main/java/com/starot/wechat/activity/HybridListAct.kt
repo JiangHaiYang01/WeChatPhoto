@@ -13,7 +13,7 @@ import com.starot.wechat.utils.Urls
 import kotlinx.android.synthetic.main.activity_image_list.*
 
 
-class HybridListAct : AppCompatActivity() {
+class HybridListAct : BaseAct() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

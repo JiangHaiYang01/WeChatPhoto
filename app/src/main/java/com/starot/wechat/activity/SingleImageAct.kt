@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_image_list.*
 import kotlinx.android.synthetic.main.activity_image_single.*
 
 
-class SingleImageAct : AppCompatActivity() {
+class SingleImageAct : BaseAct() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

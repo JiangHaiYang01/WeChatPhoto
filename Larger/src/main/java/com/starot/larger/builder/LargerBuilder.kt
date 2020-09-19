@@ -62,6 +62,11 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    fun setDebug(debug: Boolean): LargerBuilder {
+        listConfig?.debug = debug
+        return this
+    }
+
     //设置背景颜色
     fun setBackgroundColor(color: Int): LargerBuilder {
         listConfig?.backgroundColor = color

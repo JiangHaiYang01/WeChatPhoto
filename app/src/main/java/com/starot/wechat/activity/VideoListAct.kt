@@ -10,7 +10,7 @@ import com.starot.wechat.utils.Urls
 import kotlinx.android.synthetic.main.activity_image_list.*
 
 
-class VideoListAct : AppCompatActivity() {
+class VideoListAct : BaseAct() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

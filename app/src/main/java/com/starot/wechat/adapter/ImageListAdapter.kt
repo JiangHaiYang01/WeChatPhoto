@@ -134,6 +134,9 @@ class ImageListAdapter(
                         .setMaxScale(4f)//设置最大比例
                         .setMediumScale(4f)//设置中间比例 不能超过最大比例
                 }
+                6->{
+                    withListType.setBackgroundColor(Color.RED)
+                }
             }
             withListType.start(context)
         }

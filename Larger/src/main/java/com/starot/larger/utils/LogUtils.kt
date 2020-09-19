@@ -1,6 +1,7 @@
 package com.starot.larger.utils
 
 import android.util.Log
+import com.starot.larger.Larger
 
 object LogUtils {
 
@@ -9,6 +10,7 @@ object LogUtils {
 
     @JvmStatic
     fun i(info: String) {
-        Log.e(TAG, info)
+        if (Larger.largerConfig?.debug == true)
+            Log.e(TAG, info)
     }
 }

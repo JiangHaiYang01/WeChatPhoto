@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_image_list.*
 import kotlinx.android.synthetic.main.activity_image_single.*
 
 
-class SingleAudioAct : AppCompatActivity() {
+class SingleAudioAct : BaseAct() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

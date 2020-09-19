@@ -19,12 +19,16 @@ class DefConfig() {
         var def_min_scale = 0.2f
         var def_back_color = Color.BLACK
         var def_automatic = true
+        var def_debug = true
         var orientation = Orientation.ORIENTATION_HORIZONTAL
     }
 }
 
 
 data class LargerConfig(
+
+    //是否打印日志
+    var debug: Boolean = DefConfig.def_debug,
 
     //单个或者多个图片
     var images: List<View>? = null,

@@ -11,6 +11,7 @@ import com.starot.larger.impl.OnLargerType
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
 import com.starot.larger.utils.PageChange
+import com.starot.larger.utils.StatusBarTools
 import kotlinx.android.synthetic.main.activity_larger_base.*
 
 abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
@@ -26,6 +27,8 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         overridePendingTransition(0, 0)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_larger_base)
+        //沉寂式
+        StatusBarTools.setStatusBar(this)
 
         //当前的index
         mCurrentIndex = getIndex()
@@ -42,9 +45,6 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         //竖着滑动
         larger_viewpager.orientation = getOrientation()
 
-//        larger_viewpager.setPageTransformer(
-//            MarginPageTransformer(dp2px(20f))
-//        )
 
         //检查状态判断是否可以滑动viewpager
         LargerStatus.status.observe(this, {
