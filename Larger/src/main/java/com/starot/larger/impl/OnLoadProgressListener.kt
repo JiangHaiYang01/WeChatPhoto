@@ -2,7 +2,7 @@ package com.starot.larger.impl
 
 import android.content.Context
 
-interface OnLoadProgressListener {
+interface OnLoadProgressListener : OnLifecycleListener {
 
     //进度条的变化
     fun onProgressChange(context: Context, isFinish: Boolean)

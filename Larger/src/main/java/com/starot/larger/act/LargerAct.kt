@@ -33,6 +33,20 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         //当前的index
         mCurrentIndex = getIndex()
 
+        //添加到了lifecycle
+        val progressLoader = Larger.largerConfig?.progressLoad
+        val videoLoad = Larger.largerConfig?.videoLoad
+        val imageLoad = Larger.largerConfig?.imageLoad
+        if (progressLoader != null) {
+            lifecycle.addObserver(progressLoader)
+        }
+        if (imageLoad != null) {
+            lifecycle.addObserver(imageLoad)
+        }
+        if (videoLoad != null) {
+            lifecycle.addObserver(videoLoad)
+        }
+
         //设置适配器
         larger_viewpager.adapter =
             FgPageAdapter<T>(supportFragmentManager, lifecycle, getData(), this)

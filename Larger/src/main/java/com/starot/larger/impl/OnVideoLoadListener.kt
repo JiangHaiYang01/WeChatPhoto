@@ -8,7 +8,7 @@ import com.starot.larger.image.OnLargerDragListener
 
 //加载图片接口
 interface OnVideoLoadListener : OnLoadProgressPrepareListener,
-    OnVideoViewIdListener {
+    OnVideoViewIdListener, OnLifecycleListener {
 
     //返回预览图
     fun getPoster(view: View): ImageView
@@ -20,9 +20,6 @@ interface OnVideoLoadListener : OnLoadProgressPrepareListener,
     //清理资源
     fun onRelease()
 
-    fun onPause()
-
-    fun onResume()
 }
 
 

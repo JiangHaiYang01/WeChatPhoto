@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.starot.larger.bean.LargerBean
 
 //加载图片接口
-interface OnImageLoadListener : OnLoadProgressPrepareListener {
+interface OnImageLoadListener : OnLoadProgressPrepareListener, OnLifecycleListener {
 
 
     //加载图片

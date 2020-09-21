@@ -50,15 +50,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-        Larger.largerConfig?.videoLoad?.onResume()
-    }
 
-    override fun onPause() {
-        super.onPause()
-        Larger.largerConfig?.videoLoad?.onPause()
-    }
 
     override fun getFullViewId(): Int {
         return Larger.largerConfig?.fullViewId ?: Larger.largerConfig?.videoLoad?.getVideoViewId()
