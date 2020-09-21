@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
-import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
@@ -17,6 +16,7 @@ import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.OnCustomImageLoadListener
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
+import com.starot.larger.view.progress.ImageProgressLoader
 import com.starot.wechat.R
 import com.starot.wechat.bean.ImageBean
 import kotlin.collections.ArrayList
@@ -67,6 +67,7 @@ class ImageListAdapter(
                 textView.setOnClickListener {
                     listener?.load(
                         fullUrl,
+                        position,
                         true,
                         view.findViewById(R.id.item_custom_image)
                     )
@@ -90,12 +91,13 @@ class ImageListAdapter(
                 .setImageLoad(GlideImageLoader(context))   //图片加载器
                 .setIndex(position)//下标
                 .setDuration(300)//动画持续时间
-                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
+                .setProgressLoaderUse(true) //使用加载框
             when (type) {
                 0 -> {
                     withListType.setUpCanMove(true)//向上滑动有效
+                        .setDebug(true)//设置显示日志
                 }
                 1 -> {
                     withListType
@@ -106,7 +108,7 @@ class ImageListAdapter(
                             listener
                         )//自定义布局
                 }
-                2->{
+                2 -> {
                     withListType
                         .setAutomatic(false)//设置不自动加载大图
                         .setCustomListener(
@@ -114,9 +116,9 @@ class ImageListAdapter(
                             R.id.item_custom_image,
                             listener
                         )//自定义布局
-                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+//                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 }
-                3->{
+                3 -> {
                     withListType
                         .setAutomatic(false)//设置不自动加载大图
                         .setCustomListener(
@@ -124,18 +126,18 @@ class ImageListAdapter(
                             R.id.item_custom_image,
                             listener
                         )//自定义布局
-                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.NONE)) //添加进度显示
+//                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.NONE)) //添加进度显示
                 }
-                4->{
+                4 -> {
                     withListType
                         .setOrientation(Orientation.ORIENTATION_VERTICAL)//滑动的方向
                 }
-                5->{
+                5 -> {
                     withListType
                         .setMaxScale(4f)//设置最大比例
                         .setMediumScale(4f)//设置中间比例 不能超过最大比例
                 }
-                6->{
+                6 -> {
                     withListType.setBackgroundColor(Color.RED)
                 }
             }

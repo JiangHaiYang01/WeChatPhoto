@@ -34,12 +34,8 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         mCurrentIndex = getIndex()
 
         //添加到了lifecycle
-        val progressLoader = Larger.largerConfig?.progressLoad
         val videoLoad = Larger.largerConfig?.videoLoad
         val imageLoad = Larger.largerConfig?.imageLoad
-        if (progressLoader != null) {
-            lifecycle.addObserver(progressLoader)
-        }
         if (imageLoad != null) {
             lifecycle.addObserver(imageLoad)
         }
@@ -59,6 +55,9 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         //竖着滑动
         larger_viewpager.orientation = getOrientation()
 
+
+        //viewpager2 默认没有懒加载 这里给设置 1 提高滑动时候的体验
+        larger_viewpager.offscreenPageLimit = 1
 
         //检查状态判断是否可以滑动viewpager
         LargerStatus.status.observe(this, {

@@ -9,6 +9,7 @@ import com.starot.larger.Larger
 import com.starot.larger.config.DefConfig
 import com.starot.larger.enums.LargerEnum
 import com.starot.larger.enums.Orientation
+import com.starot.larger.view.progress.ImageProgressLoader
 
 //处理返回一些 框架需要的数据
 interface OnLargerConfigListener {
@@ -92,6 +93,10 @@ interface OnLargerConfigListener {
         return images?.get(position)
     }
 
+    //图片加载框的样式
+    fun getProgressLoaderType(): ImageProgressLoader.ProgressType {
+        return Larger.largerConfig?.progressType ?: DefConfig.def_progress_type
+    }
 
     private fun getViewInRecycler(position: Int): View? {
         val recyclerView = Larger.largerConfig?.recyclerView

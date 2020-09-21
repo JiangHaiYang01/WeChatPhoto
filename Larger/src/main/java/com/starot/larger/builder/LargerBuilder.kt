@@ -9,6 +9,8 @@ import com.starot.larger.act.CustomLargerAct
 import com.starot.larger.config.LargerConfig
 import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.*
+import com.starot.larger.view.progress.CircleProgressView
+import com.starot.larger.view.progress.ImageProgressLoader
 
 class LargerBuilder(private val listConfig: LargerConfig?) {
 
@@ -88,8 +90,14 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
     }
 
     //设置加载的进度
-    fun setProgress(progressLoad: OnLoadProgressListener): LargerBuilder {
-        listConfig?.progressLoad = progressLoad
+    fun setProgressType(progressType: ImageProgressLoader.ProgressType): LargerBuilder {
+        listConfig?.progressType = progressType
+        return this
+    }
+
+    //设置是否显示加载框
+    fun setProgressLoaderUse(use: Boolean): LargerBuilder {
+        listConfig?.progressLoaderUse = use
         return this
     }
 

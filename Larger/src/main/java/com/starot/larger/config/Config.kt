@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.enums.LargerEnum
 import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.*
+import com.starot.larger.view.progress.ImageProgressLoader
 
 
 class DefConfig() {
@@ -20,7 +21,9 @@ class DefConfig() {
         var def_back_color = Color.BLACK
         var def_automatic = true
         var def_debug = false
+        var def_progress_type = ImageProgressLoader.ProgressType.FULL
         var def_up_can_move = false
+        var def_progress_use = true
         var orientation = Orientation.ORIENTATION_HORIZONTAL
     }
 }
@@ -29,7 +32,7 @@ class DefConfig() {
 data class LargerConfig(
 
     //是否直接向上就能够拖动，微信直接向上不可以拖动，这里默认false
-    var upCanMove :Boolean = DefConfig.def_up_can_move,
+    var upCanMove: Boolean = DefConfig.def_up_can_move,
 
     //是否打印日志
     var debug: Boolean = DefConfig.def_debug,
@@ -70,6 +73,9 @@ data class LargerConfig(
     //大图的ImageViewID
     var fullViewId: Int? = null,
 
+    //获取加载框的id
+    var progressId: Int? = null,
+
     //默认的背景颜色
     var backgroundColor: Int = DefConfig.def_back_color,
 
@@ -79,8 +85,11 @@ data class LargerConfig(
     //图片加载器
     var imageLoad: OnImageLoadListener? = null,
 
-    //加载的进度
-    var progressLoad: OnLoadProgressListener? = null,
+    //加载y样式
+    var progressType: ImageProgressLoader.ProgressType = DefConfig.def_progress_type,
+
+    //是否使用加载框
+    var progressLoaderUse: Boolean = DefConfig.def_progress_use,
 
     //设置滑动方向
     var orientation: Orientation = DefConfig.orientation,

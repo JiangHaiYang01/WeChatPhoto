@@ -1,4 +1,3 @@
-include ':LargerProgress'
 include ':LargerGlide'
 include ':LargerLoadVideo'
 include ':Larger'

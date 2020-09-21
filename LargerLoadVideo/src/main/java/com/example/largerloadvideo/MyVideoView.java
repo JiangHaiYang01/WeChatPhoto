@@ -6,8 +6,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.starot.larger.image.OnLargerDragListener;
-import com.starot.larger.utils.LogUtils;
+import com.starot.larger.view.image.OnLargerDragListener;
 
 import cn.jzvd.JzvdStd;
 

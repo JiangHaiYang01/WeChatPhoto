@@ -3,8 +3,7 @@ package com.starot.larger.impl
 import android.view.View
 import android.widget.ImageView
 import com.starot.larger.bean.LargerBean
-import com.starot.larger.fragment.VideoFg
-import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.view.image.OnLargerDragListener
 
 //加载图片接口
 interface OnVideoLoadListener : OnLoadProgressPrepareListener,

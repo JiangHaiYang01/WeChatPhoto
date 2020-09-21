@@ -43,7 +43,7 @@ dependencies {
     //加载器
     implementation project(":LargerGlide")
     //进度
-    implementation project(":LargerProgress")
+//    implementation project(":LargerProgress")
     //加载视屏模式
     implementation project(":LargerLoadVideo")
 

@@ -15,8 +15,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
@@ -28,37 +26,34 @@ import java.io.File
 class GlideImageLoader(private val context: Context) : OnImageLoadListener {
 
 
-    private val progress = object : ProgressListener {
-        override fun onProgress(progress: Int) {
-
-            val value = progressViewLiveData?.value
-            if (value == null || value) {
-                progressViewLiveData?.postValue(false)
-            }
-
-            //进度
-            progressLiveData?.postValue(progress)
-        }
-    }
-
     private val handler: Handler = Handler(Looper.getMainLooper())
 
-    private var progressLiveData: MutableLiveData<Int>? = null
-    private var progressViewLiveData: MutableLiveData<Boolean>? = null
+    private val statusMap = HashMap<Int, MutableLiveData<Boolean>>()
+    private val progressMap = HashMap<Int, MutableLiveData<Int>>()
 
 
     @SuppressLint("CheckResult")
-    override fun load(url: String, isLoadFull: Boolean, imageView: ImageView) {
+    override fun load(url: String, position: Int, isLoadFull: Boolean, imageView: ImageView) {
 
+        val progressViewLiveData = statusMap[position]
+        val progressLiveData = progressMap[position]
         val options = RequestOptions()
         if (isLoadFull) {
-            ProgressInterceptor.addListener(url, progress)
+            ProgressInterceptor.addListener(url, object : ProgressListener {
+                override fun onProgress(progress: Int) {
+
+                    val value = progressViewLiveData?.value
+                    if (value == null || value) {
+                        progressViewLiveData?.postValue(false)
+                    }
+
+                    //进度
+                    progressLiveData?.postValue(progress)
+                }
+            })
             options
                 .placeholder(imageView.drawable)
                 .override(imageView.width, imageView.height)
-            //测试使用
-//                .skipMemoryCache(true)
-//                .diskCacheStrategy(DiskCacheStrategy.NONE)
         }
         LogUtils.i("load image isLoadFull:$isLoadFull, url:$url")
         Glide.with(context)
@@ -68,10 +63,15 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
             .into(imageView)
     }
 
-    override fun load(url: String, imageView: ImageView, listener: OnImageLoadReadyListener) {
+    override fun load(
+        url: String,
+        position: Int,
+        imageView: ImageView,
+        listener: OnImageLoadReadyListener
+    ) {
         Glide.with(context)
             .load(url)
-            .listener(object :RequestListener<Drawable>{
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -127,13 +127,22 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
         Thread { Glide.get(context).clearDiskCache() }.start()
     }
 
-    override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>) {
-        this.progressLiveData = progressLiveData
+    override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int) {
+        progressMap[position] = progressLiveData
     }
 
-    override fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>) {
-        this.progressViewLiveData = progressViewLiveData
+    override fun onPrepareProgressView(
+        status: MutableLiveData<Boolean>,
+        position: Int
+    ) {
+        statusMap[position] = status
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        statusMap.clear()
+        progressMap.clear()
+    }
 
 }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.allens.largerglide.GlideImageLoader
-import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.wechat.R
@@ -46,7 +45,7 @@ class SingleImageAct : BaseAct() {
                 .setImageLoad(GlideImageLoader(this))   //图片加载器
                 .setDuration(300)//动画持续时间
                 .setImagesWithSingle(arrayListOf(src_image))//设置imageView
-                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+//                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 .setData(list) //添加默认的数据源
                 .start(this)
         }

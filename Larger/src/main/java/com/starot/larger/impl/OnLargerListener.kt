@@ -17,5 +17,9 @@ interface OnLargerListener : OnLargerConfigListener {
     //获取layout id
     fun getLayoutId(): Int
 
+    //获取加载框的id
+    fun getProgressId(): Int{
+        return -1
+    }
 
 }

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
-import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger

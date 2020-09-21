@@ -7,11 +7,10 @@ import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
-import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.view.image.OnLargerDragListener
 import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
-import kotlinx.android.synthetic.main.activity_larger_base.*
 import kotlin.math.abs
 
 class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
@@ -35,7 +34,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, imageView)
+            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position,false, imageView)
             imageView.scaleType = thumbnailView.scaleType
         }
     }
@@ -159,6 +158,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             }
             Larger.largerConfig?.imageLoad?.load(
                 thumbnailsUrl,
+                position,
                 imageView,
                 object : OnImageLoadReadyListener {
                     override fun onReady() {

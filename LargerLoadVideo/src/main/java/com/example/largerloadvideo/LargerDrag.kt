@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ViewConfiguration
-import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.view.image.OnLargerDragListener
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.sqrt
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.allens.largerglide.GlideImageLoader
-import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger
@@ -49,7 +48,6 @@ class SingleAudioAct : BaseAct() {
                 .setDuration(3000)//动画持续时间
                 .setVideoLoad(LargerVideoLoad(this))
                 .setImagesWithSingle(arrayListOf(src_image))//设置imageView
-                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 .setData(list) //添加默认的数据源
                 .start(this)
         }

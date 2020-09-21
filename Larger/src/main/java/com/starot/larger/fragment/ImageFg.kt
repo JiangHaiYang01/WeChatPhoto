@@ -1,8 +1,6 @@
 package com.starot.larger.fragment
 
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
@@ -12,20 +10,22 @@ import com.starot.larger.R
 import com.starot.larger.bean.LargerBean
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
-import com.starot.larger.image.LargerImageView
-import com.starot.larger.image.OnLargerDragListener
-import com.starot.larger.image.OnLargerScaleListener
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.status.LargerStatus
 import com.starot.larger.utils.LogUtils
-import kotlinx.android.synthetic.main.activity_larger_base.*
+import com.starot.larger.view.image.LargerImageView
+import com.starot.larger.view.image.OnLargerDragListener
+import com.starot.larger.view.image.OnLargerScaleListener
+import com.starot.larger.view.progress.ImageProgressLoader
 import kotlin.math.abs
 
 class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLargerScaleListener {
 
     private lateinit var fullView: LargerImageView
 
+    //图片加载框
+    private var progressLoader = ImageProgressLoader(getProgressLoaderType())
 
     //使用liveData 记录 加载进度变化
     private var progressStatusChangeLiveData: MutableLiveData<Int> = MutableLiveData()
@@ -38,6 +38,11 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
         return Larger.largerConfig?.layoutId ?: R.layout.fg_image
     }
 
+    //加载框的id
+    override fun getProgressId(): Int {
+        return Larger.largerConfig?.progressId ?: R.id.image_progress
+    }
+
     override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
         if (fullView is ImageView && thumbnailView is ImageView && type == AnimType.ENTER) {
             LogUtils.i("将大图的 image scale type 设置成 和小图一样的 ${thumbnailView.scaleType}")
@@ -48,7 +53,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
+            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position, false, fullView)
             fullView.scaleType = thumbnailView.scaleType
 
 
@@ -100,10 +105,9 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             )
 
             //注册监听liveData
-            registerLiveData()
+            registerLiveData(view, position)
 
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-//            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, false, fullView)
 
 
             //这里使用的是改写 PhotoView 的
@@ -161,14 +165,14 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
                     override fun onCache(hasCache: Boolean) {
                         LogUtils.i("url:$fullUrl 是否有缓存:$hasCache")
                         if (hasCache) {
-                            Larger.largerConfig?.imageLoad?.load(fullUrl, true, fullView)
+                            Larger.largerConfig?.imageLoad?.load(fullUrl, position, true, fullView)
                         }
                     }
                 })
                 return
             }
             //不管有没有缓存自动加载
-            Larger.largerConfig?.imageLoad?.load(fullUrl, true, fullView)
+            Larger.largerConfig?.imageLoad?.load(fullUrl, position, true, fullView)
         }
     }
 
@@ -223,23 +227,39 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
     }
 
 
-    private fun registerLiveData() {
+    private fun registerLiveData(view: View, position: Int) {
         //将监听变化的liveData 通过接口保存
-        Larger.largerConfig?.imageLoad?.onPrepareLoadProgress(progressStatusChangeLiveData)
+        Larger.largerConfig?.imageLoad?.onPrepareLoadProgress(
+            progressStatusChangeLiveData,
+            position
+        )
         //将监听变化的liveData
-        Larger.largerConfig?.imageLoad?.onPrepareProgressView(progressLoadChangeLiveData)
+        Larger.largerConfig?.imageLoad?.onPrepareProgressView(progressLoadChangeLiveData, position)
 
         //对于加载进度条的逻辑判断
         progressStatusChangeLiveData.observe(this, {
-            Larger.largerConfig?.progressLoad?.onLoadProgress(it)
+            val progressId = getProgressId()
+            if (Larger.largerConfig?.progressLoaderUse == true) {
+                progressLoader.onLoadProgress(view, progressId, it, this.position)
+            }
+
         })
 
         //监听 加载大图进度变化
         progressLoadChangeLiveData.observe(this, {
             //大图加载进度
             val context = context
-            if (context != null)
-                Larger.largerConfig?.progressLoad?.onProgressChange(context, it)
+            if (context != null) {
+                val progressId = getProgressId()
+
+                progressLoader.onProgressChange(
+                    context,
+                    view,
+                    progressId,
+                    it,
+                    this.position
+                )
+            }
         })
     }
 
@@ -258,6 +278,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             }
             Larger.largerConfig?.imageLoad?.load(
                 thumbnailsUrl,
+                position,
                 fullView,
                 object : OnImageLoadReadyListener {
                     override fun onReady() {
@@ -265,5 +286,24 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
                     }
                 })
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        LogUtils.i("imageFragment create $position")
+        //创建的时候 加载框就不可见
+        view.findViewById<View>(getProgressId())?.visibility = View.INVISIBLE
+        //添加到lifecycle
+        lifecycle.addObserver(progressLoader)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LogUtils.i("imageFragment destroy $position")
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        LogUtils.i("index:$position isVisibleToUser:$isVisibleToUser")
     }
 }

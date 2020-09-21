@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
-import com.allens.largerprogress.ProgressLoader
 import com.bumptech.glide.Glide
 import com.example.largerloadvideo.LargerVideoLoad
 import com.starot.larger.Larger
@@ -68,6 +67,7 @@ class HybridListAdapter(
                 textView.setOnClickListener {
                     listener?.load(
                         fullUrl,
+                        position,
                         true,
                         view.findViewById(R.id.item_custom_image)
                     )
@@ -92,7 +92,7 @@ class HybridListAdapter(
                 .setVideoLoad(LargerVideoLoad(context))
                 .setIndex(position)//下标
                 .setDuration(300)//动画持续时间
-                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
+//                .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
             withListType.start(context)

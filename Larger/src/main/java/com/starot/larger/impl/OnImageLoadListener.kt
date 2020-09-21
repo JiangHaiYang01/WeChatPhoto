@@ -10,9 +10,9 @@ interface OnImageLoadListener : OnLoadProgressPrepareListener, OnLifecycleListen
 
 
     //加载图片
-    fun load(url: String, isLoadFull: Boolean, imageView: ImageView)
+    fun load(url: String, position: Int, isLoadFull: Boolean, imageView: ImageView)
 
-    fun load(url: String, imageView: ImageView, listener: OnImageLoadReadyListener)
+    fun load(url: String, position: Int, imageView: ImageView, listener: OnImageLoadReadyListener)
 
     //判断是有有缓存
     fun checkCache(url: String, listener: OnImageCacheListener)
@@ -46,9 +46,9 @@ interface OnCustomImageLoadListener {
 interface OnLoadProgressPrepareListener {
 
     // 将记录是否显示加载的进度框 的 liveData 传入
-    fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>)
+    fun onPrepareProgressView(status: MutableLiveData<Boolean>, position: Int)
 
     // 将记录变化的 liveData 传入
-    fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>)
+    fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int)
 
 }

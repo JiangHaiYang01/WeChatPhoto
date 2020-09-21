@@ -8,8 +8,7 @@ import cn.jzvd.JZUtils
 import cn.jzvd.Jzvd
 import cn.jzvd.JzvdStd
 import com.starot.larger.bean.LargerBean
-import com.starot.larger.fragment.VideoFg
-import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.view.image.OnLargerDragListener
 import com.starot.larger.impl.OnVideoLoadListener
 import com.starot.larger.utils.LogUtils
 
@@ -75,11 +74,14 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
     }
 
 
-    override fun onPrepareProgressView(progressViewLiveData: MutableLiveData<Boolean>) {
+    override fun onPrepareProgressView(
+        progressViewLiveData: MutableLiveData<Boolean>,
+        position: Int
+    ) {
 //        this.progressViewLiveData = progressViewLiveData
     }
 
-    override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>) {
+    override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int) {
 //        this.progressLiveData = progressLiveData
     }
 
