@@ -158,7 +158,8 @@ public class LargerImageView extends AppCompatImageView {
         attacher.getDisplayMatrix(matrix);
     }
 
-    @SuppressWarnings("UnusedReturnValue") public boolean setDisplayMatrix(Matrix finalRectangle) {
+    @SuppressWarnings("UnusedReturnValue")
+    public boolean setDisplayMatrix(Matrix finalRectangle) {
         return attacher.setDisplayMatrix(finalRectangle);
     }
 
@@ -206,6 +207,12 @@ public class LargerImageView extends AppCompatImageView {
         attacher.setScaleLevels(minimumScale, mediumScale, maximumScale);
     }
 
+    public void setOnLargerScaleListener(OnLargerScaleListener onLargerScaleListener) {
+        if (attacher != null) {
+            attacher.setOnLargerScaleListener(onLargerScaleListener);
+        }
+    }
+
     public void setOnMatrixChangeListener(OnMatrixChangedListener listener) {
         attacher.setOnMatrixChangeListener(listener);
     }
@@ -226,7 +233,7 @@ public class LargerImageView extends AppCompatImageView {
         attacher.setOnViewDragListener(listener);
     }
 
-    public void setOnLargerDragListener(OnLargerDragListener listener){
+    public void setOnLargerDragListener(OnLargerDragListener listener) {
         attacher.setOnLargerDragListener(listener);
     }
 

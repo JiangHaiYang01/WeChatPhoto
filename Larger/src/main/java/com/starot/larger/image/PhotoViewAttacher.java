@@ -15,6 +15,7 @@
  */
 package com.starot.larger.image;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.Matrix.ScaleToFit;
@@ -104,7 +105,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
 
     private AtomicBoolean isDragging = new AtomicBoolean(false);
-//    private int mTouchSlop;
+    private int mTouchSlop;
 
 
     private boolean customZoomEnable = true;
@@ -183,8 +184,9 @@ public class PhotoViewAttacher implements View.OnTouchListener,
         }
     };
 
-    private float lastFocusX,lastFocusY;
+    private float lastFocusX, lastFocusY;
 
+    @SuppressLint("ClickableViewAccessibility")
     public PhotoViewAttacher(ImageView imageView) {
         mImageView = imageView;
         imageView.setOnTouchListener(this);
@@ -193,7 +195,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
             return;
         }
 
-//        mTouchSlop = ViewConfiguration.get(imageView.getContext()).getScaledEdgeSlop();
+        mTouchSlop = ViewConfiguration.get(imageView.getContext()).getScaledEdgeSlop();
 
 
         mBaseRotation = 0.0f;
@@ -213,19 +215,19 @@ public class PhotoViewAttacher implements View.OnTouchListener,
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 if (onLargerDragListener != null) {
-                    if (!isDragging.get()) {
+                    if (!isDragging.get() && !mScaleDragDetector.scaleStart.get()) {
                         float dx = e2.getRawX() - e1.getRawX();
                         float dy = e2.getRawY() - e1.getRawY();
                         if (onLargerDragListener.onDragPrepare(dx, dy)) {
                             LogUtils.i("可以开始 drag ----");
-//                            isDragging.set(Math.sqrt(dx * dx + (dy * dy)) >= mTouchSlop);
-                            isDragging.set(true);
+                            isDragging.set(Math.sqrt(dx * dx + (dy * dy)) >= mTouchSlop);
+//                            isDragging.set(true);
                             if (isDragging.get()) {
                                 onLargerDragListener.onDragStart();
                                 setCustomZoomable(false);
                             }
                         }
-                    } else {
+                    } else if (isDragging.get()) {
                         onLargerDragListener.onDrag(e2.getRawX() - e1.getRawX(),
                                 e2.getRawY() - e1.getRawY());
                     }
@@ -411,6 +413,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
     public boolean onTouch(View v, MotionEvent ev) {
         boolean handled = false;
         if (mZoomEnabled && Util.hasDrawable((ImageView) v)) {
+//            LogUtils.i("手势状态================== " + ev.getAction());
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     ViewParent parent = v.getParent();
@@ -428,6 +431,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                     // If the user has zoomed less than min scale, zoom back
                     // to min scale
                     if (getScale() < mMinScale) {
+                        LogUtils.i("缩放已经小于最小scale 变成正常的大小动画开始 type " + ev.getAction());
                         RectF rect = getDisplayRect();
                         if (rect != null) {
                             v.post(new AnimatedZoomRunnable(getScale(), mMinScale,
@@ -504,6 +508,12 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
     public void setOnMatrixChangeListener(OnMatrixChangedListener listener) {
         mMatrixChangeListener = listener;
+    }
+
+    public void setOnLargerScaleListener(OnLargerScaleListener onLargerScaleListener) {
+        if(mScaleDragDetector!= null){
+            mScaleDragDetector.setOnLargerScaleListener(onLargerScaleListener);
+        }
     }
 
     public void setOnPhotoTapListener(OnPhotoTapListener listener) {
@@ -824,7 +834,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
         @Override
         public void run() {
-            LogUtils.i("AnimatedZoomRunnable run");
+//            LogUtils.i("AnimatedZoomRunnable run");
             float t = interpolate();
             float scale = mZoomStart + t * (mZoomEnd - mZoomStart);
             float deltaScale = scale / getScale();

@@ -29,7 +29,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     private var data: T? = null
     private var fullView: View? = null
     var position: Int = -1
-    private val handler = Handler(Looper.getMainLooper())
+     val handler = Handler(Looper.getMainLooper())
 
 
     override fun onCreateView(

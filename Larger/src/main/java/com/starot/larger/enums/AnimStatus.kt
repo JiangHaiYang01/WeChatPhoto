@@ -11,5 +11,8 @@ enum class AnimStatus {
     EXIT_END,
 
     DRAG_START,
-    DRAG_END
+    DRAG_END,
+
+    SCALE_START,
+    SCALE_END
 }

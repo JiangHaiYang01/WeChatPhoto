@@ -13,6 +13,7 @@ import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
 import com.starot.larger.image.LargerImageView
 import com.starot.larger.image.OnLargerDragListener
+import com.starot.larger.image.OnLargerScaleListener
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.status.LargerStatus
@@ -20,7 +21,7 @@ import com.starot.larger.utils.LogUtils
 import kotlinx.android.synthetic.main.activity_larger_base.*
 import kotlin.math.abs
 
-class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
+class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLargerScaleListener {
 
     private lateinit var fullView: LargerImageView
 
@@ -61,6 +62,20 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         }
     }
 
+    override fun onScaleStart() {
+        super.onScaleStart()
+        LargerStatus.status.postValue(AnimStatus.SCALE_START)
+    }
+
+    override fun onScaleEnd() {
+        super.onScaleEnd()
+        //兼容处理 防止在缩放最小状态变成标准状态的动画过程中 触发了 偷懒一下 做一个延迟任务即可
+        handler.postDelayed({
+            LargerStatus.status.postValue(AnimStatus.SCALE_END)
+        }, getDuration())
+
+    }
+
     override fun getFullViewId(): Int {
         return Larger.largerConfig?.fullViewId ?: R.id.image
     }
@@ -94,6 +109,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (fullView is LargerImageView) {
                 this.fullView = fullView
                 fullView.setOnLargerDragListener(this)
+                fullView.setOnLargerScaleListener(this)
                 //设置动画时长
                 fullView.setZoomTransitionDuration(getDuration().toInt())
 
@@ -176,6 +192,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         if (fullView.scale != 1f) {
             return false
         }
+
 
         if (getOrientation() == ViewPager2.ORIENTATION_HORIZONTAL) {
             //一开始向上无效

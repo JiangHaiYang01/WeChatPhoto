@@ -21,6 +21,10 @@ import android.view.ScaleGestureDetector;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 
+import com.starot.larger.utils.LogUtils;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 /**
  * Does a whole lot of gesture detecting.
  */
@@ -39,6 +43,13 @@ class CustomGestureDetector {
     private final float mTouchSlop;
     private final float mMinimumVelocity;
     private OnGestureListener mListener;
+    private OnLargerScaleListener mLargerScaleListener;
+    AtomicBoolean scaleStart = new AtomicBoolean(false);
+
+
+    public void setOnLargerScaleListener(OnLargerScaleListener onLargerScaleListener) {
+        this.mLargerScaleListener = onLargerScaleListener;
+    }
 
     CustomGestureDetector(Context context, OnGestureListener listener) {
         final ViewConfiguration configuration = ViewConfiguration
@@ -51,6 +62,9 @@ class CustomGestureDetector {
 
             @Override
             public boolean onScale(ScaleGestureDetector detector) {
+                if (!scaleStart.get()) {
+                    return false;
+                }
                 float scaleFactor = detector.getScaleFactor();
 
                 if (Float.isNaN(scaleFactor) || Float.isInfinite(scaleFactor))
@@ -59,18 +73,35 @@ class CustomGestureDetector {
                 if (scaleFactor >= 0) {
                     mListener.onScale(scaleFactor,
                             detector.getFocusX(), detector.getFocusY());
+                    if (mLargerScaleListener != null) {
+                        mLargerScaleListener.onScale(scaleFactor, detector.getFocusX(), detector.getFocusY());
+                    }
                 }
                 return true;
             }
 
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
+                LogUtils.i("onScaleBegin");
+                if (!scaleStart.get()) {
+                    scaleStart.set(true);
+                    if (mLargerScaleListener != null) {
+                        mLargerScaleListener.onScaleStart();
+                    }
+                }
                 return true;
             }
 
             @Override
             public void onScaleEnd(ScaleGestureDetector detector) {
                 // NO-OP
+                LogUtils.i("onScaleEnd");
+                if (scaleStart.get()) {
+                    scaleStart.set(false);
+                    if (mLargerScaleListener != null) {
+                        mLargerScaleListener.onScaleEnd();
+                    }
+                }
             }
         };
         mDetector = new ScaleGestureDetector(context, mScaleListener);

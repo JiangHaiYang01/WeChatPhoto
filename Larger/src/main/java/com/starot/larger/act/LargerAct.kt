@@ -50,11 +50,11 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         LargerStatus.status.observe(this, {
             LogUtils.i("动画状态 $it")
             when (it) {
-                AnimStatus.ENTER_START, AnimStatus.EXIT_START, AnimStatus.DRAG_START -> {
+                AnimStatus.ENTER_START, AnimStatus.EXIT_START, AnimStatus.DRAG_START, AnimStatus.SCALE_START -> {
                     larger_viewpager.isUserInputEnabled = false //true:滑动，false：禁止滑动
                     LogUtils.i("禁止滑动")
                 }
-                AnimStatus.ENTER_END-> {
+                AnimStatus.ENTER_END, AnimStatus.SCALE_END -> {
                     larger_viewpager.isUserInputEnabled = true //true:滑动，false：禁止滑动
                     LogUtils.i("-------滑动")
                 }
