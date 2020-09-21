@@ -2,6 +2,7 @@ package com.starot.larger.fragment
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
@@ -121,6 +122,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
                 fullView.setOnViewTapListener { _, _, _ ->
                     //动画过程不给点击
                     if (isAnimIng()) return@setOnViewTapListener
+                    LogUtils.i("单点击 准备退出")
                     exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
                 }
 
@@ -172,7 +174,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
     override fun onDrag(x: Float, y: Float) {
         if (isAnimIng()) return
-        LogUtils.i("onDrag")
+//        LogUtils.i("onDrag x:$x y:$y")
         startDrag(fragmentView, fullView, x = x, y = y)
     }
 
@@ -183,7 +185,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
     }
 
     override fun onDragPrepare(dx: Float, dy: Float): Boolean {
-        LogUtils.i("onDragPrepare dx $dx dy $dy")
+//        LogUtils.i("onDragPrepare dx $dx dy $dy")
         //动画过程中不能触发drag
         if (isAnimIng()) {
             return false

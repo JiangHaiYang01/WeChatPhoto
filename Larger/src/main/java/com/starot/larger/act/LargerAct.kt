@@ -52,14 +52,14 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
             when (it) {
                 AnimStatus.ENTER_START, AnimStatus.EXIT_START, AnimStatus.DRAG_START, AnimStatus.SCALE_START -> {
                     larger_viewpager.isUserInputEnabled = false //true:滑动，false：禁止滑动
-                    LogUtils.i("禁止滑动")
+                    LogUtils.i("viewPager--------禁止滑动")
                 }
                 AnimStatus.ENTER_END, AnimStatus.SCALE_END -> {
                     larger_viewpager.isUserInputEnabled = true //true:滑动，false：禁止滑动
-                    LogUtils.i("-------滑动")
+                    LogUtils.i("viewPager-------滑动")
                 }
                 AnimStatus.EXIT_END -> {
-                    LogUtils.i("-------滑动")
+                    LogUtils.i("viewPager-------滑动")
                     larger_viewpager.isUserInputEnabled = true //true:滑动，false：禁止滑动
                     finish()
                     overridePendingTransition(0, 0)

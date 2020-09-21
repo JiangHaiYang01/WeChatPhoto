@@ -187,6 +187,7 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         if (
             LargerStatus.status.value == AnimStatus.ENTER_START
             || LargerStatus.status.value == AnimStatus.EXIT_START
+//            || LargerStatus.status.value == AnimStatus.SCALE_START
 //            || LargerStatus.status.value == AnimStatus.DRAG_START
         ) {
             return true

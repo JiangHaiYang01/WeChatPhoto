@@ -256,6 +256,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
         mGestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
+                LogUtils.i("onSingleTapConfirmed");
                 if (mOnClickListener != null) {
                     mOnClickListener.onClick(mImageView);
                 }
@@ -286,6 +287,7 @@ public class PhotoViewAttacher implements View.OnTouchListener,
 
             @Override
             public boolean onDoubleTap(MotionEvent ev) {
+                LogUtils.i("onDoubleTap");
                 try {
                     float scale = getScale();
                     float x = ev.getX();
