@@ -256,7 +256,6 @@ public class PhotoViewAttacher implements View.OnTouchListener,
         mGestureDetector.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-                LogUtils.i("onSingleTapConfirmed");
                 if (mOnClickListener != null) {
                     mOnClickListener.onClick(mImageView);
                 }

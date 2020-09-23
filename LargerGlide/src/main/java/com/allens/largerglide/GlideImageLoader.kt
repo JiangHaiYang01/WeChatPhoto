@@ -44,11 +44,11 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
 
                     val value = progressViewLiveData?.value
                     if (value == null || value) {
-                        progressViewLiveData?.postValue(false)
+                        progressViewLiveData?.value = (false)
                     }
 
                     //进度
-                    progressLiveData?.postValue(progress)
+                    progressLiveData?.value = (progress)
                 }
             })
             options

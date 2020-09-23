@@ -113,7 +113,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
     override fun onDragEnd() {
-        LargerStatus.status.postValue(AnimStatus.DRAG_END)
+        LargerStatus.status.value = (AnimStatus.DRAG_END)
         endDrag(videoView)
     }
 
@@ -139,7 +139,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
     override fun onDragStart() {
-        LargerStatus.status.postValue(AnimStatus.DRAG_START)
+        LargerStatus.status.value = (AnimStatus.DRAG_START)
     }
 
     override fun onAlreadyLoad(

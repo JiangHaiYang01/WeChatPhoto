@@ -17,9 +17,6 @@ import com.starot.larger.utils.LogUtils
 class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
 
-//    private var progressLiveData: MutableLiveData<Int>? = null
-//    private var progressViewLiveData: MutableLiveData<Boolean>? = null
-
     override fun getPoster(view: View): ImageView {
         val video = view.findViewById<JzvdStd>(getVideoViewId())
         return video.posterImageView
@@ -44,7 +41,6 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
             override fun onDragStart() {
                 listener.onDragStart()
-//                onPause()
             }
         })
         video.setUp(data.fullUrl, "", Jzvd.SCREEN_NORMAL)
@@ -73,17 +69,6 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
         Jzvd.releaseAllVideos()
     }
 
-
-    override fun onPrepareProgressView(
-        progressViewLiveData: MutableLiveData<Boolean>,
-        position: Int
-    ) {
-//        this.progressViewLiveData = progressViewLiveData
-    }
-
-    override fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int) {
-//        this.progressLiveData = progressLiveData
-    }
 
     override fun getVideoViewId(): Int {
         return R.id.audio_video

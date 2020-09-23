@@ -42,6 +42,7 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         if (videoLoad != null) {
             lifecycle.addObserver(videoLoad)
         }
+        lifecycle.addObserver(LargerStatus)
 
         //设置适配器
         larger_viewpager.adapter =
@@ -82,11 +83,6 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
 
     }
 
-
-    private fun dp2px(dpValue: Float): Int {
-        return (resources.displayMetrics.density * dpValue + 0.5f).toInt()
-    }
-
     //数据源
     private fun getData(): List<T>? {
         return Larger.largerConfig?.data as List<T>?
@@ -102,6 +98,8 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
     //viewpager 滑动监听
     override fun onPageChange(pos: Int) {
         mCurrentIndex = pos
+        LogUtils.i("viewPager change:$pos")
+        LargerStatus.pos.value = pos
     }
 
 
@@ -109,15 +107,8 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         super.onDestroy()
         //清理资源
         Larger.largerConfig = null
-        LargerStatus.isLoad.postValue(false)
-        LargerStatus.status.postValue(AnimStatus.NOME)
-        Larger.largerConfig?.videoLoad?.onRelease()
     }
 
-    override fun onPause() {
-        super.onPause()
-        Larger.largerConfig?.videoLoad?.onRelease()
-    }
 
     override fun onBackPressed() {
     }

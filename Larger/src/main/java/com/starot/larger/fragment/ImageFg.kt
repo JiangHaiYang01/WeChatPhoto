@@ -70,14 +70,14 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
     override fun onScaleStart() {
         super.onScaleStart()
-        LargerStatus.status.postValue(AnimStatus.SCALE_START)
+        LargerStatus.status.value = (AnimStatus.SCALE_START)
     }
 
     override fun onScaleEnd() {
         super.onScaleEnd()
         //兼容处理 防止在缩放最小状态变成标准状态的动画过程中 触发了 偷懒一下 做一个延迟任务即可
         handler.postDelayed({
-            LargerStatus.status.postValue(AnimStatus.SCALE_END)
+            LargerStatus.status.value = (AnimStatus.SCALE_END)
         }, getDuration())
 
     }
@@ -184,7 +184,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
     override fun onDragEnd() {
         LogUtils.i("onDragEnd")
-        LargerStatus.status.postValue(AnimStatus.DRAG_END)
+        LargerStatus.status.value = (AnimStatus.DRAG_END)
         endDrag(fullView)
     }
 
@@ -223,7 +223,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
     override fun onDragStart() {
         LogUtils.i("onDragStart")
-        LargerStatus.status.postValue(AnimStatus.DRAG_START)
+        LargerStatus.status.value = (AnimStatus.DRAG_START)
     }
 
 

@@ -1,12 +1,17 @@
 package com.starot.larger.fragment
 
+import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.starot.larger.anim.impl.AnimListener
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
@@ -29,8 +34,12 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     private var data: T? = null
     private var fullView: View? = null
     var position: Int = -1
-     val handler = Handler(Looper.getMainLooper())
+    val handler = Handler(Looper.getMainLooper())
 
+    //碎片显示的状态
+    var fragmentVisitStatus = MutableLiveData<Boolean>().apply {
+        value = false
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +63,12 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         } else {
             this.position = pos
         }
+
+        LogUtils.i("baseFragment viewCreate $pos")
+
+        //监听viewpager2 滑动变化
+        registerViewPagerChange(pos)
+
         //加载的view
         fullView = view.findViewById(getFullViewId())
 
@@ -63,17 +78,42 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
             fragmentView.setBackgroundColor(getBackGroundColor())
             onDoBefore(data, fullView, getThumbnailView(position), position, view)
             onAlreadyLoad(data, fullView, getThumbnailView(position), position, view, {
-                handler.post {
-                    onDoAfter(data, fullView, getThumbnailView(position), position, view)
-                }
-
+                //这里需要处理一下，如果已经加载过了的 不触发动画，但是要等到 界面可见的时候才能出发下面的逻辑
+                fragmentVisitStatus.observe(this, {
+                    if (it) {
+                        LogUtils.i("可以触发 onDoAfter 方法")
+                        handler.post {
+                            onDoAfter(data, fullView, getThumbnailView(position), position, view)
+                        }
+                    }
+                })
             })
             return
         }
+        LogUtils.i("首次加载进入----------------")
         onDoBefore(data, fullView, getThumbnailView(position), position, view)
-        LargerStatus.isLoad.postValue(true)
+        LargerStatus.isLoad.value = true
         //执行动画
         enterAnimStart(view, getDuration(), fullView, getThumbnailView(position))
+    }
+
+    private fun registerViewPagerChange(pos: Int?) {
+        if (pos == null) {
+            return
+        }
+        if (pos < 0) {
+            return
+        }
+        LargerStatus.pos.observe(context as AppCompatActivity, Observer {
+            LogUtils.i("baseFragment pos change:$it currentFragmentIndex:$pos")
+            if (pos == it && fragmentVisitStatus.value == false) {
+                LogUtils.i("baseFragment---> $pos: 显示")
+                fragmentVisitStatus.value = true
+            } else if (fragmentVisitStatus.value == true && pos != it) {
+                LogUtils.i("baseFragment---> $pos: 隐藏")
+                fragmentVisitStatus.value = false
+            }
+        })
     }
 
 
@@ -156,8 +196,8 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //动画开始
     override fun onAnimatorStart(type: AnimType) {
         when (type) {
-            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.postValue(AnimStatus.ENTER_START)
-            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_START)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.value = (AnimStatus.ENTER_START)
+            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.value = (AnimStatus.EXIT_START)
         }
     }
 
@@ -165,10 +205,10 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     override fun onAnimatorEnd(type: AnimType) {
         when (type) {
             AnimType.ENTER, AnimType.DRAG_RESUME -> {
-                LargerStatus.status.postValue(AnimStatus.ENTER_END)
+                LargerStatus.status.value = (AnimStatus.ENTER_END)
                 onDoAfter(data, fullView, getThumbnailView(position), position, fragmentView)
             }
-            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
+            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.value = (AnimStatus.EXIT_END)
         }
 
     }
@@ -176,8 +216,8 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //动画取消
     override fun onAnimatorCancel(type: AnimType) {
         when (type) {
-            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.postValue(AnimStatus.ENTER_END)
-            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.postValue(AnimStatus.EXIT_END)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.value = (AnimStatus.ENTER_END)
+            AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.value = (AnimStatus.EXIT_END)
         }
     }
 

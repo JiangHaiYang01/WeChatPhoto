@@ -24,7 +24,7 @@ class CustomRequestListener(
         ProgressInterceptor.removeListener(url = url)
 
         if (loadFull) {
-            progressViewLiveData?.postValue(true)
+            progressViewLiveData?.value = (true)
         }
         return false
     }
@@ -39,7 +39,7 @@ class CustomRequestListener(
         ProgressInterceptor.removeListener(url = url)
 
         if (loadFull) {
-            progressViewLiveData?.postValue(true)
+            progressViewLiveData?.value = (true)
         }
         return false
     }
