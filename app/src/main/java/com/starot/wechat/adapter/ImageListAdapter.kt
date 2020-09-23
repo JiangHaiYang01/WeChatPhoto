@@ -94,10 +94,10 @@ class ImageListAdapter(
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .setProgressLoaderUse(true) //使用加载框
+                .setDebug(true)//设置显示日志
             when (type) {
                 0 -> {
                     withListType.setUpCanMove(true)//向上滑动有效
-                        .setDebug(true)//设置显示日志
                 }
                 1 -> {
                     withListType
@@ -116,7 +116,6 @@ class ImageListAdapter(
                             R.id.item_custom_image,
                             listener
                         )//自定义布局
-//                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
                 }
                 3 -> {
                     withListType
@@ -126,7 +125,6 @@ class ImageListAdapter(
                             R.id.item_custom_image,
                             listener
                         )//自定义布局
-//                        .setProgress(ProgressLoader(ProgressLoader.ProgressType.NONE)) //添加进度显示
                 }
                 4 -> {
                     withListType

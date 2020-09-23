@@ -125,6 +125,19 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    fun setCustomListener(
+        layoutId: Int,
+        fullViewId: Int,
+        progressId: Int,
+        listener: OnCustomImageLoadListener?
+    ): LargerBuilder {
+        listConfig?.layoutId = layoutId
+        listConfig?.progressId = progressId
+        listConfig?.fullViewId = fullViewId
+        listConfig?.customImageLoadListener = listener
+        return this
+    }
+
     //最大的比例
     fun setMaxScale(maxScale: Float): LargerBuilder {
         listConfig?.maxScale = maxScale

@@ -21,7 +21,7 @@ class ImageProgressLoader(private val type: ProgressType) : ProgressLoader() {
         if (progressId == -1) {
             return
         }
-        val progressView = view.findViewById<View>(progressId)
+        val progressView = view.findViewById<View>(progressId) ?: return
         if (!isFinish) {
             progressView.visibility = View.VISIBLE
         } else {
