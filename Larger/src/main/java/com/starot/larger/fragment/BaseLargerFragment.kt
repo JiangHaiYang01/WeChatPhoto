@@ -116,6 +116,12 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        //需要手动去remove
+        LargerStatus.pos.removeObservers(context as AppCompatActivity)
+    }
+
 
     //==============================================================================================
     // 抽象方法

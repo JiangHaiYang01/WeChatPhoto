@@ -16,7 +16,7 @@ object LargerStatus : OnLifecycleListener {
         value = (false)
     }
 
-    var pos = UnViscousLiveData<Int>()
+    var pos = MutableLiveData<Int>()
 
     override fun onDestroy() {
         super.onDestroy()
