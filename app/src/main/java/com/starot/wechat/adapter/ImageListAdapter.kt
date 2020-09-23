@@ -122,6 +122,7 @@ class ImageListAdapter(
                         .setAutomatic(false)//设置不自动加载大图
                         .setCustomListener(
                             R.layout.item_custom_image,
+                            R.id.image_progress,
                             R.id.item_custom_image,
                             listener
                         )//自定义布局

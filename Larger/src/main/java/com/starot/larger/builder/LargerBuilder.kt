@@ -117,7 +117,7 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
     fun setCustomListener(
         layoutId: Int,
         fullViewId: Int,
-        listener: OnCustomImageLoadListener?
+        listener: OnCustomImageLoadListener? = null
     ): LargerBuilder {
         listConfig?.layoutId = layoutId
         listConfig?.fullViewId = fullViewId
@@ -129,7 +129,7 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         layoutId: Int,
         fullViewId: Int,
         progressId: Int,
-        listener: OnCustomImageLoadListener?
+        listener: OnCustomImageLoadListener? = null
     ): LargerBuilder {
         listConfig?.layoutId = layoutId
         listConfig?.progressId = progressId

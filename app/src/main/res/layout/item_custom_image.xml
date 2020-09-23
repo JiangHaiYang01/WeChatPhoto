@@ -10,6 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.starot.larger.view.progress.CircleProgressView
+        android:id="@+id/image_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <TextView
         android:id="@+id/item_custom_tv"
