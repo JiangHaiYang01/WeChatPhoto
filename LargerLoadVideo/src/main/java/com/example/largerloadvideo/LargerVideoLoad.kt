@@ -25,7 +25,7 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
     override fun loadVideo(data: LargerBean, view: View, listener: OnLargerDragListener) {
         LogUtils.i("loadVideo")
-        val video = view.findViewById<MyVideoView>(getVideoViewId())
+        val video = view.findViewById<MyVideoView>(getVideoViewId())?:return
         video.setDragListener(object : OnLargerDragListener {
             override fun onDrag(x: Float, y: Float) {
                 listener.onDrag(x, y = y)
@@ -41,6 +41,7 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
             override fun onDragStart() {
                 listener.onDragStart()
+                video.setButtonProgressStatus(false)
             }
         })
         video.setUp(data.fullUrl, "", Jzvd.SCREEN_NORMAL)

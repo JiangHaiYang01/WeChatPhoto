@@ -34,7 +34,7 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position,false, imageView)
+            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position, false, imageView)
             imageView.scaleType = thumbnailView.scaleType
         }
     }
@@ -47,8 +47,6 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
             imageView.scaleType = thumbnailView.scaleType
         }
     }
-
-
 
 
     override fun getFullViewId(): Int {
@@ -124,13 +122,19 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
         }
 
         if (getOrientation() == ViewPager2.ORIENTATION_HORIZONTAL) {
-            if (abs(dx) > 30 && abs(dy) > 60) {
-                if (dy > 0) {
-                    return true
+            //一开始向上无效
+            if (abs(dy) > abs(dx)) {
+                //默认是可以不可以直接向上滑的
+                val upCanMove = Larger.largerConfig?.upCanMove
+                if (upCanMove == null || upCanMove == false) {
+                    if (dy < 0) {
+                        return false
+                    }
                 }
+                return true
             }
         } else {
-            if (abs(dx) > 60 && abs(dy) > 30) {
+            if (abs(dx) > abs(dy)) {
                 return true
             }
         }

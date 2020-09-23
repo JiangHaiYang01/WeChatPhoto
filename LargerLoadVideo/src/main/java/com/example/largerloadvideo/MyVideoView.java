@@ -60,4 +60,8 @@ public class MyVideoView extends JzvdStd {
         gestureDetector = new GestureDetector(getContext(), largerDrag);
     }
 
+    public void setButtonProgressStatus(boolean isVisibility) {
+        bottomProgressBar.setVisibility(isVisibility ? VISIBLE : GONE);
+    }
+
 }

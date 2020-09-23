@@ -55,7 +55,9 @@ class VideoListAdapter(
                 .setImageLoad(GlideImageLoader(context))   //图片加载器
                 .setVideoLoad(LargerVideoLoad(context))//视屏加载器
                 .setIndex(position)//下标
-                .setDuration(300)//动画持续时间
+                .setDebug(true)
+                .setUpCanMove(true)
+                .setDuration(3000)//动画持续时间
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
             when (type) {
