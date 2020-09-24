@@ -47,8 +47,8 @@ class ImageListAdapter(
     }
 
     private val listener = object : OnCustomImageLoadListener {
-        override fun onCustomImageLoad(
-            listener: OnImageLoadListener?,
+        override fun onDoBefore(
+            imageLoader: OnImageLoadListener?,
             view: View,
             position: Int,
             data: LargerBean
@@ -56,7 +56,7 @@ class ImageListAdapter(
             val textView = view.findViewById<TextView>(R.id.item_custom_tv)
             val fullUrl = data.fullUrl
             if (fullUrl != null) {
-                listener?.checkCache(fullUrl, object : OnImageCacheListener {
+                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
                     override fun onCache(hasCache: Boolean) {
                         if (hasCache) {
                             textView.visibility = View.GONE
@@ -65,7 +65,7 @@ class ImageListAdapter(
                 })
 
                 textView.setOnClickListener {
-                    listener?.load(
+                    imageLoader?.load(
                         fullUrl,
                         position,
                         true,
@@ -74,6 +74,34 @@ class ImageListAdapter(
                 }
             } else {
                 textView.visibility = View.GONE
+            }
+        }
+
+        override fun onDoAfter(
+            imageLoader: OnImageLoadListener?,
+            view: View,
+            position: Int,
+            data: LargerBean
+        ) {
+            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
+            val fullUrl = data.fullUrl
+            if (fullUrl != null) {
+                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
+                    override fun onCache(hasCache: Boolean) {
+                        if (hasCache) {
+                            textView.visibility = View.GONE
+                        }
+                    }
+                })
+
+                textView.setOnClickListener {
+                    imageLoader?.load(
+                        fullUrl,
+                        position,
+                        true,
+                        view.findViewById(R.id.item_custom_image)
+                    )
+                }
             }
         }
     }
@@ -96,46 +124,57 @@ class ImageListAdapter(
                 .setProgressLoaderUse(true) //使用加载框
                 .setDebug(true)//设置显示日志
             when (type) {
+                //默认
                 0 -> {
                     withListType.setUpCanMove(true)//向上滑动有效
                 }
+                //加载原图自定义处理
                 1 -> {
                     withListType
                         .setAutomatic(false)//设置不自动加载大图
                         .setCustomListener(
                             R.layout.item_custom_image,
                             R.id.item_custom_image,
+                            R.id.custom_image_progress,
                             listener
                         )//自定义布局
                 }
+                //加载框的样式1
                 2 -> {
                     withListType
                         .setAutomatic(false)//设置不自动加载大图
+                        .setProgressType(ImageProgressLoader.ProgressType.FULL)
                         .setCustomListener(
                             R.layout.item_custom_image,
                             R.id.item_custom_image,
+                            R.id.custom_image_progress,
                             listener
                         )//自定义布局
                 }
+                //加载框的样式2
                 3 -> {
                     withListType
                         .setAutomatic(false)//设置不自动加载大图
+                        .setProgressType(ImageProgressLoader.ProgressType.NONE)
                         .setCustomListener(
                             R.layout.item_custom_image,
-                            R.id.image_progress,
                             R.id.item_custom_image,
+                            R.id.custom_image_progress,
                             listener
                         )//自定义布局
                 }
+                //竖着滑动
                 4 -> {
                     withListType
                         .setOrientation(Orientation.ORIENTATION_VERTICAL)//滑动的方向
                 }
+                //设置缩放大小
                 5 -> {
                     withListType
                         .setMaxScale(4f)//设置最大比例
                         .setMediumScale(4f)//设置中间比例 不能超过最大比例
                 }
+                //设置背景颜色
                 6 -> {
                     withListType.setBackgroundColor(Color.RED)
                 }

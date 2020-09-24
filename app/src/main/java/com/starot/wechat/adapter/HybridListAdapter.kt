@@ -47,8 +47,8 @@ class HybridListAdapter(
     }
 
     private val listener = object : OnCustomImageLoadListener {
-        override fun onCustomImageLoad(
-            listener: OnImageLoadListener?,
+        override fun onDoBefore(
+            imageLoader: OnImageLoadListener?,
             view: View,
             position: Int,
             data: LargerBean
@@ -56,7 +56,7 @@ class HybridListAdapter(
             val textView = view.findViewById<TextView>(R.id.item_custom_tv)
             val fullUrl = data.fullUrl
             if (fullUrl != null) {
-                listener?.checkCache(fullUrl, object : OnImageCacheListener {
+                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
                     override fun onCache(hasCache: Boolean) {
                         if (hasCache) {
                             textView.visibility = View.GONE
@@ -65,7 +65,7 @@ class HybridListAdapter(
                 })
 
                 textView.setOnClickListener {
-                    listener?.load(
+                    imageLoader?.load(
                         fullUrl,
                         position,
                         true,
@@ -74,6 +74,34 @@ class HybridListAdapter(
                 }
             } else {
                 textView.visibility = View.GONE
+            }
+        }
+
+        override fun onDoAfter(
+            imageLoader: OnImageLoadListener?,
+            view: View,
+            position: Int,
+            data: LargerBean
+        ) {
+            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
+            val fullUrl = data.fullUrl
+            if (fullUrl != null) {
+                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
+                    override fun onCache(hasCache: Boolean) {
+                        if (hasCache) {
+                            textView.visibility = View.GONE
+                        }
+                    }
+                })
+
+                textView.setOnClickListener {
+                    imageLoader?.load(
+                        fullUrl,
+                        position,
+                        true,
+                        view.findViewById(R.id.item_custom_image)
+                    )
+                }
             }
         }
     }

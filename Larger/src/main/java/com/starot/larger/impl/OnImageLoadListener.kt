@@ -33,22 +33,40 @@ interface OnImageLoadReadyListener {
 
 //自行处理view
 interface OnCustomImageLoadListener {
-    //自定义的 itemViewHolder 让用户自行处理
-    fun onCustomImageLoad(
-        listener: OnImageLoadListener?,
+//    //自定义的 itemViewHolder 让用户自行处理
+//    fun onCustomImageLoad(
+//        imageLoader: OnImageLoadListener?,
+//        view: View,
+//        position: Int,
+//        data: LargerBean
+//    )
+
+
+    //动画开始以前做啥事情
+    fun onDoBefore(
+        imageLoader: OnImageLoadListener?,
         view: View,
         position: Int,
         data: LargerBean
     )
+
+    //动画结束以后做啥事情
+    fun onDoAfter(
+        imageLoader: OnImageLoadListener?,
+        view: View,
+        position: Int,
+        data: LargerBean
+    )
+
 }
 
 
 interface OnLoadProgressPrepareListener {
 
     // 将记录是否显示加载的进度框 的 liveData 传入
-    fun onPrepareProgressView(status: MutableLiveData<Boolean>, position: Int){}
+    fun onPrepareProgressView(status: MutableLiveData<Boolean>, position: Int) {}
 
     // 将记录变化的 liveData 传入
-    fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int){}
+    fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int) {}
 
 }

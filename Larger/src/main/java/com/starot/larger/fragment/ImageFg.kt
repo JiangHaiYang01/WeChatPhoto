@@ -100,7 +100,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             }
 
             //放给开发者自行处理
-            Larger.largerConfig?.customImageLoadListener?.onCustomImageLoad(
+            Larger.largerConfig?.customImageLoadListener?.onDoBefore(
                 Larger.largerConfig?.imageLoad, fragmentView, position, data
             )
 
@@ -157,6 +157,13 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             if (fullUrl.isNullOrEmpty()) {
                 return
             }
+
+            //放给开发者自行处理
+            Larger.largerConfig?.customImageLoadListener?.onDoAfter(
+                Larger.largerConfig?.imageLoad, fragmentView, position, data
+            )
+
+
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
             //不自动加载
             if (!isAutomatic()) {
