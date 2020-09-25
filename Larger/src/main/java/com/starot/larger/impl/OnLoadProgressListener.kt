@@ -2,6 +2,7 @@ package com.starot.larger.impl
 
 import android.content.Context
 import android.view.View
+import com.starot.larger.enums.LoadImageStatus
 
 interface OnLoadProgressListener : OnLifecycleListener {
 
@@ -10,7 +11,7 @@ interface OnLoadProgressListener : OnLifecycleListener {
         context: Context,
         view: View,
         progressId: Int,
-        isFinish: Boolean,
+        status: LoadImageStatus,
         position: Int
     )
 

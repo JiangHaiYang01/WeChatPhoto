@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.starot.larger.enums.LoadImageStatus
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadListener
 import com.starot.larger.impl.OnImageLoadReadyListener
@@ -28,9 +29,10 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
 
     private var handler: Handler = Handler(Looper.getMainLooper())
 
-    private val statusMap = HashMap<Int, MutableLiveData<Boolean>>()
+    private val statusMap = HashMap<Int, MutableLiveData<LoadImageStatus>>()
     private val progressMap = HashMap<Int, MutableLiveData<Int>>()
 
+    private var thread: Thread? = null
 
     @SuppressLint("CheckResult")
     override fun load(url: String, position: Int, isLoadFull: Boolean, imageView: ImageView) {
@@ -43,8 +45,8 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
                 override fun onProgress(progress: Int) {
 
                     val value = progressViewLiveData?.value
-                    if (value == null || value) {
-                        progressViewLiveData?.value = (false)
+                    if (value == null || value == LoadImageStatus.LOAD_SHOW) {
+                        progressViewLiveData?.value = LoadImageStatus.LOAD_START
                     }
 
                     //进度
@@ -98,7 +100,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
     }
 
     override fun checkCache(url: String, listener: OnImageCacheListener) {
-        Thread {
+        thread = Thread {
             val file: File? = try {
                 Glide.with(context).downloadOnly()
                     .load(url)
@@ -118,7 +120,8 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
                     listener.onCache(true)
                 }
             }
-        }.start()
+        }
+        thread?.start()
     }
 
 
@@ -132,7 +135,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
     }
 
     override fun onPrepareProgressView(
-        status: MutableLiveData<Boolean>,
+        status: MutableLiveData<LoadImageStatus>,
         position: Int
     ) {
         statusMap[position] = status
@@ -144,6 +147,8 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
         statusMap.clear()
         progressMap.clear()
         handler.removeCallbacksAndMessages(null)
+        thread?.interrupt()
+        thread = null
     }
 
 }

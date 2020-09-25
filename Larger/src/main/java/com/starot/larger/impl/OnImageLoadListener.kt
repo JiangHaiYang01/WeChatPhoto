@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.lifecycle.MutableLiveData
 import com.starot.larger.bean.LargerBean
+import com.starot.larger.enums.LoadImageStatus
 
 //加载图片接口
 interface OnImageLoadListener : OnLoadProgressPrepareListener, OnLifecycleListener {
@@ -57,7 +58,7 @@ interface OnCustomImageLoadListener : OnLoadProgressListener {
 interface OnLoadProgressPrepareListener {
 
     // 将记录是否显示加载的进度框 的 liveData 传入
-    fun onPrepareProgressView(status: MutableLiveData<Boolean>, position: Int) {}
+    fun onPrepareProgressView(status: MutableLiveData<LoadImageStatus>, position: Int) {}
 
     // 将记录变化的 liveData 传入
     fun onPrepareLoadProgress(progressLiveData: MutableLiveData<Int>, position: Int) {}

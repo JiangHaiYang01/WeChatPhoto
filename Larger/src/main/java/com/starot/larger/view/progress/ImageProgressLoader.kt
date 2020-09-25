@@ -3,29 +3,37 @@ package com.starot.larger.view.progress
 import android.content.Context
 import android.graphics.Color
 import android.view.View
-import com.starot.larger.impl.OnLoadProgressListener
+import com.starot.larger.enums.LoadImageStatus
 import com.starot.larger.utils.LogUtils
 
 class ImageProgressLoader(private val type: ProgressType) : ProgressLoader() {
-
 
 
     override fun onProgressChange(
         context: Context,
         view: View,
         progressId: Int,
-        isFinish: Boolean,
+        status: LoadImageStatus,
         position: Int
     ) {
-        LogUtils.i("进度弹窗$position  是否不显示: $isFinish")
+        LogUtils.i("进度弹窗$position  是否不显示: $status")
         if (progressId == -1) {
             return
         }
         val progressView = view.findViewById<View>(progressId) ?: return
-        if (!isFinish) {
-            progressView.visibility = View.VISIBLE
-        } else {
-            progressView.visibility = View.INVISIBLE
+        when (status) {
+            LoadImageStatus.LOAD_SHOW -> {
+                progressView.visibility = View.VISIBLE
+            }
+            LoadImageStatus.LOAD_FAILED -> {
+                progressView.visibility = View.INVISIBLE
+            }
+            LoadImageStatus.LOAD_SUCCESS -> {
+                progressView.visibility = View.INVISIBLE
+            }
+            else -> {
+
+            }
         }
         if (progressView is CircleProgressView) {
             setStyle(
@@ -52,7 +60,6 @@ class ImageProgressLoader(private val type: ProgressType) : ProgressLoader() {
         }
 
     }
-
 
 
     enum class ProgressType {

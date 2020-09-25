@@ -12,6 +12,7 @@ import com.allens.largerglide.GlideImageLoader
 import com.bumptech.glide.Glide
 import com.starot.larger.Larger
 import com.starot.larger.bean.LargerBean
+import com.starot.larger.enums.LoadImageStatus
 import com.starot.larger.enums.Orientation
 import com.starot.larger.impl.OnCustomImageLoadListener
 import com.starot.larger.impl.OnImageCacheListener
@@ -89,11 +90,13 @@ class ImageListAdapter(
             context: Context,
             view: View,
             progressId: Int,
-            isFinish: Boolean,
+            status: LoadImageStatus,
             position: Int
         ) {
             val textView = view.findViewById<TextView>(R.id.item_custom_tv)
-            if (isFinish) {
+            if (status == LoadImageStatus.LOAD_FAILED) {
+                textView.visibility = View.GONE
+            } else if (status == LoadImageStatus.LOAD_SUCCESS) {
                 textView.visibility = View.GONE
             }
         }
@@ -101,7 +104,6 @@ class ImageListAdapter(
         override fun onLoadProgress(view: View, progressId: Int, progress: Int, position: Int) {
         }
     }
-
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

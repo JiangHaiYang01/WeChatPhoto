@@ -10,6 +10,7 @@ import com.starot.larger.R
 import com.starot.larger.bean.LargerBean
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
+import com.starot.larger.enums.LoadImageStatus
 import com.starot.larger.impl.OnImageCacheListener
 import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.status.LargerStatus
@@ -31,7 +32,7 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
     private var progressStatusChangeLiveData: MutableLiveData<Int> = MutableLiveData()
 
     //使用liveData 记录 加载变化
-    private var progressLoadChangeLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    private var progressLoadChangeLiveData: MutableLiveData<LoadImageStatus> = MutableLiveData()
 
 
     override fun getLayoutId(): Int {
@@ -165,21 +166,25 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
 
             fullView.scaleType = ImageView.ScaleType.FIT_CENTER
-            //不自动加载
-            if (!isAutomatic()) {
-                //判断是否有缓存
-                Larger.largerConfig?.imageLoad?.checkCache(fullUrl, object : OnImageCacheListener {
-                    override fun onCache(hasCache: Boolean) {
-                        LogUtils.i("url:$fullUrl 是否有缓存:$hasCache")
-                        if (hasCache) {
+
+            //判断是否有缓存
+            Larger.largerConfig?.imageLoad?.checkCache(fullUrl, object : OnImageCacheListener {
+                override fun onCache(hasCache: Boolean) {
+                    LogUtils.i("url:$fullUrl 是否有缓存:$hasCache")
+                    if (hasCache) {
+                        //有缓存直接加载
+                        Larger.largerConfig?.imageLoad?.load(fullUrl, position, true, fullView)
+                    } else {
+                        //自动加载
+                        if (isAutomatic()) {
+                            //显示加载弹窗
+                            progressLoadChangeLiveData.value = LoadImageStatus.LOAD_SHOW
+                            //加载大图
                             Larger.largerConfig?.imageLoad?.load(fullUrl, position, true, fullView)
                         }
                     }
-                })
-                return
-            }
-            //不管有没有缓存自动加载
-            Larger.largerConfig?.imageLoad?.load(fullUrl, position, true, fullView)
+                }
+            })
         }
     }
 
@@ -203,6 +208,11 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
         }
         //图片处于缩放状态
         if (fullView.scale != 1f) {
+            return false
+        }
+
+        //正在显示加载框 不给drag
+        if (progressLoadChangeLiveData.value == LoadImageStatus.LOAD_SHOW) {
             return false
         }
 
