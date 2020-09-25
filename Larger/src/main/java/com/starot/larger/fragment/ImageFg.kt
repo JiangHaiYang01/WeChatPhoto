@@ -248,6 +248,11 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             val progressId = getProgressId()
             if (Larger.largerConfig?.progressLoaderUse == true) {
                 progressLoader.onLoadProgress(view, progressId, it, this.position)
+
+                //放给开发者自行处理
+                Larger.largerConfig?.customImageLoadListener?.onLoadProgress(
+                    view, progressId, it, this.position
+                )
             }
 
         })
@@ -260,6 +265,15 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
                 val progressId = getProgressId()
 
                 progressLoader.onProgressChange(
+                    context,
+                    view,
+                    progressId,
+                    it,
+                    this.position
+                )
+
+                //放给开发者自行处理
+                Larger.largerConfig?.customImageLoadListener?.onProgressChange(
                     context,
                     view,
                     progressId,

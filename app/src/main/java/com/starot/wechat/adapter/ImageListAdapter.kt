@@ -83,28 +83,25 @@ class ImageListAdapter(
             position: Int,
             data: LargerBean
         ) {
-            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
-            val fullUrl = data.fullUrl
-            if (fullUrl != null) {
-                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
-                    override fun onCache(hasCache: Boolean) {
-                        if (hasCache) {
-                            textView.visibility = View.GONE
-                        }
-                    }
-                })
+        }
 
-                textView.setOnClickListener {
-                    imageLoader?.load(
-                        fullUrl,
-                        position,
-                        true,
-                        view.findViewById(R.id.item_custom_image)
-                    )
-                }
+        override fun onProgressChange(
+            context: Context,
+            view: View,
+            progressId: Int,
+            isFinish: Boolean,
+            position: Int
+        ) {
+            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
+            if (isFinish) {
+                textView.visibility = View.GONE
             }
         }
+
+        override fun onLoadProgress(view: View, progressId: Int, progress: Int, position: Int) {
+        }
     }
+
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

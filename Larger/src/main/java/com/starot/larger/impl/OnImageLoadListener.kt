@@ -32,14 +32,7 @@ interface OnImageLoadReadyListener {
 }
 
 //自行处理view
-interface OnCustomImageLoadListener {
-//    //自定义的 itemViewHolder 让用户自行处理
-//    fun onCustomImageLoad(
-//        imageLoader: OnImageLoadListener?,
-//        view: View,
-//        position: Int,
-//        data: LargerBean
-//    )
+interface OnCustomImageLoadListener : OnLoadProgressListener {
 
 
     //动画开始以前做啥事情

@@ -46,65 +46,6 @@ class HybridListAdapter(
         return data.size
     }
 
-    private val listener = object : OnCustomImageLoadListener {
-        override fun onDoBefore(
-            imageLoader: OnImageLoadListener?,
-            view: View,
-            position: Int,
-            data: LargerBean
-        ) {
-            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
-            val fullUrl = data.fullUrl
-            if (fullUrl != null) {
-                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
-                    override fun onCache(hasCache: Boolean) {
-                        if (hasCache) {
-                            textView.visibility = View.GONE
-                        }
-                    }
-                })
-
-                textView.setOnClickListener {
-                    imageLoader?.load(
-                        fullUrl,
-                        position,
-                        true,
-                        view.findViewById(R.id.item_custom_image)
-                    )
-                }
-            } else {
-                textView.visibility = View.GONE
-            }
-        }
-
-        override fun onDoAfter(
-            imageLoader: OnImageLoadListener?,
-            view: View,
-            position: Int,
-            data: LargerBean
-        ) {
-            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
-            val fullUrl = data.fullUrl
-            if (fullUrl != null) {
-                imageLoader?.checkCache(fullUrl, object : OnImageCacheListener {
-                    override fun onCache(hasCache: Boolean) {
-                        if (hasCache) {
-                            textView.visibility = View.GONE
-                        }
-                    }
-                })
-
-                textView.setOnClickListener {
-                    imageLoader?.load(
-                        fullUrl,
-                        position,
-                        true,
-                        view.findViewById(R.id.item_custom_image)
-                    )
-                }
-            }
-        }
-    }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

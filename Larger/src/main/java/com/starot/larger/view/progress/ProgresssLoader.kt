@@ -18,8 +18,4 @@ open class ProgressLoader : OnLoadProgressListener {
     override fun onLoadProgress(view: View, progressId: Int, progress: Int, position: Int) {
     }
 
-    open fun getLoadProgressListener():OnLoadProgressListener{
-        return this
-    }
-
 }

@@ -26,7 +26,7 @@ import java.io.File
 class GlideImageLoader(private val context: Context) : OnImageLoadListener {
 
 
-    private val handler: Handler = Handler(Looper.getMainLooper())
+    private var handler: Handler = Handler(Looper.getMainLooper())
 
     private val statusMap = HashMap<Int, MutableLiveData<Boolean>>()
     private val progressMap = HashMap<Int, MutableLiveData<Int>>()
@@ -143,6 +143,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
         super.onDestroy()
         statusMap.clear()
         progressMap.clear()
+        handler.removeCallbacksAndMessages(null)
     }
 
 }
