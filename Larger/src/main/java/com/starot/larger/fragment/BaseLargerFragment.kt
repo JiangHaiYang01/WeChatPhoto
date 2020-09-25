@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -257,6 +258,23 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
             return true
         }
         return false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.isFocusableInTouchMode = true
+        view?.requestFocus()
+        view?.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP) {
+                    LogUtils.i("fragment back")
+                    exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+                    return true
+                }
+                return false
+            }
+        })
+
     }
 
 }

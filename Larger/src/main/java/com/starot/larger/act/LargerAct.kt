@@ -110,7 +110,5 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
     }
 
 
-    override fun onBackPressed() {
-    }
 
 }
