@@ -71,6 +71,12 @@ class LargerBuilder(private val listConfig: LargerConfig?) {
         return this
     }
 
+    //是否自动加载下一页大图，默认不自动加载下一页
+    fun setLoadNextFragment(auto:Boolean): LargerBuilder {
+        listConfig?.loadNextFragment = auto
+        return this
+    }
+
     //是否打印日志
     fun setDebug(debug: Boolean): LargerBuilder {
         listConfig?.debug = debug

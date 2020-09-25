@@ -23,6 +23,7 @@ class DefConfig() {
         var def_debug = false
         var def_progress_type = ImageProgressLoader.ProgressType.FULL
         var def_up_can_move = false
+        var def_loadNextFragment = false
         var def_progress_use = true
         var orientation = Orientation.ORIENTATION_HORIZONTAL
     }
@@ -33,6 +34,9 @@ data class LargerConfig(
 
     //是否直接向上就能够拖动，微信直接向上不可以拖动，这里默认false
     var upCanMove: Boolean = DefConfig.def_up_can_move,
+
+    //是否自动加载下一页，默认不自动加载下一页
+    var loadNextFragment :Boolean = DefConfig.def_loadNextFragment,
 
     //是否打印日志
     var debug: Boolean = DefConfig.def_debug,

@@ -40,6 +40,12 @@ interface OnLargerConfigListener {
     }
 
 
+    //是否自动加载下一页大图数据
+    fun isAutoLoadNextFragment(): Boolean {
+        return Larger.largerConfig?.loadNextFragment ?: DefConfig.def_loadNextFragment
+    }
+
+
     //缩放最大
     fun getMaxScale(): Float {
         val maxScale = Larger.largerConfig?.maxScale ?: return DefConfig.def_max_scale

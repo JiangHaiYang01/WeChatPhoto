@@ -124,6 +124,7 @@ class ImageListAdapter(
                 //默认
                 0 -> {
                     withListType.setUpCanMove(true)//向上滑动有效
+                        .setLoadNextFragment(true)//自定加载下一页大图
                 }
                 //加载原图自定义处理
                 1 -> {

@@ -78,15 +78,31 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
             fragmentView.setBackgroundColor(getBackGroundColor())
             onDoBefore(data, fullView, getThumbnailView(position), position, view)
             onAlreadyLoad(data, fullView, getThumbnailView(position), position, view, {
-                //这里需要处理一下，如果已经加载过了的 不触发动画，但是要等到 界面可见的时候才能出发下面的逻辑
-                fragmentVisitStatus.observe(this, {
-                    if (it) {
-                        LogUtils.i("可以触发 onDoAfter 方法")
-                        handler.post {
-                            onDoAfter(data, fullView, getThumbnailView(position), position, view)
-                        }
+
+                //这里是否等到新的一页在触发 权限放给开发者自行处理
+                if (isAutoLoadNextFragment()) {
+                    handler.post {
+                        onDoAfter(data, fullView, getThumbnailView(position), position, view)
                     }
-                })
+                } else {
+                    //这里需要处理一下，如果已经加载过了的 不触发动画，但是要等到 界面可见的时候才能出发下面的逻辑
+                    fragmentVisitStatus.observe(this, {
+                        if (it) {
+                            LogUtils.i("可以触发 onDoAfter 方法")
+                            handler.post {
+                                onDoAfter(
+                                    data,
+                                    fullView,
+                                    getThumbnailView(position),
+                                    position,
+                                    view
+                                )
+                            }
+                        }
+                    })
+                }
+
+
             })
             return
         }
@@ -202,7 +218,8 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //动画开始
     override fun onAnimatorStart(type: AnimType) {
         when (type) {
-            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.value = (AnimStatus.ENTER_START)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.value =
+                (AnimStatus.ENTER_START)
             AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.value = (AnimStatus.EXIT_START)
         }
     }
@@ -222,7 +239,8 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     //动画取消
     override fun onAnimatorCancel(type: AnimType) {
         when (type) {
-            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.value = (AnimStatus.ENTER_END)
+            AnimType.ENTER, AnimType.DRAG_RESUME -> LargerStatus.status.value =
+                (AnimStatus.ENTER_END)
             AnimType.EXIT, AnimType.DRAG_EXIT -> LargerStatus.status.value = (AnimStatus.EXIT_END)
         }
     }
