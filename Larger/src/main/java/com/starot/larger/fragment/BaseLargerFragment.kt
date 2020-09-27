@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import com.starot.larger.anim.impl.AnimListener
 import com.starot.larger.enums.AnimStatus
 import com.starot.larger.enums.AnimType
+import com.starot.larger.enums.BackEnum
 import com.starot.larger.impl.OnLargerListener
 import com.starot.larger.impl.OnLargerType
 import com.starot.larger.status.LargerStatus
@@ -38,8 +39,23 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
     val handler = Handler(Looper.getMainLooper())
 
     //碎片显示的状态
-    var fragmentVisitStatus = MutableLiveData<Boolean>().apply {
+    private var fragmentVisitStatus = MutableLiveData<Boolean>().apply {
         value = false
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //点击返回事件
+        LargerStatus.back.observe(context as AppCompatActivity, {
+            if (it == BackEnum.BACK_PREPARE) {
+                if (isAnimIng()) {
+                    LargerStatus.back.value = BackEnum.BACK_NOME
+                    return@observe
+                }
+                exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+            }
+        })
     }
 
     override fun onCreateView(
@@ -260,21 +276,21 @@ abstract class BaseLargerFragment<T : OnLargerType> : Fragment(),
         return false
     }
 
-    override fun onResume() {
-        super.onResume()
-        view?.isFocusableInTouchMode = true
-        view?.requestFocus()
-        view?.setOnKeyListener(object : View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
-                if (keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP) {
-                    LogUtils.i("fragment back")
-                    exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
-                    return true
-                }
-                return false
-            }
-        })
-
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        view?.isFocusableInTouchMode = true
+//        view?.requestFocus()
+//        view?.setOnKeyListener(object : View.OnKeyListener {
+//            override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+//                if (keyCode == KeyEvent.KEYCODE_BACK && event?.action == KeyEvent.ACTION_UP) {
+//                    LogUtils.i("fragment back")
+//                    exitAnimStart(fragmentView, getDuration(), fullView, getThumbnailView(position))
+//                    return true
+//                }
+//                return false
+//            }
+//        })
+//
+//    }
 
 }

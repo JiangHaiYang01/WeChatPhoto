@@ -6,6 +6,7 @@ import com.starot.larger.Larger
 import com.starot.larger.R
 import com.starot.larger.adapter.FgPageAdapter
 import com.starot.larger.enums.AnimStatus
+import com.starot.larger.enums.BackEnum
 import com.starot.larger.impl.OnLargerConfigListener
 import com.starot.larger.impl.OnLargerType
 import com.starot.larger.status.LargerStatus
@@ -109,6 +110,11 @@ abstract class LargerAct<T : OnLargerType> : AppCompatActivity(),
         Larger.largerConfig = null
     }
 
+    override fun onBackPressed() {
+        if (LargerStatus.back.value == BackEnum.BACK_NOME) {
+            LargerStatus.back.value = BackEnum.BACK_PREPARE
+        }
+    }
 
 
 }

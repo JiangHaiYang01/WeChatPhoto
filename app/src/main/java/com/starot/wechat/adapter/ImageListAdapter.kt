@@ -117,7 +117,7 @@ class ImageListAdapter(
                 .withListType()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))   //图片加载器
                 .setIndex(position)//下标
-                .setDuration(300)//动画持续时间
+                .setDuration(3000)//动画持续时间
                 .setRecyclerView(recyclerView)//recyclerview
                 .setData(data) //添加默认的数据源
                 .setProgressLoaderUse(true) //使用加载框
