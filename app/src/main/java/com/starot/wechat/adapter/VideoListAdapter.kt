@@ -51,7 +51,7 @@ class VideoListAdapter(
 
         holder.itemView.setOnClickListener {
             val withListType = Larger.create()
-                .withListType()//这里展示的是列表类型的
+                .withVideoMulti()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))   //图片加载器
                 .setVideoLoad(LargerVideoLoad(context))//视屏加载器
                 .setIndex(position)//下标

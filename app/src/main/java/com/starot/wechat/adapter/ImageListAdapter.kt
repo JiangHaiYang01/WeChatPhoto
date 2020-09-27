@@ -114,7 +114,7 @@ class ImageListAdapter(
 
         holder.itemView.setOnClickListener {
             val withListType = Larger.create()
-                .withListType()//这里展示的是列表类型的
+                .withImageMulti()//这里展示的是列表类型的
                 .setImageLoad(GlideImageLoader(context))   //图片加载器
                 .setIndex(position)//下标
                 .setDuration(3000)//动画持续时间
