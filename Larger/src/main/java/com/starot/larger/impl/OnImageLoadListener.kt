@@ -13,7 +13,7 @@ interface OnImageLoadListener : OnLoadProgressPrepareListener, OnLifecycleListen
     //加载图片
     fun load(url: String, position: Int, isLoadFull: Boolean, imageView: ImageView)
 
-    fun load(url: String, position: Int, imageView: ImageView, listener: OnImageLoadReadyListener)
+    fun load(url: String, position: Int, imageView: ImageView, listener: OnImageLoadReadyListener?)
 
     //判断是有有缓存
     fun checkCache(url: String, listener: OnImageCacheListener)
@@ -29,6 +29,7 @@ interface OnImageCacheListener {
 
 
 interface OnImageLoadReadyListener {
+    fun onLoadFailed();
     fun onReady()
 }
 

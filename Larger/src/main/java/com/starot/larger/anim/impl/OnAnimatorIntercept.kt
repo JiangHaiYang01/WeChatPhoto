@@ -6,12 +6,21 @@ import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
 import com.starot.larger.enums.AnimType
+import com.starot.larger.impl.OnImageLoadReadyListener
 
 
 interface OnAnimatorListener {
 
 
     //变化开始之前
+    fun onTranslatorBefore(
+        type: AnimType,
+        fullView: View,
+        thumbnailView: View,
+        onImageLoadReadyListener: OnImageLoadReadyListener? = null
+    ) {
+    }
+
     fun onTranslatorBefore(
         type: AnimType,
         fullView: View,
@@ -51,15 +60,13 @@ interface OnAnimatorIntercept {
 
         beforeTransition(type, fullView, fullView, thumbnailView, listener)
 
-        fullView.postDelayed(
-            {
-                TransitionManager.beginDelayedTransition(
-                    fullView.parent as ViewGroup,
-                    getTransition(type, duration, listener)
-                )
-                startTransition(type, fullView, thumbnailView, listener)
-            }, 50
-        )
+        fullView.post {
+            TransitionManager.beginDelayedTransition(
+                fullView.parent as ViewGroup,
+                getTransition(type, duration, listener)
+            )
+            startTransition(type, fullView, thumbnailView, listener)
+        }
     }
 
 
@@ -98,6 +105,16 @@ interface OnAnimatorIntercept {
         thumbnailView: View?,
         listener: OnAnimatorListener
     )
+
+    fun beforeTransition(
+        type: AnimType,
+        itemView: View,
+        fullView: View,
+        thumbnailView: View?,
+        listener: OnAnimatorListener,
+        onImageLoadReadyListener: OnImageLoadReadyListener? = null
+    ) {
+    }
 
 
     fun startTransition(

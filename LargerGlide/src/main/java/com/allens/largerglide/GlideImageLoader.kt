@@ -69,7 +69,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
         url: String,
         position: Int,
         imageView: ImageView,
-        listener: OnImageLoadReadyListener
+        listener: OnImageLoadReadyListener?
     ) {
         Glide.with(context)
             .load(url)
@@ -80,7 +80,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    listener.onReady()
+                    listener?.onLoadFailed()
                     return false
                 }
 
@@ -91,7 +91,7 @@ class GlideImageLoader(private val context: Context) : OnImageLoadListener {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    listener.onReady()
+                    listener?.onReady()
                     return false
                 }
             })

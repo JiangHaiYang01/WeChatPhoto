@@ -165,6 +165,10 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
                 position,
                 imageView,
                 object : OnImageLoadReadyListener {
+                    override fun onLoadFailed() {
+
+                    }
+
                     override fun onReady() {
                         LogUtils.i("onReady")
                         success(data)

@@ -75,6 +75,7 @@ interface AnimListener : OnAnimatorListener, OnDragAnimListener {
     ) {
         LogUtils.i("退场动画 start")
         if (fullView == null) {
+            LogUtils.i("退场动画 start fullView == null")
             return
         }
         AnimExitHelper.start(

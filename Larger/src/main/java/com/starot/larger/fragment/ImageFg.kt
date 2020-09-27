@@ -44,7 +44,10 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
         return Larger.largerConfig?.progressId ?: R.id.image_progress
     }
 
-    override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
+    override fun onTranslatorBefore(
+        type: AnimType, fullView: View, thumbnailView: View,
+        onImageLoadReadyListener: OnImageLoadReadyListener?
+    ) {
         if (fullView is ImageView && thumbnailView is ImageView && type == AnimType.ENTER) {
             LogUtils.i("将大图的 image scale type 设置成 和小图一样的 ${thumbnailView.scaleType}")
             val data = getData() ?: return
@@ -54,11 +57,20 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position, false, fullView)
+            Larger.largerConfig?.imageLoad?.load(
+                thumbnailsUrl,
+                position,
+                fullView,
+                onImageLoadReadyListener
+            )
             fullView.scaleType = thumbnailView.scaleType
 
 
         }
+    }
+
+    override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
+
     }
 
     override fun onTranslatorStart(type: AnimType, fullView: View, thumbnailView: View) {
@@ -316,6 +328,10 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
                 position,
                 fullView,
                 object : OnImageLoadReadyListener {
+                    override fun onLoadFailed() {
+
+                    }
+
                     override fun onReady() {
                         success(data)
                     }
