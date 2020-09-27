@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.allens.largerglide.GlideImageLoader
 import com.bumptech.glide.Glide
@@ -49,6 +50,7 @@ class ImageListAdapter(
 
     private val listener = object : OnCustomImageLoadListener {
         override fun onDoBefore(
+            progressLoadChangeLiveData: MutableLiveData<LoadImageStatus>,
             imageLoader: OnImageLoadListener?,
             view: View,
             position: Int,
@@ -66,6 +68,7 @@ class ImageListAdapter(
                 })
 
                 textView.setOnClickListener {
+                    progressLoadChangeLiveData.value = LoadImageStatus.LOAD_SHOW
                     imageLoader?.load(
                         fullUrl,
                         position,
@@ -79,6 +82,7 @@ class ImageListAdapter(
         }
 
         override fun onDoAfter(
+            progressLoadChangeLiveData: MutableLiveData<LoadImageStatus>,
             imageLoader: OnImageLoadListener?,
             view: View,
             position: Int,

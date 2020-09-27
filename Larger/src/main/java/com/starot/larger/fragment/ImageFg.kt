@@ -102,7 +102,9 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
             //放给开发者自行处理
             Larger.largerConfig?.customImageLoadListener?.onDoBefore(
-                Larger.largerConfig?.imageLoad, fragmentView, position, data
+                progressLoadChangeLiveData,
+                Larger.largerConfig?.imageLoad,
+                fragmentView, position, data
             )
 
             //注册监听liveData
@@ -161,7 +163,9 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
 
             //放给开发者自行处理
             Larger.largerConfig?.customImageLoadListener?.onDoAfter(
-                Larger.largerConfig?.imageLoad, fragmentView, position, data
+                progressLoadChangeLiveData,
+                Larger.largerConfig?.imageLoad,
+                fragmentView, position, data
             )
 
 

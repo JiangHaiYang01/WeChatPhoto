@@ -38,6 +38,7 @@ interface OnCustomImageLoadListener : OnLoadProgressListener {
 
     //动画开始以前做啥事情
     fun onDoBefore(
+        progressLoadChangeLiveData:MutableLiveData<LoadImageStatus>,
         imageLoader: OnImageLoadListener?,
         view: View,
         position: Int,
@@ -46,6 +47,7 @@ interface OnCustomImageLoadListener : OnLoadProgressListener {
 
     //动画结束以后做啥事情
     fun onDoAfter(
+        progressLoadChangeLiveData:MutableLiveData<LoadImageStatus>,
         imageLoader: OnImageLoadListener?,
         view: View,
         position: Int,
