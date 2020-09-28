@@ -1,8 +1,6 @@
 
 
 
-> 建议在 [个人博客](https://allens.icu/posts/4a05dc12/#more) 中查看,阅读体验更佳
-
 高仿微信朋友圈，点击查看大图，放大 缩小，可自定义
 
 <!-- more -->
@@ -20,11 +18,6 @@
 - 可以自行拓展想要的布局，和可修改的拓展性
 
 
-# apk 下载体验
-
-
-
-[apk 点击下载](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911111134.apk)
 
 
 # 下载
@@ -44,7 +37,7 @@
 
 ```java
 	dependencies {
-	        implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerGlide:0.0.4'
+	         implementation 'com.github.JiangHaiYang01.WeChatPhoto:Larger:0.0.5'
 	}
 ```
 
@@ -54,19 +47,15 @@
 提供默认的图片加载器
 
 ```java
- implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerGlide:0.0.4'
+ implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerGlide:0.0.5'
 ```
 
 提供默认的视屏加载器
 ```java
-implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerLoadVideo:0.0.4'
+ implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerLoadVideo:0.0.5'
 ```
 
-提供默认的进度加载样式
 
-```java
-implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerProgress:0.0.4'
-```
 
 
 # 使用介绍
@@ -92,13 +81,13 @@ class ImageBean : LargerBean() {
 
 ```java
 Larger.create()
-    .withListType()//这里展示的是列表类型的
+    .withImageMulti()//这里展示的是列表类型的
     .setImageLoad(GlideImageLoader(context))   //图片加载器
     .setIndex(position)//下标
+    .setDuration(3000)//动画持续时间
     .setRecyclerView(recyclerView)//recyclerview
     .setData(data) //添加默认的数据源
-    .start(context)//跳转
-
+    .start(context)
 ```
 
 
@@ -125,7 +114,7 @@ class VideoBean : LargerBean() {
 
 ```java
 Larger.create()
-    .withListType()//这里展示的是列表类型的
+    .withVideoMulti()//这里展示的是列表类型的
     .setImageLoad(GlideImageLoader(context))   //图片加载器
     .setVideoLoad(LargerVideoLoad(context))//视屏加载器
     .setIndex(position)//下标
@@ -141,214 +130,80 @@ Larger.create()
 ![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911092159.gif)
 
 
-## 处理加载进度
-
-
-
-添加默认的进度加载样式
-
-```java
-implementation 'com.github.JiangHaiYang01.WeChatPhoto:LargerProgress:0.0.4'
-```
-
-
-```java
-Larger.create()
-    .withListType()//这里展示的是列表类型的
-    .setImageLoad(GlideImageLoader(context))   //图片加载器
-    .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
-    .setIndex(position)//下标
-    .setRecyclerView(recyclerView)//recyclerview
-    .setData(data) //添加默认的数据源
-    .start(context)//跳转
+# 更多属性
 
 ```
 
-这里提供了两种模式的加载进度样式
+    //是否直接向上就能够拖动，微信直接向上不可以拖动，这里默认false
+    var upCanMove: Boolean = DefConfig.def_up_can_move,
 
-### FULL
+    //是否自动加载下一页，默认不自动加载下一页
+    var loadNextFragment :Boolean = DefConfig.def_loadNextFragment,
 
-![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911092404.gif)
+    //是否打印日志
+    var debug: Boolean = DefConfig.def_debug,
 
-### NONE
+    //单个或者多个图片
+    var images: List<View>? = null,
 
-![](https://gitee.com/_Allens/BlogImage/raw/master/image/20200911092550.gif)
+    //列表
+    var recyclerView: RecyclerView? = null,
 
+    //使用的类型
+    var largerType: LargerEnum = LargerEnum.LISTS,
 
+    //持续时间
+    var duration: Long = DefConfig.def_duration,
 
+    //是否自动加载大图
+    var automatic: Boolean = DefConfig.def_automatic,
 
-## 设置缩放比例
+    //最大缩放比例 （2 - f)
+    var maxScale: Float = DefConfig.def_max_scale,
 
-双击图片，可以变大（默认1.5f），再次双击会变得更大(默认3.0f)，当最大的时候，双击变成 正常比例(1.0f)，
+    //双击中间的大小 需要小于等于 max
+    var mediumScale: Float = DefConfig.def_medium_scale,
 
-当然也可以上设置自己想要的比例,
+    //最小缩放比例 (0.1f-0.7f)
+    var minScale: Float = DefConfig.def_min_scale,
 
+    //数据集合
+    var data: List<OnLargerType>? = null,
 
-```java
-Larger.create()
-    .withListType()//这里展示的是列表类型的
-    .setImageLoad(GlideImageLoader(context))   //图片加载器
-    .setMediumScale(4f)//设置中间比例 不能超过最大比例
-    .setMaxScale(4f)//设置最大比例
-    .setIndex(position)//下标
-    .setRecyclerView(recyclerView)//recyclerview
-    .setData(data) //添加默认的数据源
-    .start(context)//跳转
+    //当前的下标
+    var position: Int = 0,
 
+    //列表的布局
+    var layoutId: Int? = null,
 
+    //大图的ImageViewID
+    var fullViewId: Int? = null,
+
+    //获取加载框的id
+    var progressId: Int? = null,
+
+    //默认的背景颜色
+    var backgroundColor: Int = DefConfig.def_back_color,
+
+    //自定义
+    var customImageLoadListener: OnCustomImageLoadListener? = null,
+
+    //图片加载器
+    var imageLoad: OnImageLoadListener? = null,
+
+    //加载y样式
+    var progressType: ImageProgressLoader.ProgressType = DefConfig.def_progress_type,
+
+    //是否使用加载框
+    var progressLoaderUse: Boolean = DefConfig.def_progress_use,
+
+    //设置滑动方向
+    var orientation: Orientation = DefConfig.orientation,
+
+    //视屏加载器
+    var videoLoad: OnVideoLoadListener? = null
 ```
 
-这样就可以设置成，双击一下 变成4f 再次双击变成1f
-
-
-## 自定义布局
-
-需要使用 LargerImageView 作为图片信息
-
-下面是查看原图示例
-
-```xml
-
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-    <com.starot.larger.image.LargerImageView
-        android:id="@+id/item_custom_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
-    <TextView
-        android:id="@+id/item_custom_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="#BEBEBE"
-        android:paddingLeft="20dp"
-        android:paddingTop="6dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="6dp"
-        android:text="查看原图"
-        android:textColor="#ffffff"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-```
-
-
-因为是需要点击加载大图，所以 需要将 自动加载大图设置成false ``setAutomatic(false)``
-
-使用 ``setCustomListener`` 设置自定义的布局
-
-> 参数说明
-
-第一个参数:当前布局的id
-第二个参数:准备展示的LargerImageView id
-第三个参数:自定义的接口处理
-
-```java
-  private val listener = object : OnCustomImageLoadListener {
-        override fun onCustomImageLoad(
-            listener: OnImageLoadListener?,
-            view: View,
-            position: Int,
-            data: LargerBean
-        ) {
-            val textView = view.findViewById<TextView>(R.id.item_custom_tv)
-            val fullUrl = data.fullUrl
-            if (fullUrl != null) {
-                listener?.checkCache(fullUrl, object : OnImageCacheListener {
-                    override fun onCache(hasCache: Boolean) {
-                        if (hasCache) {
-                            textView.visibility = View.GONE
-                        }
-                    }
-                })
-
-                textView.setOnClickListener {
-                    listener?.load(
-                        fullUrl,
-                        true,
-                        view.findViewById(R.id.item_custom_image)
-                    )
-                }
-            } else {
-                textView.visibility = View.GONE
-            }
-        }
-    }
-
-
-Larger.create()
-    .withListType()//这里展示的是列表类型的
-    .setImageLoad(GlideImageLoader(context))   //图片加载器
-    .setMediumScale(4f)//设置中间比例 不能超过最大比例
-    .setMaxScale(4f)//设置最大比例
-    .setIndex(position)//下标
-    .setAutomatic(false)//设置不自动加载大图
-    .setCustomListener(R.layout.item_custom_image,R.id.item_custom_image,listener)//自定义布局
-    .setRecyclerView(recyclerView)//recyclerview
-    .setData(data) //添加默认的数据源
-    .start(context)//跳转
-
-
-```
-
-## 设置像抖音那样的上下滑动方式
-
-```java
-
-Larger.create()
-    .withListType()//这里展示的是列表类型的
-    .setImageLoad(GlideImageLoader(context))   //图片加载器
-    .setIndex(position)//下标
-    .setOrientation(Orientation.ORIENTATION_VERTICAL)//滑动的方向
-    .setRecyclerView(recyclerView)//recyclerview
-    .setData(data) //添加默认的数据源
-    .start(context)//跳转
-
-```
-
-
-## 单个View 的方式
-
-使用 withSingle  通过 ``setImagesWithSingle``设置单个图片信息，
-
-这里使用list 主要是考虑 万一有两个呢
-
-```java
-  Larger.create()
-        .withSingle()//这里展示的单个view
-        .setImageLoad(GlideImageLoader(this))   //图片加载器
-        .setDuration(300)//动画持续时间
-        .setImagesWithSingle(arrayListOf(src_image))//设置imageView
-        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
-        .setData(list) //添加默认的数据源
-        .start(this)
-```
-
-## 设置背景颜色
-
-
-```java
-  Larger.create()
-        .withSingle()//这里展示的单个view
-        .setImageLoad(GlideImageLoader(this))   //图片加载器
-        .setDuration(300)//动画持续时间
-        .setBackgroundColor(Color.Red)//默认是黑色 可以设置自己需要的颜色
-        .setImagesWithSingle(arrayListOf(src_image))//设置imageView
-        .setProgress(ProgressLoader(ProgressLoader.ProgressType.FULL)) //添加进度显示
-        .setData(list) //添加默认的数据源
-        .start(this)
-```
 
 
 # 最后
