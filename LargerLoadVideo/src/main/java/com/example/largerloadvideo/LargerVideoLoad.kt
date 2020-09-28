@@ -33,6 +33,7 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
             override fun onDragEnd() {
                 listener.onDragEnd()
+                Jzvd.goOnPlayOnResume()
             }
 
             override fun onDragPrepare(dx: Float, dy: Float): Boolean {
@@ -41,6 +42,7 @@ class LargerVideoLoad(private val context: Context) : OnVideoLoadListener {
 
             override fun onDragStart() {
                 listener.onDragStart()
+                Jzvd.goOnPlayOnPause()
                 video.setButtonProgressStatus(false)
             }
         })
