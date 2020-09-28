@@ -26,15 +26,38 @@ class VideoFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener {
     }
 
 
-    override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
+//    override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
+//        val imageView = getPoster(fragmentView)
+//        if (imageView != null && thumbnailView is ImageView && type == AnimType.ENTER) {
+//            val data = getData() ?: return
+//            val thumbnailsUrl = data.thumbnailsUrl
+//            if (thumbnailsUrl.isNullOrEmpty()) {
+//                return
+//            }
+//            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position, false, imageView)
+//            imageView.scaleType = thumbnailView.scaleType
+//        }
+//    }
+
+    override fun onTranslatorBefore(
+        type: AnimType,
+        fullView: View,
+        thumbnailView: View,
+        onImageLoadReadyListener: OnImageLoadReadyListener?
+    ) {
         val imageView = getPoster(fragmentView)
-        if (imageView != null && thumbnailView is ImageView && type == AnimType.ENTER) {
+        if (imageView != null  && thumbnailView is ImageView && type == AnimType.ENTER) {
             val data = getData() ?: return
             val thumbnailsUrl = data.thumbnailsUrl
             if (thumbnailsUrl.isNullOrEmpty()) {
                 return
             }
-            Larger.largerConfig?.imageLoad?.load(thumbnailsUrl, position, false, imageView)
+            Larger.largerConfig?.imageLoad?.load(
+                thumbnailsUrl,
+                position,
+                imageView,
+                onImageLoadReadyListener
+            )
             imageView.scaleType = thumbnailView.scaleType
         }
     }

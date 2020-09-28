@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.starot.larger.anim.impl.OnAnimatorIntercept
 import com.starot.larger.anim.impl.OnAnimatorListener
 import com.starot.larger.enums.AnimType
+import com.starot.larger.impl.OnImageLoadReadyListener
 import com.starot.larger.utils.LogUtils
 
 object AnimDragHelper : OnAnimatorIntercept {
@@ -18,12 +19,29 @@ object AnimDragHelper : OnAnimatorIntercept {
 
     private var thumbnailView: View? = null
 
+//    override fun beforeTransition(
+//        type: AnimType,
+//        itemView: View,
+//        fullView: View,
+//        thumbnailView: View?,
+//        listener: OnAnimatorListener
+//    ) {
+//        this.thumbnailView = thumbnailView
+//        if (thumbnailView == null) {
+//            LogUtils.i("beforeTransition thumbnailView is null")
+//            return
+//        }
+//        listener.onTranslatorBefore(type, fullView, thumbnailView)
+//
+//    }
+
     override fun beforeTransition(
         type: AnimType,
         itemView: View,
         fullView: View,
         thumbnailView: View?,
-        listener: OnAnimatorListener
+        listener: OnAnimatorListener,
+        onImageLoadReadyListener: OnImageLoadReadyListener?
     ) {
         this.thumbnailView = thumbnailView
         if (thumbnailView == null) {
@@ -31,7 +49,6 @@ object AnimDragHelper : OnAnimatorIntercept {
             return
         }
         listener.onTranslatorBefore(type, fullView, thumbnailView)
-
     }
 
 

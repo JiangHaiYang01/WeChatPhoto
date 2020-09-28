@@ -18,14 +18,13 @@ interface OnAnimatorListener {
         fullView: View,
         thumbnailView: View,
         onImageLoadReadyListener: OnImageLoadReadyListener? = null
-    ) {
-    }
-
-    fun onTranslatorBefore(
-        type: AnimType,
-        fullView: View,
-        thumbnailView: View
     )
+
+//    fun onTranslatorBefore(
+//        type: AnimType,
+//        fullView: View,
+//        thumbnailView: View
+//    )
 
     //开始变化
     fun onTranslatorStart(
@@ -98,13 +97,13 @@ interface OnAnimatorIntercept {
         }
     }
 
-    fun beforeTransition(
-        type: AnimType,
-        itemView: View,
-        fullView: View,
-        thumbnailView: View?,
-        listener: OnAnimatorListener
-    )
+//    fun beforeTransition(
+//        type: AnimType,
+//        itemView: View,
+//        fullView: View,
+//        thumbnailView: View?,
+//        listener: OnAnimatorListener
+//    )
 
     fun beforeTransition(
         type: AnimType,
@@ -113,8 +112,7 @@ interface OnAnimatorIntercept {
         thumbnailView: View?,
         listener: OnAnimatorListener,
         onImageLoadReadyListener: OnImageLoadReadyListener? = null
-    ) {
-    }
+    )
 
 
     fun startTransition(

@@ -69,9 +69,6 @@ class ImageFg : BaseLargerFragment<LargerBean>(), OnLargerDragListener, OnLarger
         }
     }
 
-    override fun onTranslatorBefore(type: AnimType, fullView: View, thumbnailView: View) {
-
-    }
 
     override fun onTranslatorStart(type: AnimType, fullView: View, thumbnailView: View) {
         if (fullView is ImageView && type == AnimType.ENTER) {

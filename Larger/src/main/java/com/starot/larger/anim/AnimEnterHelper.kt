@@ -46,25 +46,25 @@ object AnimEnterHelper : OnAnimatorIntercept {
 
     }
 
-    override fun beforeTransition(
-        type: AnimType,
-        itemView: View,
-        fullView: View,
-        thumbnailView: View?,
-        listener: OnAnimatorListener
-    ) {
-        if (thumbnailView == null) {
-            LogUtils.i("beforeTransition thumbnailView is null")
-            return
-        }
-        listener.onTranslatorBefore(type, fullView, thumbnailView)
-        fullView.layoutParams = fullView.layoutParams.apply {
-            width = thumbnailView.width
-            height = thumbnailView.height
-            AnimParentHelper.parentAnim(this, thumbnailView, fullView)
-        }
-
-    }
+//    override fun beforeTransition(
+//        type: AnimType,
+//        itemView: View,
+//        fullView: View,
+//        thumbnailView: View?,
+//        listener: OnAnimatorListener
+//    ) {
+//        if (thumbnailView == null) {
+//            LogUtils.i("beforeTransition thumbnailView is null")
+//            return
+//        }
+//        listener.onTranslatorBefore(type, fullView, thumbnailView)
+//        fullView.layoutParams = fullView.layoutParams.apply {
+//            width = thumbnailView.width
+//            height = thumbnailView.height
+//            AnimParentHelper.parentAnim(this, thumbnailView, fullView)
+//        }
+//
+//    }
 
     override fun beforeTransition(
         type: AnimType,
